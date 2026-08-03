@@ -227,7 +227,13 @@ export default function Home() {
       </section>
 
       {/* ============ MITOS ============ */}
-      <section id="mitos" className="bloque" style={{ background: '#F5E3CB' }} data-bg="#F0E9D8">
+      <section
+        id="mitos"
+        className="bloque clip"
+        style={{ background: '#F5E3CB' }}
+        data-bg="#F0E9D8"
+      >
+        <RingsDeco id="mitos" from="#93A48D" to="#5E99A8" className="tl" />
         <div className="wrap">
           <div className="eyebrow">Derribando mitos</div>
           <h2>Todo lo que pensás antes de animarte.</h2>

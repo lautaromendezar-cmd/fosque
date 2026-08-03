@@ -162,7 +162,13 @@ export default async function SedePage({ params }: Props) {
       </section>
 
       {/* MITOS */}
-      <section id="mitos" data-bg={sede.colorFondo}>
+      <section
+        id="mitos"
+        className="bloque clip"
+        style={{ background: sede.colorFondo }}
+        data-bg="#F0E9D8"
+      >
+        <RingsDeco id="sede-mitos" from="#93A48D" to="#5E99A8" className="tl" />
         <div className="wrap">
           <div className="eyebrow">Derribando mitos</div>
           <h2>Todo lo que pensás antes de animarte.</h2>

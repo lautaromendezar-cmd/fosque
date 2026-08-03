@@ -118,6 +118,17 @@ export default function SedeFx({ children }: { children: React.ReactNode }) {
         scrollTrigger: { trigger: '#galeria', start: 'top 70%' },
       });
 
+      /* Mitos: filas en cascada */
+      gsap.from(q('.mito'), {
+        y: 40,
+        opacity: 0,
+        stagger: 0.07,
+        duration: 0.7,
+        ease: 'power2.out',
+        clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: '#mitos', start: 'top 72%' },
+      });
+
       /* Equipo: cards en cascada */
       gsap.from(q('#equipo .row > *'), {
         y: 80,

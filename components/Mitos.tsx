@@ -25,7 +25,7 @@ export default function Mitos({ mitos }: { mitos: Mito[] }) {
             ref={(el) => {
               refs.current[i] = el;
             }}
-            style={{ maxHeight: open === i ? refs.current[i]?.scrollHeight : 0 }}
+            style={{ maxHeight: open === i ? (refs.current[i]?.scrollHeight ?? 0) + 48 : 0 }}
           >
             <p>{m.a}</p>
           </div>
