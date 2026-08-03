@@ -734,6 +734,11 @@ nav .links {
   height: 100%;
   object-fit: cover;
 }
+/* iOS: nunca mostrar el botón de play superpuesto */
+.vph.media video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
 
 /* arcos concéntricos decorativos (manual: uso del sistema) */
 .rings {
