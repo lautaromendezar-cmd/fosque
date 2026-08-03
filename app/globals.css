@@ -301,20 +301,21 @@ section {
 @media (max-width: 900px) {
   #sedes-pin {
     height: auto;
-    padding: 12vh 0;
+    padding: 10vh 0;
   }
   .sedes-track {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    overscroll-behavior-x: contain;
   }
   .sedes-track::-webkit-scrollbar {
     display: none;
   }
   .sede-card {
-    flex: 0 0 84vw;
-    height: 64vh;
+    flex: 0 0 82vw;
+    height: 56vh;
     scroll-snap-align: center;
   }
   .bloque {
@@ -1568,6 +1569,7 @@ footer .claim {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    overscroll-behavior-x: contain;
   }
   #galeria .vph {
     scroll-snap-align: center;

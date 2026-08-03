@@ -139,7 +139,7 @@ export default async function SedePage({ params }: Props) {
       {/* GALERÍA */}
       <section id="galeria" data-bg="#F8DDE0">
         <h2 className="wrap">Conocé el espacio antes de venir.</h2>
-        <div className="rail">
+        <div className="rail" data-lenis-prevent>
           {sede.galeria.map((g) => (
             <Media key={g.file + g.shot} file={g.file} shot={g.shot} />
           ))}

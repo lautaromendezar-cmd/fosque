@@ -190,7 +190,7 @@ export default function Home() {
             bienvenida.
           </p>
         </div>
-        <div className="sedes-track">
+        <div className="sedes-track" data-lenis-prevent>
           {sedes.map((s) => (
             <Link key={s.slug} className="sede-card" href={`/${s.slug}/`}>
               <Media file={s.videoFile} shot={s.shotHome} />
