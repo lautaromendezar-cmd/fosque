@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import { sedes } from '@/data/sedes';
+import Logo from '@/components/logo/Logo';
 
 export default function Footer() {
   return (
     <footer>
       <div className="cols">
         <div>
-          <div className="fw">FOSQUE</div>
+          <div className="fw">
+            <Logo iso={44} word={19} />
+          </div>
           <p className="claim">Mejora la Vida. Desde el año 2000.</p>
         </div>
         <div>

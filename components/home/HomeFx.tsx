@@ -53,20 +53,22 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         }
       } else {
         sessionStorage.setItem('fosque-seen', '1');
+        // dibujo del contorno del isologo real → relleno → devora la pantalla
+        const fpath = q('#preloader .fmark path')[0] as unknown as SVGPathElement;
+        const len = fpath.getTotalLength();
+        fpath.style.strokeDasharray = `${len}`;
+        fpath.style.strokeDashoffset = `${len}`;
         const tl = gsap.timeline({
           onComplete() {
             kill();
             reveal();
           },
         });
-        tl.to(q('#preloader .fmark path'), {
-          strokeDashoffset: 0,
-          duration: 1.2,
-          ease: 'power2.inOut',
-        }, 0)
+        tl.to(fpath, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, 0)
           .to(counter, { innerText: 100, duration: 1.2, snap: 'innerText', ease: 'power1.inOut' }, 0)
-          .to(q('#preloader .fmark'), { scale: 22, opacity: 0, duration: 0.9, ease: 'power3.in' }, 1.25)
-          .to(pre, { opacity: 0, duration: 0.4 }, 1.7);
+          .to(fpath, { fillOpacity: 1, duration: 0.35, ease: 'power1.in' }, 0.95)
+          .to(q('#preloader .fmark'), { scale: 22, opacity: 0, duration: 0.9, ease: 'power3.in' }, 1.35)
+          .to(pre, { opacity: 0, duration: 0.4 }, 1.8);
       }
 
       /* ---- FONDO VIVO: el body muta de color por capítulo ---- */

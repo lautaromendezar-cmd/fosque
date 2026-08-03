@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { sedes, waLink } from '@/data/sedes';
+import Logo from '@/components/logo/Logo';
 
 // URL exacta del login EVO: pendiente de cliente
 const EVO_URL = '#';
@@ -26,8 +27,8 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
   return (
     <>
       <nav>
-        <Link className="logo" href="/">
-          FOSQUE
+        <Link className="logo" href="/" aria-label="FOSQUE — inicio">
+          <Logo />
         </Link>
 
         <div className="links">
