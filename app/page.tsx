@@ -57,8 +57,25 @@ export default function Home() {
 
       <Arcs />
 
+      {/* ============ MANIFIESTO (video full-bleed) ============ */}
+      <section id="manifiesto" data-bg="#F0E9D8">
+        <div className="mv">
+          <Media
+            file="hero.mp4"
+            shot="🎬 VIDEO MANIFIESTO · Plano general cálido de clase, cámara lenta"
+          />
+        </div>
+        <div className="mq">
+          <blockquote>&ldquo;Acá no venís a sufrir.&rdquo;</blockquote>
+          <p>
+            Desde tu primer mensaje te hacemos sentir valorada: tu Ejecutiva Fosque te guía para
+            que incorporar el movimiento sea sostenible y hermoso.
+          </p>
+        </div>
+      </section>
+
       {/* ============ HISTORIA ============ */}
-      <section id="historia" data-bg="#F8DDE0">
+      <section id="historia" className="bloque" style={{ background: '#F8DDE0' }} data-bg="#F5EBE2">
         <div className="wrap grid">
           <div>
             <div className="eyebrow">Nuestra historia</div>
@@ -102,7 +119,7 @@ export default function Home() {
       </section>
 
       {/* ============ PROGRAMA ============ */}
-      <section id="programa" data-bg="#DCEAEE">
+      <section id="programa" className="bloque" style={{ background: '#DCEAEE' }} data-bg="#EAF0EC">
         <div className="wrap stage">
           <div className="sticky">
             <div className="eyebrow">El Programa Fosque</div>
@@ -164,22 +181,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ============ SEDES ============ */}
-      <section id="sedes" data-bg="#F0E9D8">
-        <div className="wrap">
-          <div className="eyebrow" style={{ textAlign: 'center' }}>
-            Tres capítulos, una misma película
-          </div>
+      {/* ============ SEDES: carrusel horizontal ============ */}
+      <section id="sedes-pin" data-bg="#F0E9D8">
+        <div id="sedes" className="sedes-head">
+          <div className="eyebrow">Tres capítulos, una misma película</div>
           <h2>Elegí tu Fosque</h2>
           <p>
             Cada sede tiene su propia energía. Todas comparten lo mismo: un lugar donde sos
             bienvenida.
           </p>
-
+        </div>
+        <div className="sedes-track">
           {sedes.map((s) => (
-            <Link key={s.slug} className="sede" href={`/${s.slug}/`}>
+            <Link key={s.slug} className="sede-card" href={`/${s.slug}/`}>
               <Media file={s.videoFile} shot={s.shotHome} />
-              <div>
+              <span className="sc-badge">
+                ★ {s.rating} · {s.reviews} opiniones
+              </span>
+              <div className="sc-info">
                 <div className="num">
                   SEDE {s.numero} · {s.barrio.toUpperCase()}
                 </div>
@@ -196,10 +215,7 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="meta">
-                  <b>{s.direccion}</b>
-                  <br />
-                  {s.horarioResumen}
-                  <br />★ {s.rating} · {s.reviews} opiniones en Google
+                  {s.direccion} · {s.horarioResumen}
                 </div>
                 <span className="go">
                   Conocé la sede <span className="arrow">→</span>
@@ -211,7 +227,7 @@ export default function Home() {
       </section>
 
       {/* ============ MITOS ============ */}
-      <section id="mitos" data-bg="#F5E3CB">
+      <section id="mitos" className="bloque" style={{ background: '#F5E3CB' }} data-bg="#F0E9D8">
         <div className="wrap">
           <div className="eyebrow">Derribando mitos</div>
           <h2>Todo lo que pensás antes de animarte.</h2>
@@ -220,7 +236,12 @@ export default function Home() {
       </section>
 
       {/* ============ EQUIPO ============ */}
-      <section id="equipo" data-bg="#EADFF0">
+      <section
+        id="equipo"
+        className="bloque clip"
+        style={{ background: '#EADFF0' }}
+        data-bg="#F0E9D8"
+      >
         <RingsDeco id="equipo" from="#F3A6C8" to="#CDB6D9" className="br" />
         <div className="wrap">
           <div className="eyebrow">El Equipo Fosque</div>

@@ -133,21 +133,57 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         });
       });
 
-      /* ---- Sedes: parallax de los planos ---- */
-      q('.sede .vph').forEach((v) => {
+      /* ---- Manifiesto: parallax del video full-bleed ---- */
+      const mv = q('#manifiesto .mv')[0];
+      if (mv) {
         gsap.fromTo(
-          v,
-          { y: 60 },
+          mv,
+          { yPercent: -7 },
           {
-            y: -60,
+            yPercent: 7,
             ease: 'none',
-            scrollTrigger: { trigger: v, start: 'top bottom', end: 'bottom top', scrub: 1 },
+            scrollTrigger: { trigger: '#manifiesto', start: 'top bottom', end: 'bottom top', scrub: 1 },
           },
         );
+        gsap.from(q('#manifiesto .mq'), {
+          y: 50,
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: '#manifiesto', start: 'top 60%' },
+        });
+      }
+
+      /* ---- Sedes: carrusel horizontal con pin (solo desktop) ---- */
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 901px)', () => {
+        const track = q('.sedes-track')[0];
+        if (!track) return;
+        const dist = () => track.scrollWidth - window.innerWidth;
+        gsap.to(track, {
+          x: () => -dist(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#sedes-pin',
+            start: 'top top',
+            end: () => `+=${dist()}`,
+            scrub: 1,
+            pin: true,
+            invalidateOnRefresh: true,
+          },
+        });
+      });
+      gsap.from(q('.sede-card'), {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: '#sedes-pin', start: 'top 75%' },
       });
 
       /* ---- Reveal genérico ---- */
-      q('#sedes h3, #mitos h2, #equipo h2, #final h2').forEach((el) => {
+      q('.sedes-head h2, #mitos h2, #equipo h2, #final h2').forEach((el) => {
         gsap.from(el, {
           y: 40,
           opacity: 0,
