@@ -26,7 +26,8 @@
   --r-md: 44px;
   --r-sm: 28px;
   --disp: var(--font-disp), 'Archivo', sans-serif;
-  --body: var(--font-body), 'Quicksand', sans-serif;
+  --body: var(--font-body), 'Baloo Bhaijaan 2', sans-serif;
+  --label: var(--font-label), 'Bebas Neue', sans-serif;
 }
 
 * {
@@ -63,10 +64,9 @@ h3,
 }
 
 .eyebrow {
-  font-family: var(--disp);
-  font-stretch: 105%;
-  font-weight: 700;
-  font-size: 0.72rem;
+  font-family: var(--label);
+  font-weight: 400;
+  font-size: 0.95rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   opacity: 0.55;
@@ -293,9 +293,9 @@ nav .links {
   transform: none;
 }
 .mm-label {
-  font-family: var(--disp);
-  font-weight: 700;
-  font-size: 0.7rem;
+  font-family: var(--label);
+  font-weight: 400;
+  font-size: 0.95rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
   opacity: 0.5;
@@ -660,9 +660,9 @@ nav .links {
   transform: scale(1.02) rotate(-0.5deg);
 }
 .sede .num {
-  font-family: var(--disp);
-  font-weight: 900;
-  font-size: 0.85rem;
+  font-family: var(--label);
+  font-weight: 400;
+  font-size: 1rem;
   letter-spacing: 0.3em;
   opacity: 0.5;
 }
@@ -825,8 +825,9 @@ footer .fw {
   letter-spacing: 0.05em;
 }
 footer h4 {
-  font-family: var(--disp);
-  font-size: 0.75rem;
+  font-family: var(--label);
+  font-weight: 400;
+  font-size: 0.95rem;
   letter-spacing: 0.2em;
   margin-bottom: 1rem;
   opacity: 0.6;
@@ -1124,9 +1125,9 @@ footer .claim {
   background: var(--lila-p);
 }
 .novedad .fecha {
-  font-family: var(--disp);
-  font-weight: 700;
-  font-size: 0.72rem;
+  font-family: var(--label);
+  font-weight: 400;
+  font-size: 0.95rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   opacity: 0.55;
