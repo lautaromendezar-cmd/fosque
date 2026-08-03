@@ -9,7 +9,7 @@ export default function Preloader() {
   return (
     <>
       <noscript>
-        <style>{`#preloader,#counter{display:none}#hero h1 .w span{transform:none}`}</style>
+        <style>{`#preloader,#counter{display:none}.bento-head h1 .w span{transform:none}`}</style>
       </noscript>
       <div id="preloader">
         <svg className="fmark" viewBox={ISO_VB} aria-hidden="true">

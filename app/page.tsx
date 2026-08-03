@@ -19,37 +19,6 @@ export default function Home() {
       <Preloader />
       <Nav waNumero={WA_GENERAL} waTexto="Hola Fosque! Quiero vivir la experiencia" />
 
-      {/* ============ HERO ============ */}
-      <section id="hero" data-bg="#F0E9D8">
-        <RingsDeco id="hero" from="#8FD5CC" to="#43A9A1" className="bl" />
-        <h1>
-          {TITULO.split(' ').map((w, i) => (
-            <span key={i}>
-              <span className="w">
-                <span>{w}</span>
-              </span>{' '}
-            </span>
-          ))}
-        </h1>
-        <p>
-          Tu vida no tiene precio. Fosque no es un gimnasio: es el lugar donde sos bienvenida, te
-          acompañamos y transformamos el ejercicio en el gran logro de tu vida.
-        </p>
-        <div className="ctas">
-          <a
-            className="btn solid"
-            href={waLink(WA_GENERAL, 'Hola Fosque! Quiero vivir la experiencia')}
-            target="_blank"
-            rel="noopener"
-          >
-            Quiero vivir la experiencia Fosque
-          </a>
-          <a className="btn" href="#sedes">
-            Elegí tu sucursal
-          </a>
-        </div>
-      </section>
-
       {/* ============ BENTO HERO: la película Fosque ============ */}
       <section id="bento" data-bg="#F0E9D8">
         <div className="bento-grid">
@@ -66,6 +35,35 @@ export default function Home() {
           <Media className="m-hide" file="galeria-salida.jpg" shot="📷 Alumnas saliendo" />
           <Media file="sede-emilio-castro.mp4" shot="🎬 Sede Emilio Castro" />
           <Media className="m-hide" file="equipo-4.jpg" shot="📷 Equipo Fosque" />
+        </div>
+        <div className="bento-veil" />
+        <div className="bento-head">
+          <h1>
+            {TITULO.split(' ').map((w, i) => (
+              <span key={i}>
+                <span className="w">
+                  <span>{w}</span>
+                </span>{' '}
+              </span>
+            ))}
+          </h1>
+          <p className="sub">
+            Tu vida no tiene precio. Fosque no es un gimnasio: es el lugar donde sos bienvenida, te
+            acompañamos y transformamos el ejercicio en el gran logro de tu vida.
+          </p>
+          <div className="ctas">
+            <a
+              className="btn solid"
+              href={waLink(WA_GENERAL, 'Hola Fosque! Quiero vivir la experiencia')}
+              target="_blank"
+              rel="noopener"
+            >
+              Quiero vivir la experiencia Fosque
+            </a>
+            <a className="btn" href="#sedes">
+              Elegí tu sucursal
+            </a>
+          </div>
         </div>
         <div className="bento-quote">
           <blockquote>&ldquo;Acá no venís a sufrir.&rdquo;</blockquote>

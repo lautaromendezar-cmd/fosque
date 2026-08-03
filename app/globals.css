@@ -160,7 +160,7 @@ section {
 @media (prefers-reduced-motion: reduce) {
   #bento {
     height: auto;
-    padding: 8vh 0 4vh;
+    padding: 14vh 0 4vh;
     flex-direction: column;
     gap: 3rem;
   }
@@ -170,6 +170,13 @@ section {
     background: none;
     color: var(--negro);
     pointer-events: auto;
+  }
+  .bento-head {
+    position: static;
+    pointer-events: auto;
+  }
+  .bento-veil {
+    display: none;
   }
 }
 
@@ -750,41 +757,50 @@ nav .links {
 }
 
 /* ---------- HERO (home) ---------- */
-#hero {
-  min-height: 72vh;
+/* título + CTAs flotando sobre la grilla bento */
+.bento-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: rgba(240, 233, 216, 0.66);
+}
+.bento-head {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding-top: 18vh;
-  padding-bottom: 6vh;
-}
-#hero h1 {
-  font-size: clamp(2.2rem, 6vw, 5rem);
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  margin: 5vh auto 2vh;
+  padding: 10vh 6vw 0;
+  pointer-events: none;
+}
+.bento-head h1 {
+  font-size: clamp(2.2rem, 6vw, 5rem);
   max-width: 16ch;
 }
-#hero h1 .w {
+.bento-head h1 .w {
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
 }
-#hero h1 .w span {
+.bento-head h1 .w span {
   display: inline-block;
   transform: translateY(110%);
 }
-#hero > p {
-  text-align: center;
+.bento-head .sub {
   max-width: 52ch;
-  margin: 0 auto 3.5vh;
+  margin: 3vh 0 3.5vh;
   font-size: 1.05rem;
   line-height: 1.6;
 }
-#hero .ctas {
+.bento-head .ctas {
   display: flex;
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+  pointer-events: auto;
 }
 
 /* ---------- ARCOS (transición) ---------- */

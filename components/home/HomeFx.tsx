@@ -20,14 +20,14 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       const q = gsap.utils.selector(scope);
 
       const reveal = () => {
-        gsap.to(q('#hero h1 .w > span'), {
+        gsap.to(q('.bento-head h1 .w > span'), {
           y: 0,
           duration: 0.9,
           ease: 'power3.out',
           stagger: 0.06,
           delay: 0.1,
         });
-        gsap.from(q('#hero > p, #hero .ctas'), {
+        gsap.from(q('.bento-head .sub, .bento-head .ctas'), {
           y: 24,
           opacity: 0,
           duration: 0.8,
@@ -46,7 +46,7 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       if (reduced || sessionStorage.getItem('fosque-seen')) {
         kill();
         if (reduced) {
-          gsap.set(q('#hero h1 .w > span'), { y: 0 });
+          gsap.set(q('.bento-head h1 .w > span'), { y: 0 });
         } else {
           reveal();
         }
@@ -140,16 +140,16 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         const grid = q('.bento-grid')[0] as HTMLElement;
         const otros = q('.bento-grid .vph').filter((el) => el !== bentoCenter);
 
-        /* entrada de las tiles */
+        /* entrada de las tiles (el bento arranca en viewport: sin trigger) */
         gsap.from(q('.bento-grid .vph'), {
           y: 60,
           opacity: 0,
           scale: 0.92,
           stagger: { each: 0.06, from: 'center' },
-          duration: 0.8,
+          duration: 0.9,
           ease: 'power2.out',
+          delay: 0.15,
           clearProps: 'transform,opacity',
-          scrollTrigger: { trigger: bento, start: 'top 75%' },
         });
 
         /* geometría del tile central relativa a la sección (estable con pin) */
@@ -171,7 +171,9 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
             invalidateOnRefresh: true,
           },
         });
-        tl.to(otros, { opacity: 0, scale: 0.9, duration: 0.3, stagger: 0.02 }, 0)
+        tl.to(q('.bento-head'), { opacity: 0, y: -70, duration: 0.16, ease: 'power1.in' }, 0)
+          .to(q('.bento-veil'), { opacity: 0, duration: 0.2 }, 0.04)
+          .to(otros, { opacity: 0, scale: 0.9, duration: 0.3, stagger: 0.02 }, 0.18)
           .to(
             bentoCenter,
             {
@@ -179,14 +181,14 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
               y: () => window.innerHeight / 2 - rect().cy,
               scale: () => Math.max(window.innerWidth / rect().w, window.innerHeight / rect().h) * 1.01,
               borderRadius: 0,
-              duration: 0.6,
+              duration: 0.55,
               ease: 'power2.inOut',
             },
-            0.08,
+            0.25,
           )
-          .to(q('.bento-quote'), { opacity: 1, duration: 0.22 }, 0.62)
-          .from(q('.bento-quote blockquote'), { y: 46, duration: 0.24 }, 0.62)
-          .from(q('.bento-quote p'), { y: 34, duration: 0.24 }, 0.68);
+          .to(q('.bento-quote'), { opacity: 1, duration: 0.2 }, 0.72)
+          .from(q('.bento-quote blockquote'), { y: 46, duration: 0.22 }, 0.72)
+          .from(q('.bento-quote p'), { y: 34, duration: 0.22 }, 0.78);
       }
 
       /* ---- Sedes: carrusel horizontal con pin (solo desktop) ---- */
