@@ -37,6 +37,7 @@ export default function Footer() {
           </div>
         </div>
       </footer>
+      <div className="subfooter">Diseño Web: Lautaro Mendez</div>
     </FooterFx>
   );
 }
