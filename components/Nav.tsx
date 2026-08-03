@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { sedes, waLink } from '@/data/sedes';
 import Logo from '@/components/logo/Logo';
 
@@ -22,11 +22,19 @@ function Roll({ children }: { children: string }) {
 
 export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: string }) {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const wa = waLink(waNumero, waTexto);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 30);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <>
-      <nav>
+      <nav className={scrolled ? 'scrolled' : ''}>
         <Link className="logo" href="/" aria-label="FOSQUE — inicio">
           <Logo />
         </Link>
@@ -63,10 +71,7 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
         </div>
 
         <div className="right">
-          <a className="btn evo" href={EVO_URL} title="Login EVO">
-            Ingresá a tu Perfil
-          </a>
-          <a className="btn solid" href={wa} target="_blank" rel="noopener">
+          <a className="btn cta" href={wa} target="_blank" rel="noopener">
             Empezá hoy
           </a>
           <button

@@ -121,10 +121,43 @@ nav {
   left: 0;
   right: 0;
   z-index: 100;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 1.1rem 6vw;
+  transition: background-color 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
+}
+nav .logo {
+  justify-self: start;
+}
+nav .links {
+  justify-self: center;
+}
+nav .right {
+  justify-self: end;
+}
+/* barra al scrollear: crema translúcida + línea de gradiente Fosque */
+nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--terracota), var(--durazno), var(--salvia), var(--celeste));
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+nav.scrolled {
+  background: rgba(240, 233, 216, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 14px 40px rgba(26, 24, 21, 0.08);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+nav.scrolled::after {
+  opacity: 1;
 }
 nav .logo {
   display: inline-flex;
@@ -359,6 +392,17 @@ nav .links {
 .btn.solid:hover {
   background: var(--terracota);
   border-color: var(--terracota);
+}
+/* CTA del nav: terracota, único botón */
+.btn.cta {
+  background: var(--terracota);
+  border-color: var(--terracota);
+  color: #fff;
+}
+.btn.cta:hover {
+  background: var(--negro);
+  border-color: var(--negro);
+  color: var(--crema);
 }
 
 /* ---------- VIDEO PLACEHOLDER (guion de rodaje) ---------- */
@@ -1149,8 +1193,7 @@ footer .claim {
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 1100px) {
-  nav .links,
-  nav .evo {
+  nav .links {
     display: none;
   }
   .burger {
