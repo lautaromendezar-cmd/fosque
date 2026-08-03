@@ -88,6 +88,19 @@ export default function SedeFx({ children }: { children: React.ReactNode }) {
         ease: 'power2.out',
         scrollTrigger: { trigger: q('.mapa')[0], start: 'top 85%' },
       });
+
+      /* Equipo: cards en cascada */
+      gsap.from(q('#equipo .row > *'), {
+        y: 80,
+        opacity: 0,
+        rotate: 4,
+        scale: 0.92,
+        stagger: 0.12,
+        duration: 0.85,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: '#equipo .row', start: 'top 85%' },
+      });
     },
     { scope },
   );

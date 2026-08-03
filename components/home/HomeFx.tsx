@@ -182,6 +182,19 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         scrollTrigger: { trigger: '#sedes-pin', start: 'top 75%' },
       });
 
+      /* ---- Equipo: cards en cascada ---- */
+      gsap.from(q('#equipo .row > *'), {
+        y: 80,
+        opacity: 0,
+        rotate: 4,
+        scale: 0.92,
+        stagger: 0.12,
+        duration: 0.85,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: '#equipo .row', start: 'top 85%' },
+      });
+
       /* ---- Reveal genérico ---- */
       q('.sedes-head h2, #mitos h2, #equipo h2, #final h2').forEach((el) => {
         gsap.from(el, {

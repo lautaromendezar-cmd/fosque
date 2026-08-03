@@ -1044,6 +1044,28 @@ nav .links {
   aspect-ratio: 3/4;
   height: auto;
 }
+/* cards del equipo: reposo con leve inclinación alternada, hover lift + zoom */
+#equipo .row > .vph {
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease;
+  box-shadow: 0 14px 34px rgba(26, 24, 21, 0.1);
+}
+#equipo .row > .vph:nth-child(odd) {
+  transform: rotate(-1.4deg);
+}
+#equipo .row > .vph:nth-child(even) {
+  transform: rotate(1.4deg);
+}
+#equipo .row > .vph:hover {
+  transform: translateY(-12px) rotate(0deg) scale(1.02);
+  box-shadow: 0 30px 70px rgba(26, 24, 21, 0.22);
+  z-index: 2;
+}
+#equipo .row .vph img {
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+#equipo .row > .vph:hover img {
+  transform: scale(1.08);
+}
 #equipo h2,
 #final h2 {
   font-size: clamp(2rem, 4.5vw, 3.6rem);
