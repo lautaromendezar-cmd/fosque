@@ -22,11 +22,6 @@ export default function Home() {
       {/* ============ HERO ============ */}
       <section id="hero" data-bg="#F0E9D8">
         <RingsDeco id="hero" from="#8FD5CC" to="#43A9A1" className="bl" />
-        <Media
-          file="hero.mp4"
-          className="frame"
-          shot="🎬 VIDEO HERO · Plano secuencia lento: mujeres en Reformer, risas, abrazo al final de clase · Luz natural cálida, 50fps para slow-motion · Loop 10s sin audio"
-        />
         <h1>
           {TITULO.split(' ').map((w, i) => (
             <span key={i}>
@@ -55,17 +50,24 @@ export default function Home() {
         </div>
       </section>
 
-      <Arcs />
-
-      {/* ============ MANIFIESTO (video full-bleed) ============ */}
-      <section id="manifiesto" data-bg="#F0E9D8">
-        <div className="mv">
+      {/* ============ BENTO HERO: la película Fosque ============ */}
+      <section id="bento" data-bg="#F0E9D8">
+        <div className="bento-grid">
+          <Media className="m-hide" file="galeria-reformer.jpg" shot="📷 Sala Reformer" />
+          <Media file="metodo.mp4" shot="🎬 Método · detalle resortes" />
+          <Media className="m-hide" file="equipo-1.jpg" shot="📷 Instructora" />
+          <Media file="sede-jose-hernandez.mp4" shot="🎬 Sede José Hernández" />
           <Media
+            className="bento-center"
             file="hero.mp4"
-            shot="🎬 VIDEO MANIFIESTO · Plano general cálido de clase, cámara lenta"
+            shot="🎬 VIDEO HERO · Mujeres en Reformer, risas, abrazo · Luz cálida"
           />
+          <Media file="sede-nunez.mp4" shot="🎬 Sede Núñez" />
+          <Media className="m-hide" file="galeria-salida.jpg" shot="📷 Alumnas saliendo" />
+          <Media file="sede-emilio-castro.mp4" shot="🎬 Sede Emilio Castro" />
+          <Media className="m-hide" file="equipo-4.jpg" shot="📷 Equipo Fosque" />
         </div>
-        <div className="mq">
+        <div className="bento-quote">
           <blockquote>&ldquo;Acá no venís a sufrir.&rdquo;</blockquote>
           <p>
             Desde tu primer mensaje te hacemos sentir valorada: tu Ejecutiva Fosque te guía para
@@ -73,6 +75,8 @@ export default function Home() {
           </p>
         </div>
       </section>
+
+      <Arcs />
 
       {/* ============ HISTORIA ============ */}
       <section id="historia" className="bloque" style={{ background: '#F8DDE0' }} data-bg="#F5EBE2">

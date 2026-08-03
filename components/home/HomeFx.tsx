@@ -27,7 +27,6 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           stagger: 0.06,
           delay: 0.1,
         });
-        gsap.from(q('#hero .frame'), { scale: 0.92, opacity: 0, duration: 1, ease: 'power2.out' });
         gsap.from(q('#hero > p, #hero .ctas'), {
           y: 24,
           opacity: 0,
@@ -134,25 +133,60 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         });
       });
 
-      /* ---- Manifiesto: parallax del video full-bleed ---- */
-      const mv = q('#manifiesto .mv')[0];
-      if (mv) {
-        gsap.fromTo(
-          mv,
-          { yPercent: -7 },
-          {
-            yPercent: 7,
-            ease: 'none',
-            scrollTrigger: { trigger: '#manifiesto', start: 'top bottom', end: 'bottom top', scrub: 1 },
-          },
-        );
-        gsap.from(q('#manifiesto .mq'), {
-          y: 50,
+      /* ---- Bento hero: el video central devora la pantalla ---- */
+      const bento = q('#bento')[0] as HTMLElement;
+      const bentoCenter = q('.bento-center')[0] as HTMLElement;
+      if (bento && bentoCenter) {
+        const grid = q('.bento-grid')[0] as HTMLElement;
+        const otros = q('.bento-grid .vph').filter((el) => el !== bentoCenter);
+
+        /* entrada de las tiles */
+        gsap.from(q('.bento-grid .vph'), {
+          y: 60,
           opacity: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '#manifiesto', start: 'top 60%' },
+          scale: 0.92,
+          stagger: { each: 0.06, from: 'center' },
+          duration: 0.8,
+          ease: 'power2.out',
+          clearProps: 'transform,opacity',
+          scrollTrigger: { trigger: bento, start: 'top 75%' },
         });
+
+        /* geometría del tile central relativa a la sección (estable con pin) */
+        const rect = () => {
+          const w = bentoCenter.offsetWidth;
+          const h = bentoCenter.offsetHeight;
+          const cx = grid.offsetLeft + bentoCenter.offsetLeft + w / 2;
+          const cy = grid.offsetTop + bentoCenter.offsetTop + h / 2;
+          return { w, h, cx, cy };
+        };
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: bento,
+            start: 'top top',
+            end: '+=200%',
+            scrub: 1,
+            pin: true,
+            invalidateOnRefresh: true,
+          },
+        });
+        tl.to(otros, { opacity: 0, scale: 0.9, duration: 0.3, stagger: 0.02 }, 0)
+          .to(
+            bentoCenter,
+            {
+              x: () => window.innerWidth / 2 - rect().cx,
+              y: () => window.innerHeight / 2 - rect().cy,
+              scale: () => Math.max(window.innerWidth / rect().w, window.innerHeight / rect().h) * 1.01,
+              borderRadius: 0,
+              duration: 0.6,
+              ease: 'power2.inOut',
+            },
+            0.08,
+          )
+          .to(q('.bento-quote'), { opacity: 1, duration: 0.22 }, 0.62)
+          .from(q('.bento-quote blockquote'), { y: 46, duration: 0.24 }, 0.62)
+          .from(q('.bento-quote p'), { y: 34, duration: 0.24 }, 0.68);
       }
 
       /* ---- Sedes: carrusel horizontal con pin (solo desktop) ---- */
