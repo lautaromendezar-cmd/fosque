@@ -28,6 +28,12 @@ node scripts/smoke.mjs  # smoke test Playwright (sirve out/, consola + screensho
 5. **Instagram por sede** → campo `instagram` en `data/sedes.ts` (hoy null → "Muy pronto").
 6. **Videos reales** → cada placeholder (`components/Vph.tsx`) tiene el guion de rodaje anotado; al llegar el material se cambia por `<video>` MP4 H.265 + WebM, poster, `preload="metadata"`, hero ≤ 4MB loop 8-12s sin audio.
 
+## Hecho en la 2ª iteración (2026-08-03)
+- Placeholders rellenados con media IA provisoria: 6 videos Kling 3.0 (hero, historia, método, 3 sedes) + 9 fotos Nano Banana (equipo, galería) en `site/public/media/`. `components/Media.tsx` cae al placeholder con guion si falta el archivo — cuando llegue el material real del rodaje, se reemplazan los archivos con el mismo nombre y listo.
+- Fix scroll: la rueda no funcionaba (Lenis capturaba el wheel sin raf loop). Ahora el sync espera la instancia con `useLenis`.
+- Navbar con menú: dropdown de sedes, hover "rolling" terracota, overlay mobile con burger.
+- Paleta completa del manual (salvia, oliva, lila, gradientes) + arcos concéntricos decorativos (`RingsDeco`) + bordes de bloques menos redondeados (56/44/28px).
+
 ## Pendientes técnicos (siguiente iteración)
 - Deploy a Vercel (crear repo GitHub primero; ahí también se habilita Decap CMS para novedades).
 - Transición de página home → sede con barrido de arcos (View Transitions / template.tsx).
