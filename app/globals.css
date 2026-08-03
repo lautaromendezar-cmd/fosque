@@ -1367,10 +1367,14 @@ footer .claim {
   opacity: 0.8;
 }
 
-/* GALERÍA horizontal */
+/* GALERÍA horizontal: pin + scrub en desktop, swipe nativo en mobile */
 #galeria {
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 }
 #galeria h2 {
   font-size: clamp(1.8rem, 3.8vw, 3rem);
@@ -1381,10 +1385,7 @@ footer .claim {
   display: flex;
   gap: 1.4rem;
   padding: 0 6vw;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  will-change: transform;
 }
 #galeria .rail::-webkit-scrollbar {
   display: none;
@@ -1392,8 +1393,22 @@ footer .claim {
 #galeria .vph {
   flex: 0 0 min(70vw, 520px);
   height: 62vh;
-  scroll-snap-align: center;
   border-radius: var(--r-md);
+}
+@media (max-width: 900px) {
+  #galeria {
+    height: auto;
+    padding: 12vh 0;
+  }
+  #galeria .rail {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  #galeria .vph {
+    scroll-snap-align: center;
+  }
 }
 
 /* ---------- NOVEDADES ---------- */

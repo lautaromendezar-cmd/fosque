@@ -89,6 +89,35 @@ export default function SedeFx({ children }: { children: React.ReactNode }) {
         scrollTrigger: { trigger: q('.mapa')[0], start: 'top 85%' },
       });
 
+      /* Galería: carrusel horizontal con pin (solo desktop) */
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 901px)', () => {
+        const rail = q('#galeria .rail')[0];
+        if (!rail) return;
+        const dist = () => rail.scrollWidth - window.innerWidth;
+        gsap.to(rail, {
+          x: () => -dist(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#galeria',
+            start: 'top top',
+            end: () => `+=${dist()}`,
+            scrub: 1,
+            pin: true,
+            invalidateOnRefresh: true,
+          },
+        });
+      });
+      gsap.from(q('#galeria .vph'), {
+        y: 60,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.8,
+        ease: 'power2.out',
+        clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: '#galeria', start: 'top 70%' },
+      });
+
       /* Equipo: cards en cascada */
       gsap.from(q('#equipo .row > *'), {
         y: 80,
