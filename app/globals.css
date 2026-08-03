@@ -364,6 +364,22 @@ nav.scrolled {
 nav.scrolled::after {
   opacity: 1;
 }
+/* con el menú mobile abierto, el nav (logo + X) queda por encima del overlay */
+nav.menu-open {
+  z-index: 300;
+}
+nav.menu-open.scrolled {
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+nav.menu-open::after {
+  opacity: 0;
+}
+nav.menu-open .cta {
+  visibility: hidden;
+}
 nav .logo {
   display: inline-flex;
   text-decoration: none;
@@ -1567,6 +1583,36 @@ footer .claim {
   }
   .burger {
     display: block;
+  }
+}
+@media (max-width: 600px) {
+  nav {
+    padding: 0.8rem 4vw;
+  }
+  nav .right {
+    gap: 0.5rem;
+  }
+  .btn.cta {
+    white-space: nowrap;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.74rem;
+  }
+  nav .logo-lockup {
+    gap: 0.45rem;
+  }
+  nav .logo-lockup svg:first-of-type {
+    height: 25px !important;
+  }
+  nav .logo-lockup svg:last-of-type {
+    height: 10px !important;
+  }
+  .burger {
+    width: 40px;
+    height: 40px;
+    flex: none;
+  }
+  .mobile-menu {
+    padding-top: 12vh;
   }
 }
 @media (min-width: 1101px) {

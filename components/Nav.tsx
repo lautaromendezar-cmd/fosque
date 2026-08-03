@@ -53,7 +53,7 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
 
   return (
     <>
-      <nav className={scrolled ? 'scrolled' : ''}>
+      <nav className={`${scrolled ? 'scrolled' : ''}${open ? ' menu-open' : ''}`}>
         <Link className="logo" href="/" aria-label="FOSQUE — inicio">
           <Logo />
         </Link>
