@@ -3,7 +3,6 @@ import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import WaFloat from '@/components/WaFloat';
 import Media from '@/components/Media';
-import Arcs from '@/components/Arcs';
 import RingsDeco from '@/components/RingsDeco';
 import Mitos from '@/components/Mitos';
 import HomeFx from '@/components/home/HomeFx';
@@ -73,8 +72,6 @@ export default function Home() {
           </p>
         </div>
       </section>
-
-      <Arcs />
 
       {/* ============ HISTORIA ============ */}
       <section id="historia" className="bloque" style={{ background: '#F8DDE0' }} data-bg="#F5EBE2">

@@ -86,19 +86,6 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
 
       if (reduced) return;
 
-      /* ---- Arcos: dibujo con scrub ---- */
-      q('.arcs path').forEach((el) => {
-        const p = el as unknown as SVGPathElement;
-        const len = p.getTotalLength();
-        p.style.strokeDasharray = `${len}`;
-        p.style.strokeDashoffset = `${len}`;
-        gsap.to(p, {
-          strokeDashoffset: 0,
-          ease: 'none',
-          scrollTrigger: { trigger: p.closest('.arcs'), start: 'top 90%', end: 'bottom 40%', scrub: 1 },
-        });
-      });
-
       /* ---- Counters historia ---- */
       q('[data-count]').forEach((el) => {
         gsap.fromTo(
