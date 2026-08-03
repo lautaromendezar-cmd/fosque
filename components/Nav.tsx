@@ -1,36 +1,111 @@
+'use client';
+
 import Link from 'next/link';
-import { waLink } from '@/data/sedes';
+import { useState } from 'react';
+import { sedes, waLink } from '@/data/sedes';
 
 // URL exacta del login EVO: pendiente de cliente
 const EVO_URL = '#';
 
-export default function Nav({
-  backLink,
-  waNumero,
-  waTexto,
-}: {
-  backLink?: { href: string; label: string };
-  waNumero: string;
-  waTexto: string;
-}) {
+/** Texto duplicado para el hover "rolling": la copia de abajo sube en terracota */
+function Roll({ children }: { children: string }) {
   return (
-    <nav>
-      <Link className="logo" href="/">
-        FOSQUE
-      </Link>
-      <div className="right">
-        {backLink && (
-          <Link className="back" href={backLink.href}>
-            ← {backLink.label}
+    <span className="roll">
+      <span className="l">{children}</span>
+      <span className="l c" aria-hidden="true">
+        {children}
+      </span>
+    </span>
+  );
+}
+
+export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: string }) {
+  const [open, setOpen] = useState(false);
+  const wa = waLink(waNumero, waTexto);
+
+  return (
+    <>
+      <nav>
+        <Link className="logo" href="/">
+          FOSQUE
+        </Link>
+
+        <div className="links">
+          <div className="nlink has-sub">
+            <Link href="/#sedes">
+              <Roll>Sedes</Roll>
+            </Link>
+            <div className="sub">
+              {sedes.map((s) => (
+                <Link key={s.slug} href={`/${s.slug}/`}>
+                  <span className="sub-num">{s.numero}</span>
+                  <span>
+                    {s.nombre}
+                    {s.barrio !== s.nombre && <small>{s.barrio}</small>}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <Link className="nlink" href="/#programa">
+            <Roll>El Programa</Roll>
           </Link>
-        )}
-        <a className="btn" href={EVO_URL} title="Login EVO">
-          Ingresá a tu Perfil
-        </a>
-        <a className="btn solid" href={waLink(waNumero, waTexto)} target="_blank" rel="noopener">
-          Empezá hoy
-        </a>
+          <Link className="nlink" href="/#historia">
+            <Roll>Historia</Roll>
+          </Link>
+          <Link className="nlink" href="/novedades/">
+            <Roll>Novedades</Roll>
+          </Link>
+          <a className="nlink" href={wa} target="_blank" rel="noopener">
+            <Roll>Contacto</Roll>
+          </a>
+        </div>
+
+        <div className="right">
+          <a className="btn evo" href={EVO_URL} title="Login EVO">
+            Ingresá a tu Perfil
+          </a>
+          <a className="btn solid" href={wa} target="_blank" rel="noopener">
+            Empezá hoy
+          </a>
+          <button
+            className={`burger${open ? ' x' : ''}`}
+            aria-label="Menú"
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+          >
+            <span />
+            <span />
+          </button>
+        </div>
+      </nav>
+
+      <div className={`mobile-menu${open ? ' open' : ''}`} onClick={() => setOpen(false)}>
+        <div className="mm-inner">
+          <div className="mm-label">Sedes</div>
+          {sedes.map((s) => (
+            <Link key={s.slug} className="mm-link" href={`/${s.slug}/`}>
+              {s.nombre} {s.barrio !== s.nombre && <small>{s.barrio}</small>}
+            </Link>
+          ))}
+          <div className="mm-label">Fosque</div>
+          <Link className="mm-link" href="/#programa">
+            El Programa
+          </Link>
+          <Link className="mm-link" href="/#historia">
+            Historia
+          </Link>
+          <Link className="mm-link" href="/novedades/">
+            Novedades
+          </Link>
+          <a className="mm-link" href={wa} target="_blank" rel="noopener">
+            Contacto
+          </a>
+          <a className="btn evo-m" href={EVO_URL}>
+            Ingresá a tu Perfil
+          </a>
+        </div>
       </div>
-    </nav>
+    </>
   );
 }

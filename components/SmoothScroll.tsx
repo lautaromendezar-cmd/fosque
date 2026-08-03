@@ -1,22 +1,28 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { ReactLenis, type LenisRef } from 'lenis/react';
+import { useEffect } from 'react';
+import { ReactLenis, useLenis } from 'lenis/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function SmoothScroll({ children }: { children: React.ReactNode }) {
-  const lenisRef = useRef<LenisRef>(null);
+/**
+ * useLenis entrega la instancia recién cuando existe (el effect depende de
+ * ella). Antes corríamos el effect una sola vez al montar, cuando la
+ * instancia todavía no estaba: Lenis capturaba la rueda sin loop de raf y
+ * la página no scrolleaba.
+ */
+function LenisGsapSync() {
+  const lenis = useLenis(ScrollTrigger.update);
 
   useEffect(() => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const lenis = lenisRef.current?.lenis;
     if (!lenis) return;
 
-    lenis.on('scroll', ScrollTrigger.update);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      lenis.destroy(); // scroll nativo para reduced-motion
+      return;
+    }
 
     const update = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(update);
@@ -37,10 +43,15 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       gsap.ticker.remove(update);
       document.removeEventListener('click', onClick);
     };
-  }, []);
+  }, [lenis]);
 
+  return null;
+}
+
+export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   return (
-    <ReactLenis root options={{ autoRaf: false }} ref={lenisRef}>
+    <ReactLenis root options={{ autoRaf: false }}>
+      <LenisGsapSync />
       {children}
     </ReactLenis>
   );

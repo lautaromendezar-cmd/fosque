@@ -2,8 +2,9 @@ import Link from 'next/link';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import WaFloat from '@/components/WaFloat';
-import Vph from '@/components/Vph';
+import Media from '@/components/Media';
 import Arcs from '@/components/Arcs';
+import RingsDeco from '@/components/RingsDeco';
 import Mitos from '@/components/Mitos';
 import HomeFx from '@/components/home/HomeFx';
 import Preloader from '@/components/home/Preloader';
@@ -20,7 +21,9 @@ export default function Home() {
 
       {/* ============ HERO ============ */}
       <section id="hero" data-bg="#F0E9D8">
-        <Vph
+        <RingsDeco id="hero" from="#8FD5CC" to="#43A9A1" className="bl" />
+        <Media
+          file="hero.mp4"
           className="frame"
           shot="🎬 VIDEO HERO · Plano secuencia lento: mujeres en Reformer, risas, abrazo al final de clase · Luz natural cálida, 50fps para slow-motion · Loop 10s sin audio"
         />
@@ -91,7 +94,10 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <Vph shot="🎬 VIDEO STORYTELLING · Equipo fundador + collage de archivo · Entrevista con B-roll de las 3 sedes · 45-60s" />
+          <Media
+            file="historia.mp4"
+            shot="🎬 VIDEO STORYTELLING · Equipo fundador + collage de archivo · Entrevista con B-roll de las 3 sedes · 45-60s"
+          />
         </div>
       </section>
 
@@ -105,7 +111,10 @@ export default function Home() {
               <br />
               La evolución de Pilates.
             </h2>
-            <Vph shot="🎬 VIDEO MÉTODO · Detalle de manos, resortes, deslizamiento del carro · Macro + plano general de clase · Ritmo suave" />
+            <Media
+              file="metodo.mp4"
+              shot="🎬 VIDEO MÉTODO · Detalle de manos, resortes, deslizamiento del carro · Macro + plano general de clase · Ritmo suave"
+            />
           </div>
           <div>
             <div className="beneficio">
@@ -169,7 +178,7 @@ export default function Home() {
 
           {sedes.map((s) => (
             <Link key={s.slug} className="sede" href={`/${s.slug}/`}>
-              <Vph shot={s.shotHome} />
+              <Media file={s.videoFile} shot={s.shotHome} />
               <div>
                 <div className="num">
                   SEDE {s.numero} · {s.barrio.toUpperCase()}
@@ -211,21 +220,23 @@ export default function Home() {
       </section>
 
       {/* ============ EQUIPO ============ */}
-      <section id="equipo" data-bg="#F8DDE0">
+      <section id="equipo" data-bg="#EADFF0">
+        <RingsDeco id="equipo" from="#F3A6C8" to="#CDB6D9" className="br" />
         <div className="wrap">
           <div className="eyebrow">El Equipo Fosque</div>
           <h2>Las personas que te van a cuidar.</h2>
           <div className="row">
-            <Vph play={false} shot="📷 Retrato instructora · fondo crema" />
-            <Vph play={false} shot="📷 Ejecutiva en recepción" />
-            <Vph play={false} shot="📷 Instructor corrigiendo postura" />
-            <Vph play={false} shot="📷 Equipo completo de sede" />
+            <Media file="equipo-1.jpg" shot="📷 Retrato instructora · fondo crema" />
+            <Media file="equipo-2.jpg" shot="📷 Ejecutiva en recepción" />
+            <Media file="equipo-3.jpg" shot="📷 Instructor corrigiendo postura" />
+            <Media file="equipo-4.jpg" shot="📷 Equipo completo de sede" />
           </div>
         </div>
       </section>
 
       {/* ============ CTA FINAL ============ */}
       <section id="final" data-bg="#F0E9D8">
+        <RingsDeco id="final" from="#F8E27A" to="#F29B38" className="bl" />
         <div className="eyebrow">Tu momento es ahora</div>
         <h2>Cambiá tu vida en un abrir y cerrar de ojos.</h2>
         <a

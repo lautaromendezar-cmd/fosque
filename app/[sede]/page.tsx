@@ -3,8 +3,9 @@ import { notFound } from 'next/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import WaFloat from '@/components/WaFloat';
-import Vph from '@/components/Vph';
+import Media from '@/components/Media';
 import Mitos from '@/components/Mitos';
+import RingsDeco from '@/components/RingsDeco';
 import SedeFx from '@/components/sede/SedeFx';
 import { sedes, getSede, waLink, mapsLink, mapsEmbed } from '@/data/sedes';
 import { mitosParaSede } from '@/data/mitos';
@@ -42,11 +43,7 @@ export default async function SedePage({ params }: Props) {
 
   return (
     <SedeFx>
-      <Nav
-        backLink={{ href: '/#sedes', label: 'Todas las sedes' }}
-        waNumero={sede.whatsapp}
-        waTexto={`Hola Fosque ${sede.nombre}! Quiero empezar`}
-      />
+      <Nav waNumero={sede.whatsapp} waTexto={`Hola Fosque ${sede.nombre}! Quiero empezar`} />
 
       <div className="badge">
         ★ {sede.rating} · {sede.reviews} opiniones
@@ -54,9 +51,10 @@ export default async function SedePage({ params }: Props) {
 
       {/* HERO: nombre de sede gigante, video en sandwich */}
       <section className="sede-hero" data-bg="#F0E9D8">
+        <RingsDeco id="sede-hero" from="#8FD5CC" to="#43A9A1" className="bl" />
         <div className="stack">
           <div className="title-back">{sede.heroBack}</div>
-          <Vph className="frame" shot={sede.shotHero} />
+          <Media className="frame" file={sede.videoFile} shot={sede.shotHero} />
           <div className="title-front">{sede.heroFront}</div>
         </div>
         <p className="sub">{sede.descripcion}</p>
@@ -142,22 +140,23 @@ export default async function SedePage({ params }: Props) {
       <section id="galeria" data-bg="#F8DDE0">
         <h2 className="wrap">Conocé el espacio antes de venir.</h2>
         <div className="rail">
-          {sede.galeria.map((shot) => (
-            <Vph key={shot} shot={shot} />
+          {sede.galeria.map((g) => (
+            <Media key={g.file + g.shot} file={g.file} shot={g.shot} />
           ))}
         </div>
       </section>
 
       {/* EQUIPO DE LA SEDE */}
-      <section id="equipo" data-bg="#F5E3CB">
+      <section id="equipo" data-bg="#EADFF0">
+        <RingsDeco id="sede-equipo" from="#F3A6C8" to="#CDB6D9" className="br" />
         <div className="wrap">
           <div className="eyebrow">El equipo de {sede.nombre}</div>
           <h2>Las personas que te van a cuidar.</h2>
           <div className="row">
-            <Vph play={false} shot="📷 Retrato instructora · fondo crema" />
-            <Vph play={false} shot="📷 Ejecutiva en recepción" />
-            <Vph play={false} shot="📷 Instructor corrigiendo postura" />
-            <Vph play={false} shot="📷 Equipo completo de la sede" />
+            <Media file="equipo-1.jpg" shot="📷 Retrato instructora · fondo crema" />
+            <Media file="equipo-2.jpg" shot="📷 Ejecutiva en recepción" />
+            <Media file="equipo-3.jpg" shot="📷 Instructor corrigiendo postura" />
+            <Media file="equipo-4.jpg" shot="📷 Equipo completo de la sede" />
           </div>
         </div>
       </section>

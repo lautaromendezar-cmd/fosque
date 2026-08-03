@@ -15,11 +15,7 @@ export default function NovedadesPage() {
 
   return (
     <>
-      <Nav
-        backLink={{ href: '/', label: 'Volver' }}
-        waNumero={WA_GENERAL}
-        waTexto="Hola Fosque! Quiero saber más"
-      />
+      <Nav waNumero={WA_GENERAL} waTexto="Hola Fosque! Quiero saber más" />
       <section id="novedades">
         <div className="wrap">
           <div className="eyebrow">Cartelera</div>

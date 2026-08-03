@@ -25,9 +25,10 @@ export type Sede = {
   descripcion: string;
   claim: string;
   colorFondo: string; // tinte de fondo de su capítulo en la home
+  videoFile: string; // asset en public/media/ (cae a placeholder si no existe)
   shotHero: string; // guion de rodaje del video hero
   shotHome: string; // guion del plano en la home
-  galeria: string[]; // guiones de rodaje de la galería
+  galeria: { file: string; shot: string }[];
 };
 
 export const WA_GENERAL = '5491137719572';
@@ -61,15 +62,16 @@ export const sedes: Sede[] = [
       'La sede más completa de la red: Fosque Reformer + Fuerza y Cardio, con sala de musculación propia. Abierta de lunes a lunes para que el tiempo nunca sea excusa.',
     claim: 'La más potente',
     colorFondo: '#F5E3CB',
+    videoFile: 'sede-jose-hernandez.mp4',
     shotHero:
       '🎬 VIDEO SEDE · Travelling de entrada: puerta → recepción → sala Reformer → sala de fuerza · Un solo plano, gimbal, hora dorada',
     shotHome: '🎬 Fachada + travelling de entrada · Hora dorada',
     galeria: [
-      '🎬 Sala Reformer en clase · plano fijo lateral',
-      '🎬 Sala de fuerza · paneo lento',
-      '📷 Recepción con ejecutiva sonriendo',
-      '📷 Detalle equipamiento Método Fosque',
-      '🎬 Alumnas saliendo felices · slow motion',
+      { file: 'galeria-reformer.jpg', shot: '📷 Sala Reformer en clase · plano fijo lateral' },
+      { file: 'galeria-fuerza.jpg', shot: '📷 Sala de fuerza · paneo lento' },
+      { file: 'galeria-recepcion.jpg', shot: '📷 Recepción con ejecutiva sonriendo' },
+      { file: 'galeria-detalle.jpg', shot: '📷 Detalle equipamiento Método Fosque' },
+      { file: 'galeria-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
   },
   {
@@ -98,14 +100,15 @@ export const sedes: Sede[] = [
       'Un espacio íntimo y cálido dedicado por completo a Fosque Reformer, la evolución de Pilates. Clases siempre con instructor y una ejecutiva que te acompaña.',
     claim: 'Íntima y cálida',
     colorFondo: '#F8DDE0',
+    videoFile: 'sede-emilio-castro.mp4',
     shotHero:
       '🎬 VIDEO SEDE · Steadicam entre camas Reformer en clase · Luz natural, ritmo suave',
     shotHome: '🎬 Interior sala Reformer · Steadicam entre camas',
     galeria: [
-      '🎬 Sala Reformer en clase · plano fijo lateral',
-      '📷 Recepción con ejecutiva sonriendo',
-      '📷 Detalle resortes y carro Reformer',
-      '🎬 Alumnas saliendo felices · slow motion',
+      { file: 'galeria-reformer.jpg', shot: '📷 Sala Reformer en clase · plano fijo lateral' },
+      { file: 'galeria-recepcion.jpg', shot: '📷 Recepción con ejecutiva sonriendo' },
+      { file: 'galeria-detalle.jpg', shot: '📷 Detalle resortes y carro Reformer' },
+      { file: 'galeria-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
   },
   {
@@ -134,14 +137,15 @@ export const sedes: Sede[] = [
       'Fosque llega a zona norte: Fosque Reformer en un espacio luminoso a metros del río, para que empieces el día moviéndote.',
     claim: 'Luminosa',
     colorFondo: '#DCEAEE',
+    videoFile: 'sede-nunez.mp4',
     shotHero:
       '🎬 VIDEO SEDE · Amanecer en Núñez, llegada de alumnas · Drone corto opcional · Luz dorada',
     shotHome: '🎬 Amanecer en Núñez, llegada de alumnas · Drone corto opcional',
     galeria: [
-      '🎬 Sala Reformer en clase · plano fijo lateral',
-      '📷 Recepción con ejecutiva sonriendo',
-      '📷 Detalle equipamiento Método Fosque',
-      '🎬 Alumnas saliendo felices · slow motion',
+      { file: 'galeria-reformer.jpg', shot: '📷 Sala Reformer en clase · plano fijo lateral' },
+      { file: 'galeria-recepcion.jpg', shot: '📷 Recepción con ejecutiva sonriendo' },
+      { file: 'galeria-detalle.jpg', shot: '📷 Detalle equipamiento Método Fosque' },
+      { file: 'galeria-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
   },
 ];
