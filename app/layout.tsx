@@ -28,13 +28,28 @@ const bebas = Bebas_Neue({
   display: 'swap',
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'http://localhost:3000');
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'Fosque — Mejora la Vida',
     template: '%s · Fosque',
   },
   description:
     'Fosque no es un gimnasio. Es el lugar donde sos bienvenida, te acompañamos y transformamos el ejercicio en el gran logro de tu vida. Fosque Reformer en Mataderos y Núñez.',
+  openGraph: {
+    type: 'website',
+    locale: 'es_AR',
+    siteName: 'Fosque',
+    title: 'Fosque — Mejora la Vida',
+    description:
+      'Fosque Reformer, la evolución de Pilates. Tres sedes en Buenos Aires: José Hernández, Emilio Castro y Núñez.',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
