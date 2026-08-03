@@ -129,6 +129,7 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           transformOrigin: 'top center',
           duration: 0.8,
           ease: 'power2.out',
+          clearProps: 'transform,opacity',
           scrollTrigger: { trigger: card, start: 'top 88%' },
         });
       });

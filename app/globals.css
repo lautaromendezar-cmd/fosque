@@ -840,6 +840,24 @@ nav .links {
   margin-bottom: 1.4rem;
   box-shadow: 0 12px 40px rgba(26, 24, 21, 0.07);
   transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease,
+    background-color 0.4s ease;
+}
+.beneficio:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 26px 60px rgba(26, 24, 21, 0.14);
+}
+.beneficio:nth-child(1):hover {
+  background: var(--rosa);
+}
+.beneficio:nth-child(2):hover {
+  background: #ddd494;
+}
+.beneficio:nth-child(3):hover {
+  background: var(--celeste);
+}
+.beneficio:nth-child(4):hover {
+  background: var(--lila);
 }
 /* bloques pastel del manual */
 .beneficio:nth-child(1) {
@@ -1036,11 +1054,26 @@ nav .links {
 .mito.open + .mito {
   border-top-color: transparent;
 }
+/* hover: la fila se tiñe con su color de la rueda */
+.mito:not(.open):hover {
+  background: color-mix(in srgb, var(--mc) 16%, transparent);
+  border-radius: 24px;
+  padding: 0 1.5rem;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+.mito:not(.open):hover + .mito {
+  border-top-color: transparent;
+}
+.mito:not(.open):hover .q {
+  color: color-mix(in srgb, var(--mc) 70%, var(--negro));
+}
 .mito .q {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.6rem 0;
+  transition: color 0.3s ease;
   font-family: var(--disp);
   font-weight: 400;
   font-size: clamp(1.1rem, 2.2vw, 1.6rem);
