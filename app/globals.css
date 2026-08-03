@@ -447,15 +447,28 @@ nav .links {
   transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .has-sub::after {
-  /* puente invisible para no perder el hover */
+  /* puente invisible para no perder el hover en el hueco */
   content: '';
   position: absolute;
   inset: 100% 0 -1rem 0;
 }
-.has-sub:hover .sub {
+.has-sub.sub-open .sub {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
+}
+.has-sub > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.caret {
+  width: 10px;
+  height: 6px;
+  transition: transform 0.3s ease;
+}
+.sub-open .caret {
+  transform: rotate(180deg);
 }
 .sub a {
   display: flex;

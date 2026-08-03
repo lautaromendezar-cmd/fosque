@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sedes, waLink } from '@/data/sedes';
 import Logo from '@/components/logo/Logo';
 
@@ -23,13 +23,32 @@ function Roll({ children }: { children: string }) {
 export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: string }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [subOpen, setSubOpen] = useState(false);
+  const subTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wa = waLink(waNumero, waTexto);
+
+  const openSub = () => {
+    if (subTimer.current) clearTimeout(subTimer.current);
+    setSubOpen(true);
+  };
+  const closeSub = (delay = 140) => {
+    if (subTimer.current) clearTimeout(subTimer.current);
+    subTimer.current = setTimeout(() => setSubOpen(false), delay);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSubOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('keydown', onKey);
+      if (subTimer.current) clearTimeout(subTimer.current);
+    };
   }, []);
 
   return (
@@ -40,13 +59,24 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
         </Link>
 
         <div className="links">
-          <div className="nlink has-sub">
-            <Link href="/#sedes">
+          <div
+            className={`nlink has-sub${subOpen ? ' sub-open' : ''}`}
+            onMouseEnter={openSub}
+            onMouseLeave={() => closeSub()}
+            onFocus={openSub}
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) closeSub(0);
+            }}
+          >
+            <Link href="/#sedes" aria-expanded={subOpen} onClick={() => closeSub(0)}>
               <Roll>Sedes</Roll>
+              <svg className="caret" viewBox="0 0 10 6" aria-hidden="true">
+                <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
             </Link>
             <div className="sub">
               {sedes.map((s) => (
-                <Link key={s.slug} href={`/${s.slug}/`}>
+                <Link key={s.slug} href={`/${s.slug}/`} onClick={() => closeSub(0)}>
                   <span className="sub-num">{s.numero}</span>
                   <span>
                     {s.nombre}
