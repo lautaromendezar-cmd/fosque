@@ -22,7 +22,7 @@ node scripts/smoke.mjs  # smoke test Playwright (sirve out/, consola + screensho
 
 ## Pendientes del CLIENTE (bloquean lo marcado)
 1. **Logo vectorial SVG** → reemplazar el path provisorio del isologo F en `components/home/Preloader.tsx` y el wordmark tipografiado del nav/footer (debe ser el SVG oficial, nunca tipografiado).
-2. **Momo Trust Display .woff2** + licencia web → hoy fallback Archivo/Quicksand.
+2. ~~Momo Trust Display~~ ✅ RESUELTO: resultó ser gratuita (SIL OFL, en Google Fonts). Las 3 tipografías del manual ya están aplicadas: Momo Trust Display (títulos, local en `app/fonts/`), Baloo Bhaijaan 2 (texto), Bebas Neue (etiquetas).
 3. **Confirmar nombres comerciales vs direcciones** ⚠️ "José Hernández" tiene pin en Bragado 5952 y "Emilio Castro" en Andalgalá 1395. Marcado con `direccionPendiente: true` en `data/sedes.ts`.
 4. **URL login EVO** → constante `EVO_URL` en `components/Nav.tsx` (hoy `#`).
 5. **Instagram por sede** → campo `instagram` en `data/sedes.ts` (hoy null → "Muy pronto").

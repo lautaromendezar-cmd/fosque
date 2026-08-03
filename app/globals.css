@@ -57,8 +57,7 @@ h2,
 h3,
 .disp {
   font-family: var(--disp);
-  font-stretch: 110%;
-  font-weight: 800;
+  font-weight: 400; /* Momo Trust es fatface: su 400 ya es display pesado */
   letter-spacing: -0.02em;
   line-height: 0.95;
 }
@@ -108,7 +107,7 @@ section {
   bottom: 5vh;
   right: 6vw;
   font-family: var(--disp);
-  font-weight: 900;
+  font-weight: 400;
   font-size: clamp(3rem, 8vw, 6rem);
   font-variant-numeric: tabular-nums;
   color: var(--negro);
@@ -130,9 +129,8 @@ nav {
 }
 nav .logo {
   font-family: var(--disp);
-  font-weight: 900;
+  font-weight: 400;
   font-style: italic;
-  font-stretch: 125%;
   letter-spacing: 0.06em;
   font-size: 1.15rem;
   text-decoration: none;
@@ -155,7 +153,7 @@ nav .links {
 }
 .nlink > a,
 .nlink {
-  font-family: var(--disp);
+  font-family: var(--body);
   font-weight: 700;
   font-size: 0.88rem;
   letter-spacing: 0.04em;
@@ -217,7 +215,7 @@ nav .links {
   border-radius: 18px;
   text-decoration: none;
   color: var(--negro);
-  font-family: var(--disp);
+  font-family: var(--body);
   font-weight: 700;
   font-size: 0.9rem;
   transition: background 0.25s;
@@ -304,7 +302,7 @@ nav .links {
 .mm-link {
   display: block;
   font-family: var(--disp);
-  font-weight: 800;
+  font-weight: 400;
   font-size: clamp(1.6rem, 6vw, 2.4rem);
   text-decoration: none;
   color: var(--negro);
@@ -324,7 +322,7 @@ nav .links {
 }
 
 .btn {
-  font-family: var(--disp);
+  font-family: var(--body);
   font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.05em;
@@ -515,7 +513,7 @@ nav .links {
 }
 .stat .n {
   font-family: var(--disp);
-  font-weight: 900;
+  font-weight: 400;
   font-size: clamp(2.4rem, 4vw, 3.6rem);
 }
 .stat:nth-child(1) .n {
@@ -615,6 +613,7 @@ nav .links {
 }
 .nivel b {
   font-family: var(--disp);
+  font-weight: 400;
   display: block;
   font-size: 1.6rem;
 }
@@ -681,7 +680,7 @@ nav .links {
   padding: 0.42rem 0.95rem;
   font-size: 0.75rem;
   font-weight: 700;
-  font-family: var(--disp);
+  font-family: var(--body);
   letter-spacing: 0.04em;
   background: var(--durazno);
 }
@@ -703,9 +702,9 @@ nav .links {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  font-family: var(--disp);
-  font-weight: 800;
-  font-size: 1rem;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 1.05rem;
 }
 .sede .go .arrow {
   transition: transform 0.3s;
@@ -733,7 +732,7 @@ nav .links {
   align-items: center;
   padding: 1.6rem 0;
   font-family: var(--disp);
-  font-weight: 800;
+  font-weight: 400;
   font-size: clamp(1.1rem, 2.2vw, 1.6rem);
   width: 100%;
   background: none;
@@ -818,9 +817,8 @@ footer .cols {
 }
 footer .fw {
   font-family: var(--disp);
-  font-weight: 900;
+  font-weight: 400;
   font-style: italic;
-  font-stretch: 125%;
   font-size: 2rem;
   letter-spacing: 0.05em;
 }
@@ -894,8 +892,7 @@ footer .claim {
 .sede-hero .title-back,
 .sede-hero .title-front {
   font-family: var(--disp);
-  font-weight: 900;
-  font-stretch: 120%;
+  font-weight: 400;
   font-size: clamp(3rem, 11vw, 9.5rem);
   letter-spacing: -0.03em;
   line-height: 0.85;
@@ -942,8 +939,8 @@ footer .claim {
   background: #fff;
   border-radius: 999px;
   padding: 0.6rem 1.1rem;
-  font-family: var(--disp);
-  font-weight: 800;
+  font-family: var(--body);
+  font-weight: 700;
   font-size: 0.85rem;
   box-shadow: 0 10px 30px rgba(26, 24, 21, 0.12);
   transform: rotate(4deg);
@@ -965,8 +962,7 @@ footer .claim {
 }
 .marquee span {
   font-family: var(--disp);
-  font-weight: 900;
-  font-stretch: 115%;
+  font-weight: 400;
   font-size: 1.4rem;
   letter-spacing: 0.02em;
 }
@@ -1033,7 +1029,7 @@ footer .claim {
 }
 .stars {
   font-family: var(--disp);
-  font-weight: 900;
+  font-weight: 400;
   font-size: 2rem;
 }
 .stars small {

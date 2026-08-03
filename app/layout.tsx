@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
-import { Archivo, Baloo_Bhaijaan_2, Bebas_Neue } from 'next/font/google';
+import { Baloo_Bhaijaan_2, Bebas_Neue } from 'next/font/google';
+import localFont from 'next/font/local';
 import SmoothScroll from '@/components/SmoothScroll';
 import './globals.css';
 
-// Titulares: stand-in de Momo Trust Display hasta tener el .woff2 del cliente
-const archivo = Archivo({
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  axes: ['wdth'],
+// Titulares: Momo Trust Display, la del manual de marca (SIL OFL, gratuita).
+// Local porque la lista de next/font/google de esta versión aún no la incluye.
+const momo = localFont({
+  src: './fonts/momo-trust-display-400.woff2',
+  weight: '400',
   variable: '--font-disp',
   display: 'swap',
 });
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${archivo.variable} ${baloo.variable} ${bebas.variable}`}>
+    <html lang="es" className={`${momo.variable} ${baloo.variable} ${bebas.variable}`}>
       <body>
         <SmoothScroll>{children}</SmoothScroll>
       </body>
