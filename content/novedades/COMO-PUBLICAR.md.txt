@@ -1,0 +1,24 @@
+GUÍA PARA VERO — Cómo publicar una novedad
+==========================================
+
+Cada novedad es un archivo .md dentro de esta carpeta (content/novedades/).
+
+1. Crear un archivo nuevo, por ejemplo: promo-septiembre.md
+2. Copiar este formato:
+
+---
+titulo: 'Promo de septiembre'
+fecha: '2026-09-01'
+---
+
+Acá va el texto de la novedad. Se puede usar **negrita** y listas:
+
+- Punto uno
+- Punto dos
+
+3. Guardar. Al hacer deploy, la novedad aparece automáticamente en /novedades
+   (ordenada por fecha, la más nueva primero).
+
+Nota: este archivo termina en .txt para que no se publique como novedad.
+Más adelante se puede conectar Decap CMS para editar desde un panel visual
+sin tocar archivos (pendiente: requiere el repo en GitHub).
