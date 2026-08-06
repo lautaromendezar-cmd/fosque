@@ -39,3 +39,12 @@ node scripts/smoke.mjs  # smoke test Playwright (sirve out/, consola + screensho
 - Transición de página home → sede con barrido de arcos (View Transitions / template.tsx).
 - Secciones pin avanzadas del brief (sedes apiladas fullscreen en home, beneficios sobre video pineado) — versión actual usa sticky/reveal más simple y robusta.
 - Favicon + OG image cuando esté el logo oficial.
+
+## Sesión 2026-08-03 (cierre) — sitio EN VIVO
+**https://fosque.vercel.app/** · Esperando devolución del cliente.
+
+Hecho en esta sesión (además de lo anterior): hero bento 3x3 a viewport completo con título overlay + velo, scrub que expande el video central a fullscreen con la cita del manifiesto encima (reemplazó al hero viejo y a la sección manifiesto); carrusel horizontal de sedes pineado (+galería de sedes igual); bloques de color por sección; FAQ con rueda de colores y hovers; footer gradiente+arcos+firma "Diseño Web: Lautaro Mendez"; nav completo (menú centrado, dropdown JS, CTA terracota, barra al scrollear, mobile arreglado); logo oficial vectorizado del PDF (nav/footer/preloader/favicon); 3 tipografías reales del manual (Momo local, Baloo, Bebas); OG image para WhatsApp; fix autoplay iOS (AutoVideo); fix carrusel mobile (data-lenis-prevent).
+
+⚠️ Nota soporte: si "no se ven las animaciones" en una máquina, revisar "Mostrar animaciones en Windows" / "Reducir movimiento" (el sitio respeta prefers-reduced-motion a propósito). Preloader: solo 1ª visita por sesión (sessionStorage).
+
+Pendiente inmediato: devolución del cliente → iterar; luego dominio fosque.com (+ setear NEXT_PUBLIC_SITE_URL en Vercel para el OG), Decap CMS para Vero, y reemplazar media IA por material real del rodaje (mismo nombre de archivo en public/media/).
