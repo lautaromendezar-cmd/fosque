@@ -267,11 +267,50 @@ export default function Home() {
         <div className="wrap">
           <div className="eyebrow">El Equipo Fosque</div>
           <h2>Las personas que te van a cuidar.</h2>
-          <div className="row">
-            <Media file="equipo-1.jpg" shot="📷 Retrato instructora · fondo crema" />
-            <Media file="equipo-2.jpg" shot="📷 Ejecutiva en recepción" />
-            <Media file="equipo-3.jpg" shot="📷 Instructor corrigiendo postura" />
-            <Media file="equipo-4.jpg" shot="📷 Equipo completo de sede" />
+
+          <div className="grupo" id="profe">
+            <div className="g-head">
+              <h3>Profe Fosque</h3>
+              <p className="g-desc">
+                Instructores y profesores de sala: te guían en cada clase para que cada movimiento
+                sea seguro y efectivo.
+              </p>
+            </div>
+            <div className="row">
+              <Media file="equipo-1.jpg" shot="📷 Retrato instructora · fondo crema" />
+              <Media file="equipo-3.jpg" shot="📷 Instructor corrigiendo postura" />
+              <Media file="equipo-4.jpg" shot="📷 Profes de sala de una sede" />
+            </div>
+          </div>
+
+          <div className="grupo" id="ejecutiva">
+            <div className="g-head">
+              <h3>Ejecutiva Fosque</h3>
+              <p className="g-desc">
+                El equipo comercial y de atención personalizada: tu ejecutiva te acompaña desde el
+                primer mensaje y te cuida en todo momento.
+              </p>
+            </div>
+            <div className="row">
+              <Media file="equipo-2.jpg" shot="📷 Ejecutiva en recepción" />
+              <Media file="galeria-recepcion.jpg" shot="📷 Recepción con ejecutiva sonriendo" />
+            </div>
+          </div>
+
+          <div className="grupo" id="mantenimiento">
+            <div className="g-head">
+              <h3>Personal de Mantenimiento</h3>
+              <p className="g-desc">
+                Los responsables de que cada sede esté siempre limpia e impecable para recibirte.
+              </p>
+            </div>
+            <div className="row">
+              <Media
+                file="equipo-mantenimiento.jpg"
+                shot="📷 Retrato personal de mantenimiento · sede impecable"
+              />
+              <Media file="galeria-detalle.jpg" shot="📷 Detalle de sala impecable" />
+            </div>
           </div>
         </div>
       </section>

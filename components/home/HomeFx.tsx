@@ -218,16 +218,18 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       });
 
       /* ---- Equipo: cards en cascada ---- */
-      gsap.from(q('#equipo .row > *'), {
-        y: 80,
-        opacity: 0,
-        rotate: 4,
-        scale: 0.92,
-        stagger: 0.12,
-        duration: 0.85,
-        ease: 'power3.out',
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: '#equipo .row', start: 'top 85%' },
+      q('#equipo .row').forEach((row) => {
+        gsap.from(row.children, {
+          y: 80,
+          opacity: 0,
+          rotate: 4,
+          scale: 0.92,
+          stagger: 0.12,
+          duration: 0.85,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity',
+          scrollTrigger: { trigger: row, start: 'top 85%' },
+        });
       });
 
       /* ---- Reveal genérico ---- */
