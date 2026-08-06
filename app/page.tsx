@@ -135,20 +135,35 @@ export default function Home() {
           </div>
           <div>
             <div className="beneficio">
-              <h3>Dormí mejor</h3>
-              <p>El movimiento consciente regula tu descanso desde la primera semana.</p>
+              <h3>Dormí mejor y descansá</h3>
+              <p>Regularizá tu sueño y ganá energía para todos los días.</p>
             </div>
             <div className="beneficio">
-              <h3>Recuperá movilidad</h3>
-              <p>Reducí dolores de espalda y volvé a moverte con libertad.</p>
+              <h3>Función cerebral y memoria</h3>
+              <p>Más claridad mental para tomar mejores decisiones.</p>
             </div>
             <div className="beneficio">
-              <h3>Ganá fuerza real</h3>
-              <p>La fuerza para abrazar a tus seres amados y para tu vida diaria.</p>
+              <h3>Fuerza y movilidad funcional</h3>
+              <p>
+                Recuperá flexibilidad y cuidá tu espalda: la fuerza para proteger y abrazar a tus
+                seres amados.
+              </p>
             </div>
             <div className="beneficio">
-              <h3>Mejor ánimo</h3>
-              <p>Optimizá tu estado de ánimo y tu autoestima, clase a clase.</p>
+              <h3>Ánimo y autoestima</h3>
+              <p>Activá las hormonas de la felicidad: alegría y motivación constante.</p>
+            </div>
+            <div className="beneficio">
+              <h3>Cuidado celular y longevidad</h3>
+              <p>Movimiento y buena alimentación: la combinación para vivir más y mejor.</p>
+            </div>
+            <div className="beneficio">
+              <h3>Cuerpo en equilibrio</h3>
+              <p>Bajá de peso de forma natural y aliviá contracturas.</p>
+            </div>
+            <div className="beneficio">
+              <h3>Salud cardiovascular</h3>
+              <p>Un corazón más fuerte para amar mejor.</p>
             </div>
             <div className="niveles">
               <div className="nivel">
