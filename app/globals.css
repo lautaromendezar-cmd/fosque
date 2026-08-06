@@ -1224,6 +1224,69 @@ nav .links {
   font-size: clamp(2rem, 4.5vw, 3.6rem);
   margin: 0.8rem 0 1rem;
 }
+/* teaser del equipo en la home: 3 cards → /equipo */
+#equipo .equipo-cards {
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+}
+.eq-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.eq-card .vph {
+  aspect-ratio: 4/5;
+  border-radius: var(--r-md);
+  box-shadow: 0 14px 34px rgba(26, 24, 21, 0.1);
+  transition: box-shadow 0.45s ease;
+}
+.eq-card h3 {
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  margin: 1rem 0 0.2rem;
+}
+.eq-card > p {
+  line-height: 1.5;
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+.eq-card .go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  border-bottom: 2px solid var(--durazno);
+  padding-bottom: 2px;
+}
+.eq-card .go .arrow {
+  transition: transform 0.3s;
+}
+.eq-card:hover {
+  transform: translateY(-10px);
+}
+.eq-card:hover .vph {
+  box-shadow: 0 30px 70px rgba(26, 24, 21, 0.22);
+}
+.eq-card:hover .go .arrow {
+  transform: translateX(8px);
+}
+
+/* página /equipo */
+#equipo.page {
+  position: relative;
+  min-height: 80vh;
+  padding-top: 20vh;
+  padding-bottom: 12vh;
+}
+#equipo.page h1 {
+  font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+  margin: 0.8rem 0 1rem;
+}
+#equipo.page .intro {
+  max-width: 52ch;
+  line-height: 1.6;
+}
+
 /* grupos oficiales del equipo: Profe / Ejecutiva / Mantenimiento */
 #equipo .grupo {
   display: grid;
@@ -1237,6 +1300,7 @@ nav .links {
   margin-top: 0;
   grid-template-columns: repeat(3, 1fr);
 }
+#equipo .grupo h2,
 #equipo .grupo h3 {
   font-size: clamp(1.4rem, 2.4vw, 2rem);
   margin: 0 0 0.6rem;
@@ -1725,6 +1789,12 @@ footer .claim {
   }
   #equipo .grupo {
     grid-template-columns: 1fr;
+  }
+  #equipo .equipo-cards {
+    grid-template-columns: 1fr;
+  }
+  .eq-card .vph {
+    aspect-ratio: 16/10;
   }
   footer .cols {
     grid-template-columns: 1fr 1fr;

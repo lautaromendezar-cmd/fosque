@@ -267,50 +267,31 @@ export default function Home() {
         <div className="wrap">
           <div className="eyebrow">El Equipo Fosque</div>
           <h2>Las personas que te van a cuidar.</h2>
-
-          <div className="grupo" id="profe">
-            <div className="g-head">
-              <h3>Profe Fosque</h3>
-              <p className="g-desc">
-                Instructores y profesores de sala: te guían en cada clase para que cada movimiento
-                sea seguro y efectivo.
-              </p>
-            </div>
-            <div className="row">
-              <Media file="equipo-1.jpg" shot="📷 Retrato instructora · fondo crema" />
+          <div className="row equipo-cards">
+            <Link className="eq-card" href="/equipo/#profe">
               <Media file="equipo-3.jpg" shot="📷 Instructor corrigiendo postura" />
-              <Media file="equipo-4.jpg" shot="📷 Profes de sala de una sede" />
-            </div>
-          </div>
-
-          <div className="grupo" id="ejecutiva">
-            <div className="g-head">
-              <h3>Ejecutiva Fosque</h3>
-              <p className="g-desc">
-                El equipo comercial y de atención personalizada: tu ejecutiva te acompaña desde el
-                primer mensaje y te cuida en todo momento.
-              </p>
-            </div>
-            <div className="row">
+              <h3>Profe Fosque</h3>
+              <p>Instructores y profesores de sala.</p>
+              <span className="go">
+                Conocelos <span className="arrow">→</span>
+              </span>
+            </Link>
+            <Link className="eq-card" href="/equipo/#ejecutiva">
               <Media file="equipo-2.jpg" shot="📷 Ejecutiva en recepción" />
-              <Media file="galeria-recepcion.jpg" shot="📷 Recepción con ejecutiva sonriendo" />
-            </div>
-          </div>
-
-          <div className="grupo" id="mantenimiento">
-            <div className="g-head">
-              <h3>Personal de Mantenimiento</h3>
-              <p className="g-desc">
-                Los responsables de que cada sede esté siempre limpia e impecable para recibirte.
-              </p>
-            </div>
-            <div className="row">
-              <Media
-                file="equipo-mantenimiento.jpg"
-                shot="📷 Retrato personal de mantenimiento · sede impecable"
-              />
+              <h3>Ejecutiva Fosque</h3>
+              <p>Atención personalizada desde tu primer mensaje.</p>
+              <span className="go">
+                Conocelas <span className="arrow">→</span>
+              </span>
+            </Link>
+            <Link className="eq-card" href="/equipo/#mantenimiento">
               <Media file="galeria-detalle.jpg" shot="📷 Detalle de sala impecable" />
-            </div>
+              <h3>Personal de Mantenimiento</h3>
+              <p>Cada sede siempre limpia e impecable.</p>
+              <span className="go">
+                Conocelos <span className="arrow">→</span>
+              </span>
+            </Link>
           </div>
         </div>
       </section>

@@ -92,6 +92,9 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
           <Link className="nlink" href="/#historia">
             <Roll>Historia</Roll>
           </Link>
+          <Link className="nlink" href="/equipo/">
+            <Roll>Equipo</Roll>
+          </Link>
           <Link className="nlink" href="/novedades/">
             <Roll>Novedades</Roll>
           </Link>
@@ -130,6 +133,9 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
           </Link>
           <Link className="mm-link" href="/#historia">
             Historia
+          </Link>
+          <Link className="mm-link" href="/equipo/">
+            Equipo
           </Link>
           <Link className="mm-link" href="/novedades/">
             Novedades
