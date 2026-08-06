@@ -30,6 +30,7 @@ export default function Footer() {
             <Link href="/#programa">Método Fosque</Link>
             <Link href="/equipo/">El Equipo</Link>
             <Link href="/novedades/">Novedades</Link>
+            <Link href="/franquicia/">Franquicia</Link>
           </div>
           <div>
             <h4 className="h-socios">SOCIOS</h4>

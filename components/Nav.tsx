@@ -121,6 +121,9 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
           <Link className="nlink" href="/novedades/">
             <Roll>Novedades</Roll>
           </Link>
+          <Link className="nlink" href="/franquicia/">
+            <Roll>Franquicia</Roll>
+          </Link>
         </div>
 
         <div className="right">
@@ -170,6 +173,9 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
           </a>
           <Link className="mm-link" href="/novedades/">
             Novedades
+          </Link>
+          <Link className="mm-link" href="/franquicia/">
+            Franquicia
           </Link>
           <a className="mm-link" href={wa} target="_blank" rel="noopener">
             Contacto

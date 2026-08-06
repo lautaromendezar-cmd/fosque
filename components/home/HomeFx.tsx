@@ -84,7 +84,15 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         });
       });
 
-      if (reduced) return;
+      if (reduced) {
+        // sin animación, los counters muestran el valor final directo
+        q('[data-count]').forEach((el) => {
+          (el as HTMLElement).innerText = Number(
+            (el as HTMLElement).dataset.count,
+          ).toLocaleString('es-AR');
+        });
+        return;
+      }
 
       /* ---- Counters historia ---- */
       q('[data-count]').forEach((el) => {

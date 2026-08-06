@@ -760,17 +760,20 @@ nav .links {
   margin-top: 1.4rem;
 }
 /* EVO + redes: solo si entran; en pantallas chicas viven en el menú mobile (y EVO en footer) */
-@media (max-width: 1420px) {
+@media (max-width: 1500px) {
   nav .nav-social {
     display: none;
   }
+  nav .links {
+    gap: 1.5rem;
+  }
 }
-@media (max-width: 1240px) {
+@media (max-width: 1360px) {
   nav .btn.evo {
     display: none;
   }
   nav .links {
-    gap: 1.4rem;
+    gap: 1.3rem;
   }
 }
 
@@ -1662,6 +1665,104 @@ footer .claim {
   flex-wrap: wrap;
   justify-content: center;
 }
+/* ---------- FRANQUICIA ---------- */
+#modelo h2,
+#contacto h2 {
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  margin: 0.8rem 0 1rem;
+}
+.fr-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.4rem;
+  margin-top: 4vh;
+}
+.fr-card {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: var(--r-md);
+  padding: 1.9rem 2rem;
+}
+.fr-card .num {
+  font-family: var(--label);
+  letter-spacing: 0.3em;
+  font-size: 0.9rem;
+  opacity: 0.45;
+  margin-bottom: 0.7rem;
+}
+.fr-card h3 {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  margin-bottom: 0.5rem;
+}
+.fr-card p {
+  line-height: 1.6;
+  opacity: 0.85;
+}
+.fr-form-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 3rem;
+  align-items: start;
+}
+.fr-form-wrap > div > p {
+  line-height: 1.7;
+  max-width: 40ch;
+  margin-top: 0.8rem;
+}
+.fr-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 2.2rem;
+  border-radius: var(--r-md);
+}
+.fr-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+.fr-form label .opc {
+  font-weight: 400;
+  opacity: 0.55;
+}
+.fr-form .full {
+  grid-column: 1 / -1;
+}
+.fr-form input,
+.fr-form textarea {
+  font-family: var(--body);
+  font-size: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 2px solid rgba(26, 24, 21, 0.16);
+  background: #fff;
+  transition: border-color 0.2s;
+  resize: vertical;
+}
+.fr-form input:focus,
+.fr-form textarea:focus {
+  outline: none;
+  border-color: var(--terracota);
+}
+.fr-form button {
+  grid-column: 1 / -1;
+  justify-self: start;
+  font-size: 0.95rem;
+  padding: 0.9rem 1.9rem;
+}
+@media (max-width: 900px) {
+  .fr-grid,
+  .fr-form-wrap,
+  .fr-form {
+    grid-template-columns: 1fr;
+  }
+  .fr-form {
+    padding: 1.5rem;
+  }
+}
+
 .badge {
   position: absolute;
   top: 14vh;
