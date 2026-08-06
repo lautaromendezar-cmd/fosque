@@ -7,7 +7,7 @@ import RingsDeco from '@/components/RingsDeco';
 import Mitos from '@/components/Mitos';
 import HomeFx from '@/components/home/HomeFx';
 import Preloader from '@/components/home/Preloader';
-import { sedes, waLink, WA_GENERAL } from '@/data/sedes';
+import { sedes, waLink, mapsLink, WA_GENERAL } from '@/data/sedes';
 import { mitosHome } from '@/data/mitos';
 
 const TITULO = '¿Qué es lo más importante de tu vida?';
@@ -208,11 +208,17 @@ export default function Home() {
         </div>
         <div className="sedes-track" data-lenis-prevent>
           {sedes.map((s) => (
-            <Link key={s.slug} className="sede-card" href={`/${s.slug}/`}>
+            <div key={s.slug} className="sede-card">
               <Media file={s.videoFile} shot={s.shotHome} />
               <span className="sc-badge">
                 ★ {s.rating} · {s.reviews} opiniones
               </span>
+              {/* link estirado a la landing; los accesos directos flotan encima */}
+              <Link
+                className="sc-link"
+                href={`/${s.slug}/`}
+                aria-label={`Conocé Fosque ${s.nombre}`}
+              />
               <div className="sc-info">
                 <div className="num">
                   SEDE {s.numero} · {s.barrio.toUpperCase()}
@@ -236,7 +242,43 @@ export default function Home() {
                   Conocé la sede <span className="arrow">→</span>
                 </span>
               </div>
-            </Link>
+              <div className="sc-actions">
+                <a
+                  href={waLink(s.whatsapp, `Hola Fosque ${s.nombre}! Quiero más info`)}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={`WhatsApp de Fosque ${s.nombre}`}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm5.6 14.2c-.2.7-1.2 1.2-2 1.4-.5.1-1.2.2-3.6-.8-3-1.2-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3.1s.8-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .7.5.2.6.8 2.1.9 2.2.1.2.1.3 0 .5s-.2.4-.3.5l-.5.6c-.2.2-.3.4-.1.7.2.3.8 1.4 1.8 2.2 1.2 1.1 2.3 1.4 2.6 1.6.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.3.7-.2l2.1 1c.3.1.5.2.6.4 0 .1 0 .7-.2 1.2z" />
+                  </svg>
+                </a>
+                <a
+                  href={mapsLink(s.placeId)}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={`Fosque ${s.nombre} en Google Maps`}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+                  </svg>
+                </a>
+                {s.instagram && (
+                  <a
+                    href={s.instagram}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`Instagram de Fosque ${s.nombre}`}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="5" />
+                      <circle cx="12" cy="12" r="4" />
+                      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       </section>

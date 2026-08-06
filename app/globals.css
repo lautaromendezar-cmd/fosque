@@ -284,6 +284,57 @@ section {
 .sede-card:hover .go .arrow {
   transform: translateX(8px);
 }
+/* link estirado a la landing (la card entera clickea) */
+.sc-link {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+/* accesos directos: WhatsApp / Maps / Instagram */
+.sc-actions {
+  position: absolute;
+  right: 1.8rem;
+  bottom: 2.4rem;
+  z-index: 4;
+  display: flex;
+  gap: 0.55rem;
+}
+.sc-actions a {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--crema);
+  color: var(--negro);
+  box-shadow: 0 10px 26px rgba(26, 24, 21, 0.28);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.3s, opacity 0.3s;
+}
+.sc-actions a:hover {
+  background: #fff;
+  transform: translateY(-5px);
+}
+.sc-actions svg {
+  width: 21px;
+  height: 21px;
+}
+/* con mouse: plegados hasta el hover de la card (en touch quedan visibles) */
+@media (hover: hover) {
+  .sc-actions a {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .sc-actions a:nth-child(2) {
+    transition-delay: 0.05s;
+  }
+  .sc-actions a:nth-child(3) {
+    transition-delay: 0.1s;
+  }
+  .sede-card:hover .sc-actions a {
+    opacity: 1;
+    transform: none;
+  }
+}
 .sc-badge {
   position: absolute;
   top: 1.6rem;
