@@ -92,95 +92,29 @@ section {
 }
 
 /* ---------- BENTO HERO (el video central devora la pantalla) ---------- */
-#bento {
+#cine {
   position: relative;
   height: 100vh;
+  height: 100svh;
   padding: 0;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-.bento-grid {
+#cine .cine-bg {
   position: absolute;
   inset: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 0.8rem;
-  padding: 0.8rem;
-}
-.bento-grid .vph {
-  width: 100%;
   height: 100%;
-  border-radius: 20px;
-  will-change: transform;
+  border-radius: 0;
 }
-.bento-grid .bento-center {
-  z-index: 3;
-}
-.bento-quote {
+.cine-veil {
   position: absolute;
   inset: 0;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: var(--crema);
-  padding: 0 8vw;
-  background: linear-gradient(180deg, rgba(26, 24, 21, 0.2), rgba(26, 24, 21, 0.55));
-  opacity: 0;
-  pointer-events: none;
-}
-.bento-quote blockquote {
-  font-family: var(--disp);
-  font-size: clamp(2.2rem, 5.5vw, 4.6rem);
-  line-height: 1.02;
-  letter-spacing: -0.02em;
-  max-width: 22ch;
-}
-.bento-quote p {
-  margin-top: 2.2vh;
-  font-size: 1.08rem;
-  line-height: 1.6;
-  opacity: 0.92;
-  max-width: 54ch;
-}
-@media (max-width: 700px) {
-  .bento-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .bento-grid .m-hide {
-    display: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  #bento {
-    height: auto;
-    padding: 14vh 0 4vh;
-    flex-direction: column;
-    gap: 3rem;
-  }
-  .bento-quote {
-    position: static;
-    opacity: 1;
-    background: none;
-    color: var(--negro);
-    pointer-events: auto;
-  }
-  .bento-head {
-    position: static;
-    pointer-events: auto;
-  }
-  .bento-veil {
-    display: none;
-  }
-  .bento-grid {
-    position: static;
-    height: 80vh;
-  }
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    rgba(26, 24, 21, 0.38) 0%,
+    rgba(26, 24, 21, 0.2) 42%,
+    rgba(26, 24, 21, 0.66) 100%
+  );
 }
 
 /* ---------- SEDES: carrusel horizontal ---------- */
@@ -864,51 +798,88 @@ nav .links {
   transform: rotate(90deg);
 }
 
-/* ---------- HERO (home) ---------- */
-/* título + CTAs flotando sobre la grilla bento */
-.bento-veil {
+/* ---------- HERO CINE (home): las 3 frases sobre el video ---------- */
+.cine-content {
   position: absolute;
   inset: 0;
   z-index: 3;
-  background: rgba(240, 233, 216, 0.66);
-}
-.bento-head {
-  position: absolute;
-  inset: 0;
-  z-index: 4;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 10vh 6vw 0;
-  pointer-events: none;
+  color: var(--crema);
+  padding: 12vh 6vw 0;
 }
-.bento-head h1 {
-  font-size: clamp(2.2rem, 6vw, 5rem);
+.cine-content h1 {
+  font-size: clamp(2.4rem, 6.2vw, 5.4rem);
   max-width: 16ch;
+  text-shadow: 0 2px 34px rgba(26, 24, 21, 0.45);
 }
-.bento-head h1 .w {
+.cine-content h1 .w {
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
 }
-.bento-head h1 .w span {
+.cine-content h1 .w span {
   display: inline-block;
   transform: translateY(110%);
 }
-.bento-head .sub {
-  max-width: 52ch;
-  margin: 3vh 0 3.5vh;
-  font-size: 1.05rem;
-  line-height: 1.6;
+.cine-content .sub {
+  max-width: 56ch;
+  margin: 3.5vh 0 4vh;
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.65;
+  opacity: 0.96;
+  text-shadow: 0 1px 20px rgba(26, 24, 21, 0.5);
 }
-.bento-head .ctas {
+.cine-content .ctas {
   display: flex;
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-  pointer-events: auto;
+}
+/* botón fantasma sobre el video */
+.btn.ghost {
+  color: var(--crema);
+  border-color: rgba(240, 233, 216, 0.75);
+}
+.btn.ghost:hover {
+  background: var(--crema);
+  border-color: var(--crema);
+  color: var(--negro);
+}
+/* audio del video ("activable de forma orgánica") */
+.cine-audio {
+  position: absolute;
+  left: 2rem;
+  bottom: 2rem;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(240, 233, 216, 0.55);
+  background: rgba(26, 24, 21, 0.28);
+  color: var(--crema);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: 0.25s;
+}
+.cine-audio:hover {
+  background: var(--crema);
+  border-color: var(--crema);
+  color: var(--negro);
+}
+.cine-audio svg {
+  width: 21px;
+  height: 21px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cine-content h1 .w span {
+    transform: none;
+  }
 }
 
 /* ---------- ARCOS (transición) ---------- */

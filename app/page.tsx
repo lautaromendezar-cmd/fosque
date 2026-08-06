@@ -7,6 +7,7 @@ import RingsDeco from '@/components/RingsDeco';
 import Mitos from '@/components/Mitos';
 import HomeFx from '@/components/home/HomeFx';
 import Preloader from '@/components/home/Preloader';
+import CineAudio from '@/components/home/CineAudio';
 import { sedes, waLink, mapsLink, WA_GENERAL } from '@/data/sedes';
 import { mitosHome } from '@/data/mitos';
 
@@ -18,25 +19,15 @@ export default function Home() {
       <Preloader />
       <Nav waNumero={WA_GENERAL} waTexto="Hola Fosque! Quiero vivir la experiencia" />
 
-      {/* ============ BENTO HERO: la película Fosque ============ */}
-      <section id="bento" data-bg="#F0E9D8">
-        <div className="bento-grid">
-          <Media className="m-hide" file="galeria-reformer.jpg" shot="📷 Sala Reformer" />
-          <Media file="metodo.mp4" shot="🎬 Método · detalle resortes" />
-          <Media className="m-hide" file="equipo-1.jpg" shot="📷 Instructora" />
-          <Media file="sede-jose-hernandez.mp4" shot="🎬 Sede José Hernández" />
-          <Media
-            className="bento-center"
-            file="hero.mp4"
-            shot="🎬 VIDEO HERO · Mujeres en Reformer, risas, abrazo · Luz cálida"
-          />
-          <Media file="sede-nunez.mp4" shot="🎬 Sede Núñez" />
-          <Media className="m-hide" file="galeria-salida.jpg" shot="📷 Alumnas saliendo" />
-          <Media file="sede-emilio-castro.mp4" shot="🎬 Sede Emilio Castro" />
-          <Media className="m-hide" file="equipo-4.jpg" shot="📷 Equipo Fosque" />
-        </div>
-        <div className="bento-veil" />
-        <div className="bento-head">
+      {/* ============ HERO CINE: la película Fosque ============ */}
+      <section id="cine" data-bg="#F0E9D8">
+        <Media
+          className="cine-bg"
+          file="hero.mp4"
+          shot="🎬 VIDEO HERO · Relato continuo sin cortes bruscos: rutina urbana y cansancio → llegada a Fosque → transformación, risas, abrazo · Luz cálida"
+        />
+        <div className="cine-veil" />
+        <div className="cine-content">
           <h1>
             {TITULO.split(' ').map((w, i) => (
               <span key={i}>
@@ -47,30 +38,24 @@ export default function Home() {
             ))}
           </h1>
           <p className="sub">
-            Tu vida no tiene precio. Fosque no es un gimnasio: es el lugar donde sos bienvenida, te
-            acompañamos y transformamos el ejercicio en el gran logro de tu vida.
+            Fosque no es un gimnasio. Es el lugar donde lográs tu mejor versión para disfrutar y
+            cuidar lo más importante de tu vida.
           </p>
           <div className="ctas">
             <a
-              className="btn solid"
+              className="btn cta"
               href={waLink(WA_GENERAL, 'Hola Fosque! Quiero vivir la experiencia')}
               target="_blank"
               rel="noopener"
             >
               Quiero vivir la experiencia Fosque
             </a>
-            <a className="btn" href="#sedes">
+            <a className="btn ghost" href="#sedes">
               Elegí tu sucursal
             </a>
           </div>
         </div>
-        <div className="bento-quote">
-          <blockquote>&ldquo;A Fosque venís a sentirte querida.&rdquo;</blockquote>
-          <p>
-            Desde tu primer mensaje te hacemos sentir bienvenida: tu Ejecutiva Fosque te guía y te
-            motiva para que el ejercicio sea sostenible, constante y hasta divertido.
-          </p>
-        </div>
+        <CineAudio />
       </section>
 
       {/* ============ HISTORIA ============ */}

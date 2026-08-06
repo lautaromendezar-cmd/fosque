@@ -19,21 +19,26 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const q = gsap.utils.selector(scope);
 
+      /* Apertura de película: la pregunta palabra por palabra, pausa para
+         reflexión, y recién ahí entran subtítulo y CTAs. Todo queda fijo. */
       const reveal = () => {
-        gsap.to(q('.bento-head h1 .w > span'), {
+        const tl = gsap.timeline({ delay: 0.15 });
+        tl.to(q('.cine-content h1 .w > span'), {
           y: 0,
           duration: 0.9,
           ease: 'power3.out',
-          stagger: 0.06,
-          delay: 0.1,
-        });
-        gsap.from(q('.bento-head .sub, .bento-head .ctas'), {
-          y: 24,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.12,
-          delay: 0.35,
-        });
+          stagger: 0.09,
+        })
+          .from(
+            q('.cine-content .sub'),
+            { y: 26, opacity: 0, duration: 0.8, ease: 'power2.out' },
+            '+=0.9',
+          )
+          .from(
+            q('.cine-content .ctas'),
+            { y: 22, opacity: 0, duration: 0.7, ease: 'power2.out' },
+            '-=0.35',
+          );
       };
 
       /* ---- PRELOADER (solo primera visita por sesión) ---- */
@@ -46,7 +51,7 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       if (reduced || sessionStorage.getItem('fosque-seen')) {
         kill();
         if (reduced) {
-          gsap.set(q('.bento-head h1 .w > span'), { y: 0 });
+          gsap.set(q('.cine-content h1 .w > span'), { y: 0 });
         } else {
           reveal();
         }
@@ -128,62 +133,14 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         });
       });
 
-      /* ---- Bento hero: el video central devora la pantalla ---- */
-      const bento = q('#bento')[0] as HTMLElement;
-      const bentoCenter = q('.bento-center')[0] as HTMLElement;
-      if (bento && bentoCenter) {
-        const grid = q('.bento-grid')[0] as HTMLElement;
-        const otros = q('.bento-grid .vph').filter((el) => el !== bentoCenter);
-
-        /* entrada de las tiles (el bento arranca en viewport: sin trigger) */
-        gsap.from(q('.bento-grid .vph'), {
-          y: 60,
-          opacity: 0,
-          scale: 0.92,
-          stagger: { each: 0.06, from: 'center' },
-          duration: 0.9,
-          ease: 'power2.out',
-          delay: 0.15,
-          clearProps: 'transform,opacity',
-        });
-
-        /* geometría del tile central relativa a la sección (estable con pin) */
-        const rect = () => {
-          const w = bentoCenter.offsetWidth;
-          const h = bentoCenter.offsetHeight;
-          const cx = grid.offsetLeft + bentoCenter.offsetLeft + w / 2;
-          const cy = grid.offsetTop + bentoCenter.offsetTop + h / 2;
-          return { w, h, cx, cy };
-        };
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: bento,
-            start: 'top top',
-            end: '+=200%',
-            scrub: 1,
-            pin: true,
-            invalidateOnRefresh: true,
-          },
-        });
-        tl.to(q('.bento-head'), { opacity: 0, y: -70, duration: 0.16, ease: 'power1.in' }, 0)
-          .to(q('.bento-veil'), { opacity: 0, duration: 0.2 }, 0.04)
-          .to(otros, { opacity: 0, scale: 0.9, duration: 0.3, stagger: 0.02 }, 0.18)
-          .to(
-            bentoCenter,
-            {
-              x: () => window.innerWidth / 2 - rect().cx,
-              y: () => window.innerHeight / 2 - rect().cy,
-              scale: () => Math.max(window.innerWidth / rect().w, window.innerHeight / rect().h) * 1.01,
-              borderRadius: 0,
-              duration: 0.55,
-              ease: 'power2.inOut',
-            },
-            0.25,
-          )
-          .to(q('.bento-quote'), { opacity: 1, duration: 0.2 }, 0.72)
-          .from(q('.bento-quote blockquote'), { y: 46, duration: 0.22 }, 0.72)
-          .from(q('.bento-quote p'), { y: 34, duration: 0.22 }, 0.78);
+      /* ---- Hero cine: zoom lentísimo del video, respiración de película ---- */
+      const cineVideo = q('#cine video')[0];
+      if (cineVideo) {
+        gsap.fromTo(
+          cineVideo,
+          { scale: 1 },
+          { scale: 1.07, duration: 16, ease: 'sine.inOut', yoyo: true, repeat: -1 },
+        );
       }
 
       /* ---- Sedes: carrusel horizontal con pin (solo desktop) ---- */
