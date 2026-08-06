@@ -267,31 +267,33 @@ export default function Home() {
         <div className="wrap">
           <div className="eyebrow">El Equipo Fosque</div>
           <h2>Las personas que te van a cuidar.</h2>
+          {/* <a> nativo: Link de Next pisa el hash cuando hay varios al mismo
+              pathname (bug de la caché de prefetch del App Router) */}
           <div className="row equipo-cards">
-            <Link className="eq-card" href="/equipo/#profe">
+            <a className="eq-card" href="/equipo/#profe">
               <Media file="equipo-3.jpg" shot="📷 Instructor corrigiendo postura" />
               <h3>Profe Fosque</h3>
               <p>Instructores y profesores de sala.</p>
               <span className="go">
                 Conocelos <span className="arrow">→</span>
               </span>
-            </Link>
-            <Link className="eq-card" href="/equipo/#ejecutiva">
+            </a>
+            <a className="eq-card" href="/equipo/#ejecutiva">
               <Media file="equipo-2.jpg" shot="📷 Ejecutiva en recepción" />
               <h3>Ejecutiva Fosque</h3>
               <p>Atención personalizada desde tu primer mensaje.</p>
               <span className="go">
                 Conocelas <span className="arrow">→</span>
               </span>
-            </Link>
-            <Link className="eq-card" href="/equipo/#mantenimiento">
+            </a>
+            <a className="eq-card" href="/equipo/#mantenimiento">
               <Media file="galeria-detalle.jpg" shot="📷 Detalle de sala impecable" />
               <h3>Personal de Mantenimiento</h3>
               <p>Cada sede siempre limpia e impecable.</p>
               <span className="go">
                 Conocelos <span className="arrow">→</span>
               </span>
-            </Link>
+            </a>
           </div>
         </div>
       </section>

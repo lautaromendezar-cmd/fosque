@@ -27,13 +27,15 @@ export default function Footer() {
           <div>
             <h4 className="h-fosque">FOSQUE</h4>
             <Link href="/#historia">Historia</Link>
-            <Link href="/#programa">El Programa</Link>
+            <Link href="/#programa">Método Fosque</Link>
+            <Link href="/equipo/">El Equipo</Link>
             <Link href="/novedades/">Novedades</Link>
           </div>
           <div>
             <h4 className="h-socios">SOCIOS</h4>
             <a href="#">Ingresá a tu Perfil</a>
             <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
           </div>
         </div>
       </footer>

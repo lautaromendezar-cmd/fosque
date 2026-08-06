@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { ReactLenis, useLenis } from 'lenis/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -15,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
  */
 function LenisGsapSync() {
   const lenis = useLenis(ScrollTrigger.update);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!lenis) return;
@@ -28,14 +30,19 @@ function LenisGsapSync() {
     gsap.ticker.add(update);
     gsap.ticker.lagSmoothing(0);
 
-    // Anclas internas (#sedes, #info) con scroll suave de Lenis
+    // Anclas dentro de la misma página (#sedes, /equipo/#profe estando en
+    // /equipo) con scroll suave de Lenis. Las de otra página siguen su curso:
+    // Next navega y el effect de ruta de abajo hace el scroll al montar.
     const onClick = (e: MouseEvent) => {
-      const a = (e.target as HTMLElement).closest('a[href^="#"]') as HTMLAnchorElement | null;
-      if (!a) return;
+      const a = (e.target as HTMLElement).closest('a[href*="#"]') as HTMLAnchorElement | null;
+      if (!a || !a.hash) return;
+      const norm = (p: string) => p.replace(/\/$/, '');
+      if (norm(a.pathname) !== norm(location.pathname)) return;
       const target = document.querySelector(a.hash);
       if (!target) return;
       e.preventDefault();
-      lenis.scrollTo(target as HTMLElement, { offset: -60 });
+      history.pushState(null, '', a.hash);
+      lenis.scrollTo(target as HTMLElement, { offset: -80 });
     };
     document.addEventListener('click', onClick);
 
@@ -44,6 +51,20 @@ function LenisGsapSync() {
       document.removeEventListener('click', onClick);
     };
   }, [lenis]);
+
+  // Ancla al llegar a una página nueva (ej. home → /equipo/#profe): el scroll
+  // nativo de Next pelea con el raf de Lenis, así que lo hace Lenis cuando el
+  // layout del route nuevo ya está montado.
+  useEffect(() => {
+    if (!lenis) return;
+    // con reduced-motion Lenis está destruido: el scroll nativo ya se encarga
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!window.location.hash) return;
+    const target = document.querySelector(window.location.hash);
+    if (!target) return;
+    const t = setTimeout(() => lenis.scrollTo(target as HTMLElement, { offset: -80 }), 120);
+    return () => clearTimeout(t);
+  }, [lenis, pathname]);
 
   return null;
 }

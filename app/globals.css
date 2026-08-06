@@ -677,6 +677,51 @@ nav .links {
   border-color: var(--negro);
   color: var(--crema);
 }
+/* redes sociales en el nav (URLs pendientes de cliente) */
+.nav-social {
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+}
+.nav-social a,
+.mm-social a {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--negro);
+  transition: 0.25s;
+}
+.nav-social a:hover,
+.mm-social a:hover {
+  background: var(--negro);
+  color: var(--crema);
+}
+.nav-social svg,
+.mm-social svg {
+  width: 19px;
+  height: 19px;
+}
+.mm-social {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+/* EVO + redes: solo si entran; en pantallas chicas viven en el menú mobile (y EVO en footer) */
+@media (max-width: 1420px) {
+  nav .nav-social {
+    display: none;
+  }
+}
+@media (max-width: 1240px) {
+  nav .btn.evo {
+    display: none;
+  }
+  nav .links {
+    gap: 1.4rem;
+  }
+}
 
 /* ---------- VIDEO PLACEHOLDER (guion de rodaje) ---------- */
 .vph {
