@@ -196,7 +196,7 @@ export default async function SedePage({ params }: Props) {
       </section>
 
       <Footer />
-      <WaFloat numero={sede.whatsapp} />
+      <WaFloat numero={sede.whatsapp} directo />
     </SedeFx>
   );
 }
