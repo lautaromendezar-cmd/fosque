@@ -1,0 +1,208 @@
+# 🎬 BRIEF ESTRATÉGICO Y ESTRUCTURA WEB OFICIAL: FOSQUE.COM
+
+**Destinatario:** Lautaro (Lead Web Developer / UI-UX Designer)
+
+**Proyecto:** Sitio Web Oficial Fosque ([fosque.com](https://fosque.com))
+
+**Enfoque de Experiencia:** Cinemático, ultradinámico (cero estático), interactivo, altamente emocional y centrado en la **"Mujer Fosque"**.
+
+---
+
+## 🛠️ LINEAMIENTOS TÉCNICOS GENERALES
+
+* **Experiencia Cinemática:** Auto-play de video en segundo plano desde el primer segundo (con opción de audio activable de forma orgánica).
+* **Navegación Interactiva:** Micro-interacciones, animaciones fluidas al hacer scroll (*scroll-triggered animations*) y acordeones inteligentes.
+
+
+* **Responsive First (Optimizado para Mobile):** Más del 85% del tráfico de la red proviene de dispositivos móviles; la navegación debe ser ultrarrápida y táctil.
+
+
+* **Header / Barra Superior Fija (Sticky Header):**
+* **Logotipo de Fosque** (animación suave al hacer scroll).
+* **Acceso a Socios (EVO):** Botón destacado `[Ingresá a tu Perfil]` para acceso directo a la plataforma EVO de las alumnas.
+* **Navegación Menú:** Método Fosque | Profe Fosque | Ejecutiva Fosque | Tu Sucursal | Novedades | Franquicia / Quiero formar parte.
+* **Redes Sociales:** Iconos de Instagram y Facebook integrados.
+
+
+
+---
+
+## 🎥 1. SECCIÓN HERO (Primer Impacto - La Película Fosque)
+
+* **Fondo:** Neutro, sobrio, cinematográfico y elegante.
+
+
+* **Formato Visual (Neuromarketing):** Video continuo de alto impacto desde el segundo 0. Un relato audiovisual sin cortes bruscos que conecta con la rutina diaria, el cansancio urbano y la posterior transformación en Fosque.
+
+
+
+### Copy Persuasivo (Texto en Pantalla)
+
+* **Título Principal:**
+> **"¿Qué es lo más importante de tu vida? ..."** *(pausa en animación para reflexión profunda)*
+
+
+* **Subtítulo:**
+> *"Fosque no es un gimnasio. Es el lugar donde lográs tu mejor versión para disfrutar y cuidar lo más importante de tu vida. Un espacio donde siempre sos bienvenida, te acompañamos con profesionalismo y amabilidad para que el ejercicio físico se convierta, de una vez por todas, en un hábito en tu vida."*
+
+
+* **Botón de Acción Directo (CTA):**
+👉 `[ Quiero vivir la experiencia Fosque ]` *(Redirecciona al checkout de reserva de clase o chat directo)*.
+
+---
+
+## 📖 2. SECCIÓN: NUESTRA HISTORIA (Conexión Emocional)
+
+* **Formato Visual:** Video interactivo tipo *Storytelling* o collage cinemático dinámico donde la usuaria hace clic y descubre la evolución de Fosque desde sus inicios.
+
+### Narrativa de Impacto & Manifiesto
+
+> **24 Años Transformando Vidas**
+> Nacimos en el año 2000. En 24 años le mejoramos la vida a más de **30.000 personas** que confiaron en nosotros para incorporar el ejercicio físico a su día a día.
+> 
+> 
+> **Muchísimas gracias a todas las Mujeres Fosque que nos han hecho parte de su vida en estos 24 años.**
+
+#### 📜 El Manifiesto Fosque
+
+> *"A Fosque venís a sentirte querida. Desde tu primer mensaje te hacemos sentir bienvenida. Tu Ejecutiva Fosque te guía para que puedas disfrutar los beneficios del ejercicio físico y te motivamos para que sea sostenible, constante y hasta divertido."*
+> 
+
+---
+
+## ⚡ 3. SECCIÓN: EL PROGRAMA FOSQUE (La Solución)
+
+* **Formato Visual:** Video explicativo animado y dinámico donde se aprecia la técnica sobre cama de **Fosque Reformer** (la evolución de Pilates).
+
+
+
+### Beneficios Directos (Neuromarketing de Salud & Dolores)
+
+* **Dormir mejor y descansar:** Regularización del sueño y aumento de energía diaria.
+* **Función cerebral y memoria:** Toma de mejores decisiones y mayor claridad mental.
+* **Fuerza y movilidad funcional:** Recuperar la flexibilidad y cuidar la espalda para proteger y abrazar a tus seres amados.
+* **Estado de ánimo y autoestima:** Activación de hormonas de felicidad, alegría y motivación constante.
+* **Cuidado celular y longevidad:** Mantiene las células protegidas; combinación de movimiento y buena alimentación para vivir más y mejor.
+* **Cuerpo en equilibrio:** Promueve la pérdida de peso de forma natural y alivia contracturas.
+* **Salud cardiovascular:** Un corazón más fuerte para amar mejor.
+
+```
+       [ ESTRUCTURA DE 3 NIVELES PROGRESIVOS ]
+  ┌─────────────────┬─────────────────┬─────────────────┐
+  │   1. INICIAL    │  2. PROGRESIVO  │   3. AVANZADO   │
+  └─────────────────┴─────────────────┴─────────────────┘
+
+```
+
+> *Explicación clara: No importa tu estado físico actual; hay un nivel exacto para vos. Ni un esfuerzo de más, ni un movimiento de menos, para asegurar resultados desde tu primera sesión.*
+
+* **Botón de Acción:**
+👉 `[ Quiero mi evaluación sin cargo ]`
+
+---
+
+## 📍 4. SECCIÓN: LAS TRES SUCURSALES (Identidad Local)
+
+* **Nota para Lautaro:** Tarjetas/Menú visual e interactivo con fotos/videos reales de cada sede. Al hacer clic o pasar el cursor, se pliegan/despliegan los accesos directos.
+
+
+
+### 🏛️ SUCURSAL 1: FOSQUE JOSÉ HERNÁNDEZ (FJH)
+
+* **Disciplinas:** Fosque Reformer + Fuerza y Cardio (La combinación más potente).
+
+
+* **Dirección:** José Hernández (Completar altura exacta con la calle).
+
+
+* **Accesos Directos:** `[WhatsApp Sede FJH]` | `[Ver en Google Maps]` | `[Instagram FJH]`.
+
+
+
+### 🏛️ SUCURSAL 2: FOSQUE EMILIO CASTRO (FEC)
+
+* **Disciplinas:** Fosque Reformer.
+
+
+* **Dirección:** Emilio Castro (Completar altura exacta).
+
+
+* **Accesos Directos:** `[WhatsApp Sede FEC]` | `[Ver en Google Maps]` | `[Instagram FEC]`.
+
+
+
+### 🏛️ SUCURSAL 3: FOSQUE NÚÑEZ (FNN)
+
+* **Disciplinas:** Fosque Reformer.
+
+
+* **Dirección:** Núñez (Completar altura exacta).
+
+
+* **Accesos Directos:** `[WhatsApp Sede FNN]` | `[Ver en Google Maps]` | `[Instagram FNN]`.
+
+
+
+---
+
+## 🛑 5. SECCIÓN: "DERRIBANDO MITOS" (Matando Objeciones)
+
+* **Formato Visual:** Acordeón interactivo táctil o mini-reels verticales de respuesta rápida.
+
+
+
+| Mito / Objeción | Respuesta Empática Fosque |
+| --- | --- |
+| **"No tengo tiempo"** | ¿Tiempo para quién? ¿Tiempo para vos? Tenemos la grilla más completa: **Lunes a viernes de 7:00 a 22:00 hs**, sábados desde las 9:00 hs, domingos a la mañana ¡y abrimos feriados! |
+| **"No sé si Pilates es para mí"** | El método se adapta 100% a vos con niveles progresivos para que crezcas y te desafíes sin ningún tipo de miedo. |
+| **"No me gustan los gimnasios"** | ¡A nosotros tampoco! Fosque no se parece en nada a un gimnasio tradicional. Clases guiadas por instructores capacitados y una ejecutiva que te cuida en todo momento.
+
+ |
+| **"No me gusta hacer actividad física"** | A nadie le gusta el esfuerzo previo; ¡lo hermoso es cómo te sentís después! Acá hacemos que todo sea llevadero para que lo disfrutes. |
+| **"¿Tengo que ir muchas veces por semana?"** | Si hiciste menos de 20 clases en los últimos años, empezar con **4 sesiones al mes por 1 a 3 meses** ya te cambia la vida. Es tu nuevo proyecto. |
+| **"Tengo vergüenza"** | Tranquila. Acá no hay cuerpos para juzgar; somos personas reales en un ambiente cálido, familiar y de absoluta amabilidad. |
+| **"¿Tengo que pagar un año por adelantado?"** | Jamás. Invertís mes a mes en tu cuidado. El mes que no quieras continuar, ponés en pausa tu membresía hablando directamente con tu ejecutiva.
+
+ |
+
+---
+
+## 👥 6. SECCIÓN: EL EQUIPO FOSQUE
+
+* **Formato Visual:** Módulo de tarjetas dinámicas reservado para las fotos/videos de los equipos:
+
+
+* **Profe Fosque:** Instructores y profesores de sala.
+* **Ejecutiva Fosque:** Equipo comercial y de atención.
+
+
+* **Personal de Mantenimiento:** Responsables de mantener la sede limpia e impecable.
+
+
+
+
+
+---
+
+## 🚀 7. ESTRUCTURA DE NAVEGACIÓN Y REQUISITOS TÉCNICOS
+
+### Nodos del Menú Principal
+
+1. **Mi Perfil (EVO):** Acceso al sistema de reservas y estado de cuenta del socio.
+2. **Método Fosque:** Explicación cinemática del entrenamiento Reformer.
+3. **Profe Fosque:** Perfiles de los instructores y staff técnico.
+4. **Ejecutiva Fosque:** Presentación del equipo de atención personalizada.
+
+
+5. **Tu Sucursal:** Desplegable interactivo para seleccionar FJH, FEC o FNN.
+
+
+6. **Franquicia / Quiero formar parte:** Módulo de captación para nuevos inversores/franquiciados con formulario interactivo.
+7. **Novedades (Blog / Cartelera Digital):** Espacio tipo CMS autoadministrable para publicar eventos, promos y notas de salud.
+
+### Widget Flotante Obligatorio
+
+* **WhatsApp Flotante Permanente:** Esquina inferior derecha con selector inteligente de sucursal (*¿Con qué sede deseas hablar? FJH / FEC / FNN*).
+
+
+* **Redes Sociales:** Accesos directos a Instagram y Facebook en Header y Footer.
