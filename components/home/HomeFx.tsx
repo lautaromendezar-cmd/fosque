@@ -19,26 +19,38 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const q = gsap.utils.selector(scope);
 
-      /* Apertura de película: la pregunta palabra por palabra, pausa para
-         reflexión, y recién ahí entran subtítulo y CTAs. Todo queda fijo. */
+      /* Estado final del hero: la pregunta + botones, queda fijo. */
       const reveal = () => {
-        const tl = gsap.timeline({ delay: 0.15 });
-        tl.to(q('.cine-content h1 .w > span'), {
+        gsap.to(q('.cine-content'), { opacity: 1, duration: 0.5 });
+        gsap.to(q('.cine-content h1 .w > span'), {
           y: 0,
           duration: 0.9,
           ease: 'power3.out',
-          stagger: 0.09,
-        })
-          .from(
-            q('.cine-content .sub'),
-            { y: 26, opacity: 0, duration: 0.8, ease: 'power2.out' },
-            '+=0.9',
-          )
-          .from(
-            q('.cine-content .ctas'),
-            { y: 22, opacity: 0, duration: 0.7, ease: 'power2.out' },
-            '-=0.35',
-          );
+          stagger: 0.07,
+          delay: 0.1,
+        });
+        gsap.from(q('.cine-content .ctas'), {
+          y: 22,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          delay: 0.6,
+        });
+      };
+
+      /* Trailer: las 3 frases pasan una tras otra (mismo tamaño); cuando
+         termina, recién ahí entra el estado final con los botones. */
+      const film = () => {
+        const frases = q('.cine-frases .frase');
+        const hold = [1.4, 0.9, 1.4]; // la pregunta y el cierre respiran más
+        const tl = gsap.timeline({ delay: 0.25, onComplete: reveal });
+        frases.forEach((f, i) => {
+          tl.fromTo(
+            f,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' },
+          ).to(f, { opacity: 0, y: -26, duration: 0.5, ease: 'power2.in' }, `+=${hold[i]}`);
+        });
       };
 
       /* ---- PRELOADER (solo primera visita por sesión) ---- */
@@ -53,6 +65,7 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         if (reduced) {
           gsap.set(q('.cine-content h1 .w > span'), { y: 0 });
         } else {
+          // visita repetida en la sesión: directo al estado final, sin trailer
           reveal();
         }
       } else {
@@ -65,7 +78,7 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         const tl = gsap.timeline({
           onComplete() {
             kill();
-            reveal();
+            film();
           },
         });
         tl.to(fpath, { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, 0)

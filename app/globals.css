@@ -798,7 +798,28 @@ nav .links {
   transform: rotate(90deg);
 }
 
-/* ---------- HERO CINE (home): las 3 frases sobre el video ---------- */
+/* ---------- HERO CINE (home): trailer de 3 frases sobre el video ---------- */
+.cine-frases {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 10vh 6vw 0;
+  text-align: center;
+  pointer-events: none;
+}
+.cine-frases .frase {
+  grid-area: 1 / 1;
+  font-family: var(--disp);
+  font-size: clamp(2.2rem, 5.6vw, 4.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--crema);
+  max-width: 19ch;
+  opacity: 0;
+  text-shadow: 0 2px 34px rgba(26, 24, 21, 0.45);
+}
 .cine-content {
   position: absolute;
   inset: 0;
@@ -810,6 +831,7 @@ nav .links {
   text-align: center;
   color: var(--crema);
   padding: 12vh 6vw 0;
+  opacity: 0;
 }
 .cine-content h1 {
   font-size: clamp(2.4rem, 6.2vw, 5.4rem);
@@ -838,6 +860,7 @@ nav .links {
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: 4.5vh;
 }
 /* botón fantasma sobre el video */
 .btn.ghost {
@@ -877,6 +900,12 @@ nav .links {
   height: 21px;
 }
 @media (prefers-reduced-motion: reduce) {
+  .cine-frases {
+    display: none;
+  }
+  .cine-content {
+    opacity: 1;
+  }
   .cine-content h1 .w span {
     transform: none;
   }

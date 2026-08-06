@@ -27,6 +27,16 @@ export default function Home() {
           shot="🎬 VIDEO HERO · Relato continuo sin cortes bruscos: rutina urbana y cansancio → llegada a Fosque → transformación, risas, abrazo · Luz cálida"
         />
         <div className="cine-veil" />
+        {/* las 3 frases del trailer: una tras otra, mismo tamaño */}
+        <div className="cine-frases" aria-hidden="true">
+          <p className="frase">¿Qué es lo más importante de tu vida?</p>
+          <p className="frase">Fosque no es un gimnasio.</p>
+          <p className="frase">
+            Es el lugar donde lográs tu mejor versión para disfrutar y cuidar lo más importante de
+            tu vida.
+          </p>
+        </div>
+        {/* estado final: aparece cuando termina el trailer y queda fijo */}
         <div className="cine-content">
           <h1>
             {TITULO.split(' ').map((w, i) => (
@@ -37,10 +47,6 @@ export default function Home() {
               </span>
             ))}
           </h1>
-          <p className="sub">
-            Fosque no es un gimnasio. Es el lugar donde lográs tu mejor versión para disfrutar y
-            cuidar lo más importante de tu vida.
-          </p>
           <div className="ctas">
             <a
               className="btn cta"
