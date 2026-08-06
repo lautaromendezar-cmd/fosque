@@ -65,10 +65,10 @@ export default function Home() {
           </div>
         </div>
         <div className="bento-quote">
-          <blockquote>&ldquo;Acá no venís a sufrir.&rdquo;</blockquote>
+          <blockquote>&ldquo;A Fosque venís a sentirte querida.&rdquo;</blockquote>
           <p>
-            Desde tu primer mensaje te hacemos sentir valorada: tu Ejecutiva Fosque te guía para
-            que incorporar el movimiento sea sostenible y hermoso.
+            Desde tu primer mensaje te hacemos sentir bienvenida: tu Ejecutiva Fosque te guía y te
+            motiva para que el ejercicio sea sostenible, constante y hasta divertido.
           </p>
         </div>
       </section>
@@ -88,8 +88,9 @@ export default function Home() {
               en estos 24 años.
             </p>
             <p>
-              Acá no venís a sufrir. Desde tu primer mensaje te hacemos sentir valorada: tu
-              Ejecutiva Fosque te guía para que incorporar el movimiento sea sostenible y hermoso.
+              A Fosque venís a sentirte querida. Desde tu primer mensaje te hacemos sentir
+              bienvenida. Tu Ejecutiva Fosque te guía para que puedas disfrutar los beneficios del
+              ejercicio físico y te motivamos para que sea sostenible, constante y hasta divertido.
             </p>
             <div className="stats">
               <div className="stat">
@@ -170,11 +171,11 @@ export default function Home() {
             <a
               className="btn solid"
               style={{ marginTop: '1.4rem' }}
-              href={waLink(WA_GENERAL, 'Hola! Quiero mi sesión de diagnóstico')}
+              href={waLink(WA_GENERAL, 'Hola! Quiero mi evaluación sin cargo')}
               target="_blank"
               rel="noopener"
             >
-              Quiero mi sesión de diagnóstico
+              Quiero mi evaluación sin cargo
             </a>
           </div>
         </div>

@@ -93,7 +93,7 @@ export const sedes: Sede[] = [
     ],
     horarioResumen: 'L a V 8:00–21:00 · Sáb 9:00–13:00',
     disciplinas: ['Fosque Reformer'],
-    marquee: ['FOSQUE REFORMER', 'NIVELES 1 · 2 · 3', 'CLASE DE DIAGNÓSTICO', 'AMBIENTE CÁLIDO'],
+    marquee: ['FOSQUE REFORMER', 'NIVELES 1 · 2 · 3', 'EVALUACIÓN SIN CARGO', 'AMBIENTE CÁLIDO'],
     placeId: 'ChIJAT7pAFfIvJURJROxKVu3WyU',
     instagram: null,
     descripcion:
@@ -130,7 +130,7 @@ export const sedes: Sede[] = [
     ],
     horarioResumen: 'L a V 8:00–21:00 · Sáb 8:00–13:00',
     disciplinas: ['Fosque Reformer'],
-    marquee: ['FOSQUE REFORMER', 'NIVELES 1 · 2 · 3', 'CLASE DE DIAGNÓSTICO', 'ZONA NORTE'],
+    marquee: ['FOSQUE REFORMER', 'NIVELES 1 · 2 · 3', 'EVALUACIÓN SIN CARGO', 'ZONA NORTE'],
     placeId: 'ChIJgxgtyCC0vJURBp2OL0nQzA0',
     instagram: null,
     descripcion:

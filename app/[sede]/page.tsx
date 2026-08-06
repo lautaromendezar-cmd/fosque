@@ -36,9 +36,9 @@ export default async function SedePage({ params }: Props) {
   const sede = getSede(slug);
   if (!sede) notFound();
 
-  const waDiagnostico = waLink(
+  const waEvaluacion = waLink(
     sede.whatsapp,
-    `Hola! Quiero mi sesión de diagnóstico en ${sede.nombre}`,
+    `Hola! Quiero mi evaluación sin cargo en ${sede.nombre}`,
   );
 
   return (
@@ -59,8 +59,8 @@ export default async function SedePage({ params }: Props) {
         </div>
         <p className="sub">{sede.descripcion}</p>
         <div className="ctas">
-          <a className="btn solid" href={waDiagnostico} target="_blank" rel="noopener">
-            Quiero mi sesión de diagnóstico
+          <a className="btn solid" href={waEvaluacion} target="_blank" rel="noopener">
+            Quiero mi evaluación sin cargo
           </a>
           <a className="btn" href="#info">
             Horarios y ubicación
@@ -179,7 +179,7 @@ export default async function SedePage({ params }: Props) {
       {/* CTA FINAL */}
       <section id="final" data-bg="#F0E9D8">
         <div className="eyebrow">Tu primera clase te espera</div>
-        <h2>Vení a probar. La llamamos clase de diagnóstico.</h2>
+        <h2>Vení a probar. Tu evaluación es sin cargo.</h2>
         <p>
           Después de esa clase recibís una devolución personalizada sobre cuáles son las mejores
           clases y planes para vos.
@@ -187,11 +187,11 @@ export default async function SedePage({ params }: Props) {
         <a
           className="btn solid"
           style={{ fontSize: '1rem', padding: '1rem 2.2rem' }}
-          href={waLink(sede.whatsapp, `Hola! Quiero mi clase de diagnóstico en ${sede.nombre}`)}
+          href={waLink(sede.whatsapp, `Hola! Quiero mi evaluación sin cargo en ${sede.nombre}`)}
           target="_blank"
           rel="noopener"
         >
-          Reservar mi clase de diagnóstico
+          Reservar mi evaluación sin cargo
         </a>
       </section>
 

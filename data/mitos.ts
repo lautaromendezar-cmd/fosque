@@ -2,38 +2,39 @@ import type { Mito } from '@/components/Mitos';
 import type { Sede } from './sedes';
 
 /**
- * Copys del brief del cliente, tal cual — salvo la respuesta de "No tengo
- * tiempo": el horario completo (L-V 7 a 22, dom y feriados) solo es real en
- * Mataderos/Bragado, así que en cada landing se usa el horario de ESA sede.
+ * Copys del brief del cliente (lineamientos 2026-08), tal cual — salvo la
+ * respuesta de "No tengo tiempo": la grilla completa (L-V 7 a 22, dom y
+ * feriados) solo es real en José Hernández, así que en cada landing se usa el
+ * horario de ESA sede (mitosParaSede).
  */
 const base: Mito[] = [
   {
     q: '"No tengo tiempo"',
-    a: '¿Tiempo para quién? ¿Tiempo para vos? Tenemos una de las grillas más completas: consultá el horario de tu sede — Mataderos abre de lunes a viernes de 7 a 22, sábados y domingos también.',
+    a: '¿Tiempo para quién? ¿Tiempo para vos? Tenemos la grilla más completa: lunes a viernes de 7:00 a 22:00 hs, sábados desde las 9:00 hs, domingos a la mañana ¡y abrimos feriados!',
   },
   {
     q: '"No sé si Pilates es para mí"',
-    a: 'Justamente: el método se adapta 100% a tus necesidades con niveles progresivos para que crezcas y te desafíes sin miedo.',
+    a: 'El método se adapta 100% a vos con niveles progresivos para que crezcas y te desafíes sin ningún tipo de miedo.',
   },
   {
     q: '"No me gustan los gimnasios"',
-    a: '¡A nosotros tampoco! Fosque no se parece en nada. Clases siempre con instructor capacitado y una ejecutiva que te cuida y te hace pasar un gran momento.',
+    a: '¡A nosotros tampoco! Fosque no se parece en nada a un gimnasio tradicional. Clases guiadas por instructores capacitados y una ejecutiva que te cuida en todo momento.',
   },
   {
     q: '"No me gusta hacer actividad física"',
-    a: 'A nadie le gusta el esfuerzo previo, ¡lo hermoso es cómo te sentís después! Acá hacemos que todo sea llevadero para que disfrutes los beneficios por días.',
+    a: 'A nadie le gusta el esfuerzo previo; ¡lo hermoso es cómo te sentís después! Acá hacemos que todo sea llevadero para que lo disfrutes.',
   },
   {
-    q: '"¿Tengo que hacer 2 o 3 sesiones por semana?"',
-    a: 'Si hiciste menos de 20 clases profesionales en los últimos años, empezar con 4 sesiones al mes por 1 a 3 meses ya te cambia la vida. Es un proceso: tu nuevo proyecto.',
+    q: '"¿Tengo que ir muchas veces por semana?"',
+    a: 'Si hiciste menos de 20 clases en los últimos años, empezar con 4 sesiones al mes por 1 a 3 meses ya te cambia la vida. Es tu nuevo proyecto.',
   },
   {
     q: '"Tengo vergüenza"',
-    a: 'Tranquila. Acá nadie juzga a nadie: somos todos personas normales en un ambiente cálido, familiar y de absoluta amabilidad.',
+    a: 'Tranquila. Acá no hay cuerpos para juzgar; somos personas reales en un ambiente cálido, familiar y de absoluta amabilidad.',
   },
   {
     q: '"¿Tengo que pagar un año por adelantado?"',
-    a: 'Jamás. Invertís mes a mes en tu cuidado. El mes que no querés continuar, ponés en pausa tu membresía hablando personalmente con tu ejecutiva.',
+    a: 'Jamás. Invertís mes a mes en tu cuidado. El mes que no quieras continuar, ponés en pausa tu membresía hablando directamente con tu ejecutiva.',
   },
 ];
 
