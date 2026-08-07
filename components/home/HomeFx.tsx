@@ -33,12 +33,19 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           stagger: 0.07,
           delay: 0.1,
         });
+        gsap.from(q('.cine-content .sub'), {
+          y: 18,
+          opacity: 0,
+          duration: 0.7,
+          ease: 'power2.out',
+          delay: 0.55,
+        });
         gsap.from(q('.cine-content .ctas'), {
           y: 22,
           opacity: 0,
           duration: 0.7,
           ease: 'power2.out',
-          delay: 0.6,
+          delay: 0.8,
         });
       };
 

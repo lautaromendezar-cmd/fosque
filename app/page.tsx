@@ -47,6 +47,12 @@ export default function Home() {
               </span>
             ))}
           </h1>
+          {/* la parte del subtítulo oficial que el trailer no dice: cierra el relato */}
+          <p className="sub">
+            Un espacio donde siempre sos bienvenida, te acompañamos con profesionalismo y
+            amabilidad para que el ejercicio físico se convierta, de una vez por todas, en un
+            hábito en tu vida.
+          </p>
           <div className="ctas">
             <a
               className="btn cta"
