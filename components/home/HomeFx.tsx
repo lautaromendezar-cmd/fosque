@@ -38,10 +38,12 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         });
       };
 
-      /* Trailer: las 3 frases pasan una tras otra (mismo tamaño); cuando
-         termina, recién ahí entra el estado final con los botones. */
+      /* Trailer en 3 actos: la pregunta sola sobre telón negro → el video
+         "abre la escena" junto con la 2ª frase → al cierre entra el estado
+         final con los botones. */
       const film = () => {
         const frases = q('.cine-frases .frase');
+        const escena = q('#cine .cine-bg, #cine .cine-veil, #cine .cine-audio');
         const hold = [1.4, 0.9, 1.4]; // la pregunta y el cierre respiran más
         const tl = gsap.timeline({ delay: 0.25, onComplete: reveal });
         frases.forEach((f, i) => {
@@ -49,7 +51,12 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
             f,
             { opacity: 0, y: 30 },
             { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' },
-          ).to(f, { opacity: 0, y: -26, duration: 0.5, ease: 'power2.in' }, `+=${hold[i]}`);
+          );
+          if (i === 1) {
+            // el video entra con la 2ª frase (leve anticipo, tipo apertura de escena)
+            tl.to(escena, { opacity: 1, duration: 1.3, ease: 'power2.inOut' }, '<-0.35');
+          }
+          tl.to(f, { opacity: 0, y: -26, duration: 0.5, ease: 'power2.in' }, `+=${hold[i]}`);
         });
       };
 
@@ -70,6 +77,9 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         }
       } else {
         sessionStorage.setItem('fosque-seen', '1');
+        // telón negro listo ANTES de que el preloader se desvanezca (si no,
+        // el video se ve un instante detrás y se apaga de golpe)
+        gsap.set(q('#cine .cine-bg, #cine .cine-veil, #cine .cine-audio'), { opacity: 0 });
         // dibujo del contorno del isologo real → relleno → devora la pantalla
         const fpath = q('#preloader .fmark path')[0] as unknown as SVGPathElement;
         const len = fpath.getTotalLength();

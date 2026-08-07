@@ -52,6 +52,10 @@ El doc del cliente está en `docs/lineamientos-cliente-2026-08.txt`. Se implemen
 - **GSAP**: `from()` con stagger sobre targets de selectores mezclados dejó un target congelado en los valores iniciales → `CineAudio` quedó fuera de la timeline (siempre visible). Pins: usar `clearProps` en entrances para no pisar hovers CSS.
 - **Counters + reduced-motion**: setear el valor final directo (HomeFx y FranquiciaFx lo hacen).
 
+## ✅ Sesión 2026-08-07 — Hero en 3 actos
+
+Rework del trailer del hero a pedido de Lautaro: **acto 1** = la pregunta sola sobre telón negro (sin video, `#cine` tiene `background: var(--negro)`); **acto 2** = el video+velo+botón de audio se funden a la vista junto con "Fosque no es un gimnasio." (leve anticipo `'<-0.35'`); sigue la 3ª frase sobre el video y al cierre el estado final (pregunta + CTAs) igual que antes. Detalle clave: la escena se oculta (`gsap.set opacity 0`) ANTES de arrancar el preloader — si se hace en `film()` el video se ve un instante detrás del preloader al desvanecerse y se apaga de golpe. Reduced-motion y visitas repetidas no se tocan (nunca corren `film()`, la escena queda visible). Verificado con capturas Playwright por acto.
+
 ## ⏳ Pendientes
 
 **Del CLIENTE (bloquean):**

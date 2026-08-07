@@ -98,6 +98,8 @@ section {
   height: 100svh;
   padding: 0;
   overflow: hidden;
+  /* telón de fondo del acto 1 del trailer (la pregunta sola, sin video) */
+  background: var(--negro);
 }
 #cine .cine-bg {
   position: absolute;
