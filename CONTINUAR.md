@@ -62,6 +62,8 @@ Rework del trailer del hero a pedido de Lautaro: **acto 1** = la pregunta sola s
 
 **Intro limpia**: durante la intro el nav y el WhatsApp flotante están ocultos (`autoAlpha 0` seteado junto con el telón, antes del preloader) y entran en `reveal()` con los CTAs — en el acto 1 se ve SOLO la frase sobre negro. `CineAudio` quedó detrás del flag `HERO_CON_AUDIO` en `page.tsx` (hoy `false`): poner `true` cuando el hero.mp4 real traiga pista de audio, con video mudo el botón confundía.
 
+**Video del hero sin loop visible**: el hero.mp4 (8s) se reproducía invisible desde la carga y loopeaba a mitad del trailer. Ahora, en el momento exacto en que abre la escena, un callback en la timeline lo reinicia (`currentTime = 0`) y lo ralentiza (`playbackRate = 0.55` → un pase ≈ 14.6s): cubre las frases y el aterrizaje del estado final; el primer loop llega mucho después. ⚠️ Si se reemplaza hero.mp4 por el del rodaje, recalcular el rate (comentario en `HomeFx.tsx`) — y si trae audio, el playbackRate ralentizado va a deformar la pista: en ese caso repensar (quizás rate 1 y un clip más largo).
+
 ## ⏳ Pendientes
 
 **Del CLIENTE (bloquean):**

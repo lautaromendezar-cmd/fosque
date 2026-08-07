@@ -64,6 +64,7 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       const film = () => {
         const frases = q('.cine-frases .frase');
         const escena = q('#cine .cine-bg, #cine .cine-veil, #cine .cine-audio');
+        const video = q('#cine video')[0] as HTMLVideoElement | undefined;
         const hold = [1.4, 0.9, 1.4]; // la pregunta y el cierre respiran más
         const tl = gsap.timeline({ delay: 0.25, onComplete: reveal });
         frases.forEach((f, i) => {
@@ -75,6 +76,16 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           if (i === 1) {
             // el video entra con la 2ª frase (leve anticipo, tipo apertura de escena)
             tl.to(escena, { opacity: 1, duration: 1.3, ease: 'power2.inOut' }, '<-0.35');
+            // ...arrancando desde cero y ralentizado: el hero.mp4 venía
+            // reproduciéndose invisible desde la carga y loopeaba a mitad del
+            // trailer. Un pase a 0.55x (8s ÷ 0.55 ≈ 14.6s) cubre las frases
+            // y el aterrizaje del estado final sin corte visible.
+            tl.add(() => {
+              if (video) {
+                video.currentTime = 0;
+                video.playbackRate = 0.55;
+              }
+            }, '<');
           }
           tl.to(f, { opacity: 0, y: -26, duration: 0.5, ease: 'power2.in' }, `+=${hold[i]}`);
         });
