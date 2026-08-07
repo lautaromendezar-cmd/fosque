@@ -7,6 +7,10 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+/* ¿La home ya montó en ESTE documento? (variable de módulo: sobrevive a la
+   navegación client-side, se resetea con cada carga/recarga de página) */
+let homeMontoEnEsteDoc = false;
+
 /**
  * Motor de animación de la home. El contenido llega server-rendered como
  * children; acá solo se anima (regla de oro: "use client" solo donde se anima).
@@ -60,19 +64,27 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         });
       };
 
-      /* ---- PRELOADER (solo primera visita por sesión) ---- */
+      /* ---- PRELOADER + TRAILER ----
+         La intro corre en la primera visita de la sesión y también al
+         RECARGAR la página (recargar = querés verla de nuevo). Volver a la
+         home navegando dentro del sitio va directo al estado final. */
       const pre = q('#preloader')[0];
       const counter = q('#counter')[0];
       const kill = () => {
         pre?.remove();
         counter?.remove();
       };
-      if (reduced || sessionStorage.getItem('fosque-seen')) {
+      const navType = (
+        performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
+      )?.type;
+      const replay = navType === 'reload' && !homeMontoEnEsteDoc;
+      homeMontoEnEsteDoc = true;
+      if (reduced || (sessionStorage.getItem('fosque-seen') && !replay)) {
         kill();
         if (reduced) {
           gsap.set(q('.cine-content h1 .w > span'), { y: 0 });
         } else {
-          // visita repetida en la sesión: directo al estado final, sin trailer
+          // vuelta a la home sin recargar: directo al estado final
           reveal();
         }
       } else {
