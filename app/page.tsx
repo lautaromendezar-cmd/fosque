@@ -13,6 +13,11 @@ import { mitosHome } from '@/data/mitos';
 
 const TITULO = '¿Qué es lo más importante de tu vida?';
 
+/* Botón mute/unmute del hero ("audio activable de forma orgánica" del brief).
+   Poner en true cuando el hero.mp4 real del rodaje traiga pista de audio —
+   con el video IA mudo actual el botón no hace nada y confunde. */
+const HERO_CON_AUDIO = false;
+
 export default function Home() {
   return (
     <HomeFx>
@@ -67,7 +72,7 @@ export default function Home() {
             </a>
           </div>
         </div>
-        <CineAudio />
+        {HERO_CON_AUDIO && <CineAudio />}
       </section>
 
       {/* ============ HISTORIA ============ */}

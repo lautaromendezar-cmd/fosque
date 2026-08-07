@@ -23,8 +23,17 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const q = gsap.utils.selector(scope);
 
-      /* Estado final del hero: la pregunta + botones, queda fijo. */
+      /* Estado final del hero: la pregunta + botones, queda fijo. El nav y
+         el WhatsApp flotante entran acá (durante la intro están ocultos;
+         autoAlpha también corta los clicks mientras tanto). */
       const reveal = () => {
+        gsap.to(q('nav, #wa-box, #wa'), {
+          autoAlpha: 1,
+          duration: 0.8,
+          ease: 'power2.out',
+          delay: 0.8,
+          clearProps: 'opacity,visibility',
+        });
         gsap.to(q('.cine-content'), { opacity: 1, duration: 0.5 });
         gsap.to(q('.cine-content h1 .w > span'), {
           y: 0,
@@ -97,8 +106,10 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       } else {
         sessionStorage.setItem('fosque-seen', '1');
         // telón negro listo ANTES de que el preloader se desvanezca (si no,
-        // el video se ve un instante detrás y se apaga de golpe)
+        // el video se ve un instante detrás y se apaga de golpe); nav y
+        // WhatsApp también arrancan ocultos hasta el estado final
         gsap.set(q('#cine .cine-bg, #cine .cine-veil, #cine .cine-audio'), { opacity: 0 });
+        gsap.set(q('nav, #wa-box, #wa'), { autoAlpha: 0 });
         // dibujo del contorno del isologo real → relleno → devora la pantalla
         const fpath = q('#preloader .fmark path')[0] as unknown as SVGPathElement;
         const len = fpath.getTotalLength();
