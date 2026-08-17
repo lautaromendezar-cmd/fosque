@@ -9,7 +9,15 @@ import { useEffect, useRef } from 'react';
  * se reintenta en el primer toque (modo de bajo consumo) y se re-dispara
  * cuando el video entra al viewport (iOS pausa los que salen de pantalla).
  */
-export default function AutoVideo({ src, label }: { src: string; label: string }) {
+export default function AutoVideo({
+  src,
+  label,
+  poster,
+}: {
+  src: string;
+  label: string;
+  poster?: string;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -44,6 +52,16 @@ export default function AutoVideo({ src, label }: { src: string; label: string }
   }, []);
 
   return (
-    <video ref={ref} src={src} autoPlay muted loop playsInline preload="auto" aria-label={label} />
+    <video
+      ref={ref}
+      src={src}
+      poster={poster}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="auto"
+      aria-label={label}
+    />
   );
 }

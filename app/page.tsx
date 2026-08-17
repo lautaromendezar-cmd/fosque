@@ -24,7 +24,11 @@ export default function Home() {
       <Preloader />
       <Nav waNumero={WA_GENERAL} waTexto="Hola Fosque! Quiero vivir la experiencia" />
 
-      {/* ============ HERO CINE: la película Fosque ============ */}
+      {/* ============ HERO CINE: la película Fosque ============
+          Doc del cliente 2026-08-17: el video corre desde el segundo 0 sobre
+          fondo de paleta (nada de telón negro), la pregunta queda en pantalla
+          unos segundos y el resto del copy se SUMA encima —no reemplaza—,
+          hasta que emergen los botones. */}
       <section id="cine" data-bg="#F0E9D8">
         <Media
           className="cine-bg"
@@ -32,16 +36,6 @@ export default function Home() {
           shot="🎬 VIDEO HERO · Relato continuo sin cortes bruscos: rutina urbana y cansancio → llegada a Fosque → transformación, risas, abrazo · Luz cálida"
         />
         <div className="cine-veil" />
-        {/* las 3 frases del trailer: una tras otra, mismo tamaño */}
-        <div className="cine-frases" aria-hidden="true">
-          <p className="frase">¿Qué es lo más importante de tu vida?</p>
-          <p className="frase">Fosque no es un gimnasio.</p>
-          <p className="frase">
-            Es el lugar donde lográs tu mejor versión para disfrutar y cuidar lo más importante de
-            tu vida.
-          </p>
-        </div>
-        {/* estado final: aparece cuando termina el trailer y queda fijo */}
         <div className="cine-content">
           <h1>
             {TITULO.split(' ').map((w, i) => (
@@ -52,11 +46,10 @@ export default function Home() {
               </span>
             ))}
           </h1>
-          {/* la parte del subtítulo oficial que el trailer no dice: cierra el relato */}
+          {/* 2º tiempo: entra a los 3s, con la pregunta todavía en pantalla */}
           <p className="sub">
-            Un espacio donde siempre sos bienvenida, te acompañamos con profesionalismo y
-            amabilidad para que el ejercicio físico se convierta, de una vez por todas, en un
-            hábito en tu vida.
+            En Fosque nos dedicamos a que puedas disfrutar y cuidar lo que verdaderamente tiene
+            valor en tu vida.
           </p>
           <div className="ctas">
             <a
@@ -73,6 +66,22 @@ export default function Home() {
           </div>
         </div>
         {HERO_CON_AUDIO && <CineAudio />}
+      </section>
+
+      {/* ============ MANIFIESTO: la 2ª pantalla narrativa del hero ============
+          Doc del cliente: el párrafo "Fosque no es un gimnasio…" deja de estar
+          dentro del trailer y pasa a ser la pantalla que se descubre al
+          scrollear. Fondo dentro de la paleta, sin corte con el hero. */}
+      <section id="manifiesto" data-bg="#F0E9D8">
+        <div className="wrap">
+          <h2 className="mf-titulo">Fosque no es un gimnasio.</h2>
+          <p className="mf-texto">
+            Es el lugar donde lográs tu mejor versión, acompañada y motivada por personas
+            maravillosas. Un espacio donde siempre sos bienvenida, guiada con amabilidad para que
+            el ejercicio físico se convierta en un hábito en tu vida y disfrutes los enormes
+            beneficios.
+          </p>
+        </div>
       </section>
 
       {/* ============ HISTORIA ============ */}
@@ -223,7 +232,7 @@ export default function Home() {
               />
               <div className="sc-info">
                 <div className="num">
-                  SEDE {s.numero} · {s.barrio.toUpperCase()}
+                  {s.codigo} · {s.barrio.toUpperCase()}
                 </div>
                 <h3>
                   Fosque
@@ -345,8 +354,9 @@ export default function Home() {
       {/* ============ CTA FINAL ============ */}
       <section id="final" data-bg="#F0E9D8">
         <RingsDeco id="final" from="#F8E27A" to="#F29B38" className="bl" />
-        <div className="eyebrow">Tu momento es ahora</div>
-        <h2>Cambiá tu vida en un abrir y cerrar de ojos.</h2>
+        {/* copy en 1ª persona: la decisión la dice ella, no la marca (doc 2026-08-17) */}
+        <div className="eyebrow">Mi momento es ahora</div>
+        <h2>Comienzo el cambio. Elijo ser mi mejor versión.</h2>
         <a
           className="btn solid"
           style={{ fontSize: '1rem', padding: '1rem 2.2rem' }}

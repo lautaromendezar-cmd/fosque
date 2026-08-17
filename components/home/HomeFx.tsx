@@ -11,6 +11,17 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
    navegación client-side, se resetea con cada carga/recarga de página) */
 let homeMontoEnEsteDoc = false;
 
+/* Segundos que la pregunta queda SOLA en pantalla antes de que se sume la
+   frase central. El doc del cliente pide "0s–3s la pregunta, a los 3s el
+   texto": es la pausa para procesar, así que se toca acá y en ningún otro lado. */
+const HOLD_PREGUNTA = 3;
+
+/* Velocidad del hero.mp4 durante la intro. El clip provisorio de IA dura 8s y
+   loopearía a la vista en mitad de la intro; a 0.55x un pase dura ≈14,6s y la
+   cubre entera. ⚠️ Con el video real del rodaje: si trae audio hay que dejarlo
+   en 1 (el rate ralentizado deforma la pista) y que el clip sea largo de por sí. */
+const HERO_RATE = 0.55;
+
 /**
  * Motor de animación de la home. El contenido llega server-rendered como
  * children; acá solo se anima (regla de oro: "use client" solo donde se anima).
@@ -23,72 +34,61 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const q = gsap.utils.selector(scope);
 
-      /* Estado final del hero: la pregunta + botones, queda fijo. El nav y
-         el WhatsApp flotante entran acá (durante la intro están ocultos;
-         autoAlpha también corta los clicks mientras tanto). */
-      const reveal = () => {
+      /* Nav + WhatsApp flotante: ocultos durante la intro (autoAlpha también
+         corta los clicks mientras tanto), entran con los botones del hero. */
+      const mostrarNav = (delay = 0) =>
         gsap.to(q('nav, #wa-box, #wa'), {
           autoAlpha: 1,
           duration: 0.8,
           ease: 'power2.out',
-          delay: 0.8,
+          delay,
           clearProps: 'opacity,visibility',
         });
-        gsap.to(q('.cine-content'), { opacity: 1, duration: 0.5 });
-        gsap.to(q('.cine-content h1 .w > span'), {
-          y: 0,
-          duration: 0.9,
-          ease: 'power3.out',
-          stagger: 0.07,
-          delay: 0.1,
-        });
-        gsap.from(q('.cine-content .sub'), {
-          y: 18,
-          opacity: 0,
-          duration: 0.7,
-          ease: 'power2.out',
-          delay: 0.55,
-        });
-        gsap.from(q('.cine-content .ctas'), {
-          y: 22,
-          opacity: 0,
-          duration: 0.7,
-          ease: 'power2.out',
-          delay: 0.8,
-        });
+
+      /* Estado final del hero, sin intro: visita repetida dentro de la misma
+         sesión (volver a la home navegando). Todo visible de una. */
+      const reveal = () => {
+        gsap.set(q('.cine-content'), { opacity: 1 });
+        gsap.set(q('.cine-content h1 .w > span'), { y: 0 });
+        gsap.set(q('.cine-content .sub, .cine-content .ctas'), { autoAlpha: 1, y: 0 });
+        mostrarNav(0.2);
       };
 
-      /* Trailer en 3 actos: la pregunta sola sobre telón negro → el video
-         "abre la escena" junto con la 2ª frase → al cierre entra el estado
-         final con los botones. */
+      /* Intro del hero (doc del cliente 2026-08-17): el video viene corriendo
+         desde el segundo 0 sobre fondo de paleta —no hay telón negro ni corte
+         técnico—, la pregunta queda sola en pantalla el tiempo de leerla y el
+         resto del copy se SUMA encima en capas, sin reemplazarla. */
       const film = () => {
-        const frases = q('.cine-frases .frase');
-        const escena = q('#cine .cine-bg, #cine .cine-veil, #cine .cine-audio');
         const video = q('#cine video')[0] as HTMLVideoElement | undefined;
-        const hold = [1.4, 0.9, 1.4]; // la pregunta y el cierre respiran más
-        const tl = gsap.timeline({ delay: 0.25, onComplete: reveal });
-        frases.forEach((f, i) => {
-          tl.fromTo(
-            f,
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' },
-          );
-          if (i === 1) {
-            // el video entra con la 2ª frase (leve anticipo, tipo apertura de escena)
-            tl.to(escena, { opacity: 1, duration: 1.3, ease: 'power2.inOut' }, '<-0.35');
-            // ...arrancando desde cero y ralentizado: el hero.mp4 venía
-            // reproduciéndose invisible desde la carga y loopeaba a mitad del
-            // trailer. Un pase a 0.55x (8s ÷ 0.55 ≈ 14.6s) cubre las frases
-            // y el aterrizaje del estado final sin corte visible.
-            tl.add(() => {
-              if (video) {
-                video.currentTime = 0;
-                video.playbackRate = 0.55;
-              }
-            }, '<');
-          }
-          tl.to(f, { opacity: 0, y: -26, duration: 0.5, ease: 'power2.in' }, `+=${hold[i]}`);
-        });
+        if (video) {
+          // la intro empieza por el primer frame: el video venía reproduciéndose
+          // detrás del preloader y arrancaría por la mitad
+          video.currentTime = 0;
+          video.playbackRate = HERO_RATE;
+        }
+        // el bloque de copy (con su velo local) entra fundido, no de golpe:
+        // si aparece seco se lee como un escalón de luz sobre el video
+        const tl = gsap.timeline({ delay: 0.15 });
+        tl.to(q('.cine-content'), { opacity: 1, duration: 0.9, ease: 'sine.out' }, 0)
+          // la pregunta sube palabra por palabra dentro de ese mismo fundido
+          .to(
+            q('.cine-content h1 .w > span'),
+            { y: 0, duration: 0.95, ease: 'power3.out', stagger: 0.07 },
+            0,
+          )
+          // 2º tiempo: la pregunta ya asentada, se suma la frase central
+          .to(
+            q('.cine-content .sub'),
+            { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out' },
+            `+=${HOLD_PREGUNTA}`,
+          )
+          // 3º tiempo: emergen los botones (y con ellos el nav y el WhatsApp)
+          .to(
+            q('.cine-content .ctas'),
+            { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+            '+=0.9',
+          )
+          .add(() => mostrarNav(), '<');
       };
 
       /* ---- PRELOADER + TRAILER ----
@@ -116,10 +116,10 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         }
       } else {
         sessionStorage.setItem('fosque-seen', '1');
-        // telón negro listo ANTES de que el preloader se desvanezca (si no,
-        // el video se ve un instante detrás y se apaga de golpe); nav y
-        // WhatsApp también arrancan ocultos hasta el estado final
-        gsap.set(q('#cine .cine-bg, #cine .cine-veil, #cine .cine-audio'), { opacity: 0 });
+        // el video NO se oculta: cuando el preloader se desvanece la escena ya
+        // está ahí, en paleta, y no hay salto de fondo. Lo que arranca oculto
+        // es el copy que se suma después, más el nav y el WhatsApp.
+        gsap.set(q('.cine-content .sub, .cine-content .ctas'), { autoAlpha: 0, y: 20 });
         gsap.set(q('nav, #wa-box, #wa'), { autoAlpha: 0 });
         // dibujo del contorno del isologo real → relleno → devora la pantalla
         const fpath = q('#preloader .fmark path')[0] as unknown as SVGPathElement;
@@ -136,7 +136,10 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           .to(counter, { innerText: 100, duration: 1.2, snap: 'innerText', ease: 'power1.inOut' }, 0)
           .to(fpath, { fillOpacity: 1, duration: 0.35, ease: 'power1.in' }, 0.95)
           .to(q('#preloader .fmark'), { scale: 22, opacity: 0, duration: 0.9, ease: 'power3.in' }, 1.35)
-          .to(pre, { opacity: 0, duration: 0.4 }, 1.8);
+          // disolvencia larga: el preloader crema se funde CON el video ya
+          // corriendo debajo, así el paso a la escena es un fundido y no un
+          // corte de luminancia (medido: sin este tramo el salto era de golpe)
+          .to(pre, { opacity: 0, duration: 0.9, ease: 'sine.inOut' }, 1.7);
       }
 
       /* ---- FONDO VIVO: el body muta de color por capítulo ---- */
@@ -162,6 +165,17 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         });
         return;
       }
+
+      /* ---- Manifiesto: la 2ª pantalla del hero, se descubre al scrollear ---- */
+      gsap.from(q('#manifiesto .mf-titulo, #manifiesto .mf-texto'), {
+        y: 44,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: '#manifiesto', start: 'top 78%' },
+      });
 
       /* ---- Counters historia ---- */
       q('[data-count]').forEach((el) => {

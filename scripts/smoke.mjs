@@ -6,6 +6,8 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 
 const OUT = path.join(process.cwd(), 'out');
+// puerto configurable: 4173 lo suele tener tomado otro proyecto en la misma PC
+const PORT = Number(process.env.SMOKE_PORT ?? 4173);
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript',
@@ -24,7 +26,7 @@ const server = http.createServer((req, res) => {
   res.end(fs.readFileSync(file));
 });
 
-await new Promise((r) => server.listen(4173, r));
+await new Promise((r) => server.listen(PORT, r));
 
 const pages = ['/', '/jose-hernandez/', '/emilio-castro/', '/nunez/', '/novedades/'];
 const browser = await chromium.launch();
@@ -37,7 +39,7 @@ for (const route of pages) {
   const errors = [];
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   page.on('pageerror', (e) => errors.push(String(e)));
-  await page.goto(`http://localhost:4173${route}`, { waitUntil: 'networkidle' });
+  await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(2600); // deja terminar el preloader
   await page.mouse.wheel(0, 2500);
   await page.waitForTimeout(1200);

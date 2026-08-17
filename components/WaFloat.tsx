@@ -62,7 +62,10 @@ export default function WaFloat({ numero, directo = false }: { numero: string; d
             rel="noopener"
           >
             <b>{s.nombre}</b>
-            {s.barrio !== s.nombre && <small>{s.barrio}</small>}
+            <small>
+              {s.codigo}
+              {s.barrio !== s.nombre && ` · ${s.barrio}`}
+            </small>
           </a>
         ))}
         <a

@@ -49,7 +49,8 @@ body {
   color: var(--negro);
   background: var(--crema);
   overflow-x: hidden;
-  transition: background-color 0.6s ease;
+  /* fades de fondo entre capítulos, nunca cortes (doc del cliente) */
+  transition: background-color 0.8s ease-in-out;
 }
 
 h1,
@@ -98,14 +99,33 @@ section {
   height: 100svh;
   padding: 0;
   overflow: hidden;
-  /* telón de fondo del acto 1 del trailer (la pregunta sola, sin video) */
-  background: var(--negro);
+  /* fondo de la escena SIEMPRE en paleta: si el video todavía no pintó, lo que
+     se ve es crema, nunca negro (doc del cliente: prohibido el salto a #000) */
+  background: var(--crema);
 }
 #cine .cine-bg {
   position: absolute;
   inset: 0;
   height: 100%;
   border-radius: 0;
+}
+/* mientras el video bufferea, el hueco es crema y no el negro del <video> */
+#cine .cine-bg video,
+#cine .cine-bg img {
+  background: var(--crema);
+}
+/* el pie del hero se funde con el crema de la página: sin esto el video corta
+   en seco contra la sección siguiente (el cliente pidió que no haya cortes) */
+#cine::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 16vh;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(240, 233, 216, 0) 0%, var(--crema) 100%);
 }
 .cine-veil {
   position: absolute;
@@ -117,6 +137,26 @@ section {
     rgba(26, 24, 21, 0.2) 42%,
     rgba(26, 24, 21, 0.66) 100%
   );
+}
+
+/* ---------- MANIFIESTO: la 2ª pantalla narrativa, saliendo del hero ---------- */
+#manifiesto {
+  padding: 18vh 6vw 16vh;
+  text-align: center;
+}
+#manifiesto .wrap {
+  max-width: 1000px;
+}
+.mf-titulo {
+  font-size: clamp(2.4rem, 6.4vw, 5.2rem);
+  margin: 0 0 3.5vh;
+}
+.mf-texto {
+  max-width: 46ch;
+  margin: 0 auto;
+  font-size: clamp(1.15rem, 1.9vw, 1.55rem);
+  line-height: 1.6;
+  opacity: 0.86;
 }
 
 /* ---------- SEDES: carrusel horizontal ---------- */
@@ -801,26 +841,23 @@ nav .links {
 }
 
 /* ---------- HERO CINE (home): trailer de 3 frases sobre el video ---------- */
-.cine-frases {
+/* Velo LOCAL detrás del copy: elipse enorme y de caída larga, así el texto
+   siempre tiene fondo suficiente (medido: sin esto el título quedaba en 2,1:1
+   sobre los frames claros del video) pero los bordes del cuadro siguen
+   luminosos y la escena no se oscurece de conjunto. Tono de paleta, no negro. */
+.cine-content::before {
+  content: '';
   position: absolute;
   inset: 0;
-  z-index: 3;
-  display: grid;
-  place-items: center;
-  padding: 10vh 6vw 0;
-  text-align: center;
+  /* debajo del copy pero dentro del contexto de apilado del hero */
+  z-index: -1;
   pointer-events: none;
-}
-.cine-frases .frase {
-  grid-area: 1 / 1;
-  font-family: var(--disp);
-  font-size: clamp(2.2rem, 5.6vw, 4.9rem);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  color: var(--crema);
-  max-width: 19ch;
-  opacity: 0;
-  text-shadow: 0 2px 34px rgba(26, 24, 21, 0.45);
+  background: radial-gradient(
+    ellipse 75% 58% at 50% 48%,
+    rgba(26, 24, 21, 0.58) 0%,
+    rgba(26, 24, 21, 0.42) 45%,
+    rgba(26, 24, 21, 0) 80%
+  );
 }
 .cine-content {
   position: absolute;
@@ -849,11 +886,13 @@ nav .links {
   display: inline-block;
   transform: translateY(110%);
 }
+/* ya no es un pie de página del título: es la 2ª frase de la película, la que
+   entra a los 3s. Cuerpo intermedio, ancho corto, para leerla de un saque. */
 .cine-content .sub {
-  max-width: 56ch;
-  margin: 3.5vh 0 4vh;
-  font-size: clamp(1rem, 1.4vw, 1.18rem);
-  line-height: 1.65;
+  max-width: 38ch;
+  margin: 3.5vh 0 0;
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+  line-height: 1.5;
   opacity: 0.96;
   text-shadow: 0 1px 20px rgba(26, 24, 21, 0.5);
 }
@@ -902,9 +941,6 @@ nav .links {
   height: 21px;
 }
 @media (prefers-reduced-motion: reduce) {
-  .cine-frases {
-    display: none;
-  }
   .cine-content {
     opacity: 1;
   }

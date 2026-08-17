@@ -8,6 +8,8 @@ export type Sede = {
   heroBack: string;
   heroFront: string;
   barrio: string;
+  /** Código oficial de la sede (doc del cliente 2026-08: FJH / FEC / FNN) */
+  codigo: string;
   numero: string; // "01", "02", "03"
   direccion: string;
   direccionPendiente: boolean; // ⚠️ nombre comercial no coincide con calle del pin
@@ -40,6 +42,7 @@ export const sedes: Sede[] = [
     heroBack: 'Fosque',
     heroFront: 'Mataderos',
     barrio: 'Mataderos',
+    codigo: 'FJH',
     numero: '01',
     direccion: 'Bragado 5952, CABA',
     direccionPendiente: true,
@@ -80,6 +83,7 @@ export const sedes: Sede[] = [
     heroBack: 'Fosque',
     heroFront: 'E. Castro',
     barrio: 'Mataderos',
+    codigo: 'FEC',
     numero: '02',
     direccion: 'Andalgalá 1395, CABA',
     direccionPendiente: true,
@@ -117,6 +121,7 @@ export const sedes: Sede[] = [
     heroBack: 'Fosque',
     heroFront: 'Núñez',
     barrio: 'Núñez',
+    codigo: 'FNN',
     numero: '03',
     direccion: '11 de Septiembre 3635, CABA',
     direccionPendiente: false,

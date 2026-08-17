@@ -23,10 +23,17 @@ export default function Media({
   }
   const src = `/media/${file}`;
   const alt = shot.replace(/[🎬📷]/gu, '').split('·')[0].trim();
+  /* Poster del video: el primer frame en JPG (scripts/gen-posters.mjs). Sin
+     esto el <video> pinta negro mientras bufferea, justo lo que el cliente
+     marcó como corte técnico. Si no existe el archivo, no se pasa el atributo. */
+  const posterFile = file.replace(/\.(mp4|webm)$/, '-poster.jpg');
+  const poster = fs.existsSync(path.join(process.cwd(), 'public', 'media', posterFile))
+    ? `/media/${posterFile}`
+    : undefined;
   return (
     <div className={`vph media ${className}`.trim()}>
       {file.endsWith('.mp4') || file.endsWith('.webm') ? (
-        <AutoVideo src={src} label={alt} />
+        <AutoVideo src={src} label={alt} poster={poster} />
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={src} alt={alt} loading="lazy" />

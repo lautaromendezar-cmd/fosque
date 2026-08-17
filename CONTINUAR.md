@@ -15,9 +15,13 @@ npm run dev                       # desarrollo en localhost:3000
 Verificación antes de CADA push (cazó varios bugs reales):
 
 ```bash
-npm run build            # export estático a out/
-node scripts/smoke.mjs   # Playwright: consola + screenshots de las 5 rutas
+npm run build                 # export estático a out/
+node scripts/smoke.mjs        # Playwright: consola + screenshots de las 5 rutas
+node scripts/check-hero.mjs   # luminancia + contraste + los 4 caminos del hero
 ```
+
+`SMOKE_PORT` / `HERO_PORT` cambian el puerto si otro proyecto tiene tomado el
+default (4173 / 4194).
 
 Pushear a `main` deploya solo a Vercel. ⚠️ En Claude Code el cwd se resetea entre comandos bash: siempre `cd` absoluto antes de npm/git.
 
@@ -64,16 +68,70 @@ Rework del trailer del hero a pedido de Lautaro: **acto 1** = la pregunta sola s
 
 **Video del hero sin loop visible**: el hero.mp4 (8s) se reproducía invisible desde la carga y loopeaba a mitad del trailer. Ahora, en el momento exacto en que abre la escena, un callback en la timeline lo reinicia (`currentTime = 0`) y lo ralentiza (`playbackRate = 0.55` → un pase ≈ 14.6s): cubre las frases y el aterrizaje del estado final; el primer loop llega mucho después. ⚠️ Si se reemplaza hero.mp4 por el del rodaje, recalcular el rate (comentario en `HomeFx.tsx`) — y si trae audio, el playbackRate ralentizado va a deformar la pista: en ese caso repensar (quizás rate 1 y un clip más largo).
 
+## ✅ Sesión 2026-08-17 — Devolución del cliente: se va el telón negro
+
+Doc del cliente (`docs/devolucion-cliente-2026-08-17.md`). El 85% describía lo
+que ya estaba hecho; lo que sí pedía de nuevo se implementó entero:
+
+1. **Adiós al telón negro.** `#cine` pasó de `--negro` a `--crema` y el video ya
+   NO se oculta detrás del preloader: cuando el preloader se disuelve (0,9s, era
+   0,4s) la escena ya está ahí. Se eliminó `.cine-frases` (el trailer de 3 frases
+   que se reemplazaban) y con él la duplicación de la pregunta.
+2. **El copy se SUMA en capas, no se reemplaza.** `film()` en `HomeFx.tsx`:
+   pregunta palabra por palabra → `HOLD_PREGUNTA` (3s, constante arriba del
+   archivo) → frase central → botones + nav + WhatsApp. Total ≈9s.
+3. **Copys oficiales nuevos**: la 2ª frase es "En Fosque nos dedicamos a que
+   puedas disfrutar y cuidar lo que verdaderamente tiene valor en tu vida" y el
+   párrafo largo "Fosque no es un gimnasio…" salió del trailer y es ahora la
+   sección `#manifiesto`, la 2ª pantalla narrativa que se descubre al scrollear.
+4. **CTA final en 1ª persona**: "Mi momento es ahora / Comienzo el cambio. Elijo
+   ser mi mejor versión."
+5. **Códigos oficiales de sede** `FJH/FEC/FNN` (campo `codigo` en `data/sedes.ts`):
+   reemplazan al "SEDE 01/02/03" inventado, en las cards y en el selector de WhatsApp.
+6. **Posters de video** (`scripts/gen-posters.mjs` → `<nombre>-poster.jpg`): un
+   `<video>` sin `poster` pinta NEGRO mientras bufferea, justo el corte técnico
+   que el cliente marcó. `Media.tsx` lo pasa solo si el archivo existe.
+7. **Fundidos**: el pie del hero se funde al crema (`#cine::after`) y el fondo del
+   body pasó a `0.8s ease-in-out`, como pedía el doc.
+
+### Contraste: el hallazgo de la sesión
+
+Medido con `scripts/check-hero.mjs`: el título del hero estaba en **2,11:1**
+contra los frames más claros del video — no llegaba ni a AA large. Venía de
+antes y se notó más al quedar el copy fijo sobre el video. **No se resolvió
+oscureciendo la escena** (sería volver a lo que el cliente rechazó) sino con un
+velo LOCAL detrás del copy: elipse de caída larga en `.cine-content::before`,
+tono de paleta. Los bordes del cuadro siguen luminosos. Ahora **5,0:1** el
+título y **6,1:1** la frase. ⚠️ Volver a correr el check al cambiar `hero.mp4`:
+un clip más claro tira esto abajo sin que se vea a ojo.
+
 ## ⏳ Pendientes
 
 **Del CLIENTE (bloquean):**
 1. URL login EVO → `EVO_URL` en `components/Nav.tsx` (hoy `#`; también en Footer).
-2. Instagram/Facebook general → `IG_URL`/`FB_URL` en `Nav.tsx` + Footer. Instagram por sede → campo `instagram` en `data/sedes.ts` (activa el botón en las cards).
-3. Confirmar nombres comerciales vs direcciones ⚠️ "José Hernández" pin en Bragado 5952, "Emilio Castro" en Andalgalá 1395 (`direccionPendiente: true`).
-4. Media real del rodaje: reemplazar por nombre en `public/media/` — prioridad `hero.mp4` CON AUDIO (relato continuo: rutina/cansancio → Fosque → transformación), `franquicia.mp4`, `equipo-mantenimiento.jpg`, y todas las fotos IA (las del "equipo" son IA: cambiarlas antes del lanzamiento real).
+   ⚠️ El doc del 17-ago vuelve a dibujar el botón `[Ingresá a tu Perfil]` pero
+   sigue sin mandar la URL.
+2. Instagram/Facebook general → `IG_URL`/`FB_URL` en `Nav.tsx` + Footer. Instagram por sede → campo `instagram` en `data/sedes.ts` (activa el botón en las cards). ⚠️ Ídem: el doc muestra el botón de IG en las 3 sedes y no manda las URLs.
+3. Confirmar direcciones ⚠️ "José Hernández" pin en Bragado 5952, "Emilio Castro" en Andalgalá 1395 (`direccionPendiente: true`). Los NOMBRES ya los confirmó el doc del 17-ago (Fosque José Hernández / Emilio Castro / Núñez, FJH/FEC/FNN).
+4. **HORARIOS: hay contradicción sin resolver.** El doc del 17-ago contesta el
+   mito "no tengo tiempo" con "L a V 7:00–22:00, sábados desde 9:00, domingos a
+   la mañana y feriados abiertos" — eso es SOLO José Hernández. En `data/sedes.ts`
+   Emilio Castro es L-V 8–21 / sáb 9–13 y Núñez L-V 8–21 / sáb 8–13, y **ninguna
+   de las dos abre domingo**. Encima para JH figura "domingos hasta 17:00" y el
+   doc dice "a la mañana". No tocar hasta que confirme sede por sede.
+5. ¿Los mitos son 7 o 3? El doc del 17-ago lista 3; en el sitio están los 7 que
+   él mismo mandó en agosto. Se asumió que los 3 son ejemplos y NO se borró nada.
+6. Media real del rodaje: reemplazar por nombre en `public/media/` — prioridad `hero.mp4` CON AUDIO (relato continuo: rutina/cansancio → Fosque → transformación), `franquicia.mp4`, `equipo-mantenimiento.jpg`, y todas las fotos IA (las del "equipo" son IA: cambiarlas antes del lanzamiento real).
+   ⚠️ El rodaje del 12-ago cubrió **solo las 2 sedes de Mataderos** (material en
+   `Desktop/Fosque`, fuera del repo: 99 ARW + 296 clips 1080p a 119,88fps con
+   audio). **Núñez no se filmó** y el doc pide material real de cada sede.
+   Además hoy las 3 sedes comparten los mismos `galeria-*.jpg`: con material real
+   conviene separarlos por sede en `data/sedes.ts`.
 
 **Técnicos:**
-- Dominio fosque.com + setear `NEXT_PUBLIC_SITE_URL` en Vercel (para el OG de WhatsApp).
+- Dominio fosque.com + setear `NEXT_PUBLIC_SITE_URL` en Vercel (para el OG de WhatsApp). ⚠️ El doc del cliente lo encabeza como si el dominio ya existiera: hoy es fosque.vercel.app. Definir quién lo compra.
+- Botón de audio del hero: `HERO_CON_AUDIO` en `app/page.tsx` (hoy `false`). Ponerlo en `true` cuando `hero.mp4` traiga pista de audio — el cliente lo pide expresamente. Y ahí `HERO_RATE` (`HomeFx.tsx`) tiene que volver a 1: a 0,55x el audio se deforma.
+- Lighthouse >90 que pide el doc: alcanzable en accesibilidad / best practices / SEO. En **performance** con video fullscreen en autoplay no es realista; se mejora con el poster + comprimir el clip del rodaje. Conviene fijarle la expectativa antes de que reclame el número.
 - Decap CMS para que Vero publique novedades sola (guía provisoria: `COMO-PUBLIR.md.txt` en la carpeta del proyecto de la PC principal).
 - Transición home → sede con barrido de arcos (idea vieja, baja prioridad).
 
