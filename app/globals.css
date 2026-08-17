@@ -1461,11 +1461,14 @@ nav .links {
   line-height: 1.6;
 }
 
+/* Footer en paleta clara: era el único fondo oscuro que quedaba en el sitio y
+   el cliente pidió continuidad cromática. Arena cálida, un escalón más honda
+   que el crema del body para que igual se lea como bloque de cierre. */
 footer {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #1a1815 0%, #2b1e18 55%, #45281c 100%);
-  color: var(--crema);
+  background: linear-gradient(135deg, #e6dcc4 0%, #f0e2ca 55%, #f6e7d3 100%);
+  color: var(--negro);
   padding: 8vh 6vw;
   border-radius: 48px 48px 0 0;
 }
@@ -1481,39 +1484,52 @@ footer::before {
   z-index: 2;
 }
 footer .rings {
-  opacity: 0.3;
+  opacity: 0.42;
 }
 footer .cols {
   position: relative;
   z-index: 1;
 }
-footer h4.h-sedes {
-  color: var(--terracota);
-  opacity: 1;
+/* Sobre fondo claro el terracota/durazno/salvia como TEXTO no pasa de 2:1, así
+   que el color de cada columna vive en una marca al costado (decorativa) y el
+   rótulo va en negro. Se conserva el código de color de las 3 columnas. */
+footer h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
 }
-footer h4.h-fosque {
-  color: var(--durazno);
-  opacity: 1;
+footer h4::before {
+  content: '';
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  flex: none;
+  background: currentColor;
 }
-footer h4.h-socios {
-  color: var(--salvia);
-  opacity: 1;
+footer h4.h-sedes::before {
+  background: var(--terracota);
+}
+footer h4.h-fosque::before {
+  background: #d98f3f; /* durazno un punto más hondo: sobre arena el original se diluye */
+}
+footer h4.h-socios::before {
+  background: var(--salvia);
 }
 footer a:hover {
-  color: var(--durazno);
   opacity: 1;
-  text-decoration: none;
+  text-decoration: underline;
 }
 /* firma */
 .subfooter {
-  background: #121110;
-  color: var(--crema);
+  background: #e0d4b8;
+  /* la transparencia va en el color y NO en el elemento: con opacity sobre la
+     franja entera el fondo se lavaba contra la página */
+  color: rgba(26, 24, 21, 0.72);
   text-align: center;
   padding: 0.9rem 6vw;
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.08em;
-  opacity: 0.9;
 }
 footer .cols {
   display: grid;
@@ -1523,7 +1539,7 @@ footer .cols {
   margin: 0 auto;
 }
 footer .fw {
-  color: var(--crema);
+  color: var(--negro);
 }
 footer h4 {
   font-family: var(--label);
@@ -1531,10 +1547,11 @@ footer h4 {
   font-size: 0.95rem;
   letter-spacing: 0.2em;
   margin-bottom: 1rem;
-  opacity: 0.6;
+  /* sobre el arena, 0.6 dejaba el rótulo en 4,37:1 (medido): no llega a AA */
+  opacity: 0.78;
 }
 footer a {
-  color: var(--crema);
+  color: var(--negro);
   text-decoration: none;
   display: block;
   margin-bottom: 0.6rem;
