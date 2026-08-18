@@ -107,6 +107,10 @@ un clip más claro tira esto abajo sin que se vea a ojo.
 
 ## ⏳ Pendientes
 
+📋 Todo lo que falta de parte del cliente, junto y listo para mandarle:
+`docs/PEDIDO-AL-CLIENTE.md` (incluye los números de franquicia y la versión
+corta para WhatsApp).
+
 **Del CLIENTE (bloquean):**
 1. URL login EVO → `EVO_URL` en `components/Nav.tsx` (hoy `#`; también en Footer).
    ⚠️ El doc del 17-ago vuelve a dibujar el botón `[Ingresá a tu Perfil]` pero
