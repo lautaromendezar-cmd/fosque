@@ -39,7 +39,13 @@ constantes (`HERO_RATE` y `HERO_CON_AUDIO`).
 
 ---
 
-## 📷 FOTOS DEL EQUIPO (5) — verticales
+## 📷 FOTOS DEL EQUIPO (5) — ⚠️ NO SALEN DEL RODAJE
+
+**Las pide el dueño** (17-ago). No hay que editarlas de este material: se listan
+acá solo para saber qué formato tienen que tener cuando lleguen. El pedido está
+en `docs/PEDIDO-AL-CLIENTE.md`, punto 8.
+
+Verticales.
 
 Formato: **JPG, vertical 3:4, ~1200×1600, calidad 80** (200-400 KB).
 Se ven recortadas a 3:4 y a 4:5, así que dejá aire arriba y abajo.
@@ -102,7 +108,9 @@ de la otra. **Núñez sigue usando las genéricas de IA hasta que se filme.**
 
 ## Total
 
-**6 videos + 16 fotos.** Si hay que priorizar: `hero.mp4` primero (es lo primero
-que se ve y lo único con audio), después los dos `sede-*.mp4` y las 4 fotos de
-equipo, que son las que hoy son IA de personas y conviene que dejen de serlo
-antes del lanzamiento.
+**Del rodaje: 6 videos + 11 fotos de galería.** Si hay que priorizar:
+`hero.mp4` primero (es lo primero que se ve y lo único con audio), después los
+dos `sede-*.mp4`.
+
+**Aparte, del dueño: las 5 fotos de personas** (equipo + mantenimiento). Hoy son
+IA y conviene que dejen de serlo antes del lanzamiento.
