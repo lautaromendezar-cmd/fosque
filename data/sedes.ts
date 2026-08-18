@@ -70,11 +70,11 @@ export const sedes: Sede[] = [
       '🎬 VIDEO SEDE · Travelling de entrada: puerta → recepción → sala Reformer → sala de fuerza · Un solo plano, gimbal, hora dorada',
     shotHome: '🎬 Fachada + travelling de entrada · Hora dorada',
     galeria: [
-      { file: 'galeria-reformer.jpg', shot: '📷 Sala Reformer en clase · plano fijo lateral' },
-      { file: 'galeria-fuerza.jpg', shot: '📷 Sala de fuerza · paneo lento' },
-      { file: 'galeria-recepcion.jpg', shot: '📷 Recepción con ejecutiva sonriendo' },
-      { file: 'galeria-detalle.jpg', shot: '📷 Detalle equipamiento Método Fosque' },
-      { file: 'galeria-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
+      { file: 'galeria-jh-reformer.jpg', shot: '📷 Sala Reformer en clase · plano fijo lateral' },
+      { file: 'galeria-jh-fuerza.jpg', shot: '📷 Sala de fuerza · paneo lento' },
+      { file: 'galeria-jh-recepcion.jpg', shot: '📷 Recepción con ejecutiva sonriendo' },
+      { file: 'galeria-jh-detalle.jpg', shot: '📷 Detalle equipamiento Método Fosque' },
+      { file: 'galeria-jh-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
   },
   {
@@ -109,10 +109,10 @@ export const sedes: Sede[] = [
       '🎬 VIDEO SEDE · Steadicam entre camas Reformer en clase · Luz natural, ritmo suave',
     shotHome: '🎬 Interior sala Reformer · Steadicam entre camas',
     galeria: [
-      { file: 'galeria-reformer.jpg', shot: '📷 Sala Reformer en clase · plano fijo lateral' },
-      { file: 'galeria-recepcion.jpg', shot: '📷 Recepción con ejecutiva sonriendo' },
-      { file: 'galeria-detalle.jpg', shot: '📷 Detalle resortes y carro Reformer' },
-      { file: 'galeria-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
+      { file: 'galeria-ec-reformer.jpg', shot: '📷 Sala Reformer en clase · plano fijo lateral' },
+      { file: 'galeria-ec-recepcion.jpg', shot: '📷 Recepción con ejecutiva sonriendo' },
+      { file: 'galeria-ec-detalle.jpg', shot: '📷 Detalle resortes y carro Reformer' },
+      { file: 'galeria-ec-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
   },
   {
