@@ -101,10 +101,14 @@ const rel = (v) => {
 };
 const L_CREMA = 0.2126 * rel(240) + 0.7152 * rel(233) + 0.0722 * rel(216);
 
+/* El video LOOPEA para siempre debajo del texto, así que no alcanza con
+   muestrear la reproducción en vivo: cada corrida caía en tramos distintos y el
+   mismo clip daba 3,49 en una y 4,86 en otra. Se pausa y se recorre el clip
+   ENTERO segundo a segundo, que es determinista y cubre el 100%. */
 for (const sel of ['.cine-content h1', '.cine-content .sub']) {
   page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(base, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(11000); // que termine la intro
+  await page.waitForTimeout(11000); // que termine la intro y el copy esté fijo
   const caja = await page.evaluate((s) => {
     const r = document.querySelector(s).getBoundingClientRect();
     return {
@@ -114,13 +118,26 @@ for (const sel of ['.cine-content h1', '.cine-content .sub']) {
       height: Math.round(r.height),
     };
   }, sel);
-  // se oculta el texto para medir SOLO el fondo bajo su caja
-  await page.evaluate((s) => {
+  // se oculta el texto para medir SOLO el fondo bajo su caja, y se congela el video
+  const dur = await page.evaluate((s) => {
     document.querySelector(s).style.visibility = 'hidden';
+    const v = document.querySelector('#cine video');
+    v.pause();
+    return v.duration;
   }, sel);
 
   let peor = 99;
-  for (let i = 0; i < 22; i++) {
+  let peorT = 0;
+  for (let t = 0; t < dur; t += 1) {
+    await page.evaluate(
+      (t) =>
+        new Promise((res) => {
+          const v = document.querySelector('#cine video');
+          v.addEventListener('seeked', res, { once: true });
+          v.currentTime = t;
+        }),
+      t,
+    );
     const b64 = (await page.screenshot({ clip: caja })).toString('base64');
     const maxL = await page.evaluate(async (d) => {
       const img = new Image();
@@ -143,9 +160,13 @@ for (const sel of ['.cine-content h1', '.cine-content .sub']) {
       }
       return max;
     }, b64);
-    peor = Math.min(peor, (L_CREMA + 0.05) / (maxL + 0.05));
+    const ratio = (L_CREMA + 0.05) / (maxL + 0.05);
+    if (ratio < peor) {
+      peor = ratio;
+      peorT = t;
+    }
   }
-  ok(peor >= 4.5, `${sel} contra el fondo más claro`, `${peor.toFixed(2)}:1`);
+  ok(peor >= 4.5, `${sel} en el peor frame del clip`, `${peor.toFixed(2)}:1 en el segundo ${peorT}`);
   await page.close();
 }
 
@@ -161,29 +182,46 @@ const visible = (pg, sel) =>
     return cs.visibility === 'hidden' || op < 0.05 ? 'oculto' : 'visible';
   }, sel);
 
+/* El cronómetro NO puede arrancar en 'networkidle': con los videos reales del
+   rodaje la carga tarda mucho más y la intro ya viene corriendo. Se ancla en el
+   momento en que el preloader desaparece, que es exactamente cuando arranca
+   film() y cuando el video vuelve a su frame 1. */
+const intro = async (pg) => {
+  await pg.waitForSelector('#preloader', { state: 'detached', timeout: 30000 });
+  return Date.now();
+};
+const enT = async (pg, t0, seg) => {
+  const faltan = t0 + seg * 1000 - Date.now();
+  if (faltan > 0) await pg.waitForTimeout(faltan);
+};
+
 // carga fresca: el copy se suma por tiempos
 let ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 page = await ctx.newPage();
-await page.goto(base, { waitUntil: 'networkidle' });
-await page.waitForTimeout(3800);
-ok((await visible(page, '.cine-content h1')) === 'visible', 'fresca: la pregunta ya está a los ~4s');
+await page.goto(base, { waitUntil: 'domcontentloaded' });
+let t0 = await intro(page);
+await enT(page, t0, 2.5);
+ok((await visible(page, '.cine-content h1')) === 'visible', 'fresca: la pregunta ya está a los 2,5s');
 ok((await visible(page, '.cine-content .sub')) === 'oculto', 'fresca: la frase central todavía no');
 ok((await visible(page, 'nav')) === 'oculto', 'fresca: el nav no interrumpe la intro');
-await page.waitForTimeout(7000);
+await enT(page, t0, 5.8);
+ok((await visible(page, '.cine-content .sub')) === 'visible', 'fresca: la frase central a los 5,8s');
+await enT(page, t0, 9);
 ok((await visible(page, '.cine-content .ctas')) === 'visible', 'fresca: los botones al cierre');
 ok((await visible(page, 'nav')) === 'visible', 'fresca: el nav al cierre');
 
 // recargar repite la intro
-await page.reload({ waitUntil: 'networkidle' });
-await page.waitForTimeout(3200);
+await page.reload({ waitUntil: 'domcontentloaded' });
+t0 = await intro(page);
+await enT(page, t0, 2.5);
 ok((await visible(page, '.cine-content .ctas')) === 'oculto', 'recargar: repite la intro');
 await ctx.close();
 
 // volver navegando: sin intro
 ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 page = await ctx.newPage();
-await page.goto(base, { waitUntil: 'networkidle' });
-await page.waitForTimeout(11000);
+await page.goto(base, { waitUntil: 'domcontentloaded' });
+await enT(page, await intro(page), 10);
 await page.click('nav a[href="/novedades/"]');
 await page.waitForTimeout(1500);
 await page.click('nav a[href="/"]');

@@ -16,11 +16,11 @@ let homeMontoEnEsteDoc = false;
    texto": es la pausa para procesar, así que se toca acá y en ningún otro lado. */
 const HOLD_PREGUNTA = 3;
 
-/* Velocidad del hero.mp4 durante la intro. El clip provisorio de IA dura 8s y
-   loopearía a la vista en mitad de la intro; a 0.55x un pase dura ≈14,6s y la
-   cubre entera. ⚠️ Con el video real del rodaje: si trae audio hay que dejarlo
-   en 1 (el rate ralentizado deforma la pista) y que el clip sea largo de por sí. */
-const HERO_RATE = 0.55;
+/* Velocidad del hero.mp4 durante la intro. El clip real del rodaje (21,8s) cubre
+   de sobra los ~9,3s de la intro, así que va a velocidad natural y se respeta el
+   ritmo del montaje. El 0.55x anterior existía solo porque el clip provisorio de
+   IA duraba 8s y loopeaba a la vista en mitad del trailer. */
+const HERO_RATE = 1;
 
 /**
  * Motor de animación de la home. El contenido llega server-rendered como
