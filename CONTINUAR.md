@@ -105,6 +105,66 @@ tono de paleta. Los bordes del cuadro siguen luminosos. Ahora **5,0:1** el
 título y **6,1:1** la frase. ⚠️ Volver a correr el check al cambiar `hero.mp4`:
 un clip más claro tira esto abajo sin que se vea a ojo.
 
+## ✅ Sesión 2026-08-18/19 — Entra el material real del rodaje
+
+**5 de los 6 videos ya no son IA.** De 641 MB en bruto quedaron 18 MB servidos.
+
+| Archivo | En bruto | En el sitio | Notas |
+| --- | --- | --- | --- |
+| `hero.mp4` | 212 MB | **6,6 MB** | 21,8s · 1920×1080 · ⚠️ audio MUDO |
+| `sede-jose-hernandez.mp4` | 53,6 MB | **2,6 MB** | 5,2s |
+| `sede-emilio-castro.mp4` | 61,5 MB | **2,3 MB** | 5,9s |
+| `historia.mp4` | 95,3 MB | **2,9 MB** | 9,9s · 16:9 en marco cuadrado, se recorta 43% |
+| `metodo.mp4` | 68,5 MB | **3,0 MB** | 9,7s · 1080×1350, se recorta 21% de alto |
+| `franquicia.mp4` | 205 MB | **3,2 MB** | 20,3s · a 1600px y CRF 26 |
+| `sede-nunez.mp4` | — | 5,0 MB | **SIGUE SIENDO IA** (sede sin filmar) |
+
+### ⚠️ Todo lo que exporta Premiere viene en bruto
+
+Los seis llegaron a 55-82 Mbps, 119,88 fps y con pista de audio que el
+reproductor mutea igual. **No subir nada sin pasarlo por acá:**
+
+```bash
+ffmpeg -y -i ENTRADA.mp4 -an -r 30 -vf "scale=1920:-2"   -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 23   -preset slow -movflags +faststart public/media/SALIDA.mp4
+
+rm public/media/SALIDA-poster.jpg   # el viejo es el frame del clip anterior
+node scripts/gen-posters.mjs
+```
+
+Para clips de 20s o más: `-crf 26` y `scale=1600:-2`, si no se van a 8+ MB.
+**Los originales en bruto NO están en el repo** (pesan 641 MB) y quedaron en un
+temporal de la PC vieja: si hacen falta, se reexportan de Premiere.
+
+### Decisiones tomadas en esta sesión
+
+- **`HERO_RATE` pasó de 0.55 a 1**. El ralentizado existía solo porque el clip de
+  IA duraba 8s y loopeaba en mitad de la intro; el real dura 21,8s.
+- **El botón de audio sigue apagado** (`HERO_CON_AUDIO` en `app/page.tsx`): la
+  pista del hero salió en silencio digital (-91 dB de pico). Debe ser el audio
+  desactivado en la secuencia de Premiere. Reexportar con sonido de sala y
+  poner el flag en `true`.
+- **Los marcos de `historia` y `metodo` son casi cuadrados** (1,01:1). Se probó
+  pasarlos a 16:9 y **se descartó por cómo quedaba la sección**: si hay que
+  corregir el recorte, se reexporta el video en 1080×1080, no se toca el CSS.
+- **Galerías separadas por sede** (`galeria-jh-*` / `galeria-ec-*`). Los archivos
+  que hay son copias de los de IA hasta que lleguen las fotos reales.
+
+### `check-hero.mjs`: dos fallas del propio test que el material real destapó
+
+1. Los tiempos se anclaban en `networkidle`. Con videos de verdad la carga tarda
+   más y la intro ya venía corriendo → 3 chequeos fallaban por el test, no por el
+   sitio. Ahora se anclan en **el momento en que desaparece el preloader**, que es
+   exactamente cuando arranca `film()`.
+2. El contraste se medía sobre la reproducción en vivo: el mismo clip daba 3,49
+   en una corrida y 4,86 en la siguiente. Ahora **pausa el video y lo recorre
+   entero segundo a segundo**. Determinista y cubre el 100% del loop.
+
+⚠️ **Pendiente concreto**: con esa medición honesta el título del hero da
+**3,45:1 en el segundo 1** del clip (justo donde la pregunta queda sola). Cumple
+AA para texto grande (3:1 a 86px) pero no el 4,5 del script. Se arregla subiendo
+el velo local de `.cine-content::before` en `globals.css` — **no** oscureciendo
+la escena entera, que es lo que el cliente rechazó.
+
 ## ⏳ Pendientes
 
 📋 Todo lo que falta de parte del cliente, junto y listo para mandarle:
