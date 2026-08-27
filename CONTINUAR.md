@@ -243,13 +243,38 @@ el que lo lee es el propio scroll.
    termina en el extremo opuesto de la pantalla. Se deja el origen por defecto.
    (Lo cazó una captura, no el test: es de las cosas que hay que mirar.)
 
-## 🎬 Pendiente abierto: "mejorar los videos con IA" — PILOTO HECHO (27-ago)
+## 🎬 "Mejorar los videos con IA" — APROBADO, integrándose por tandas
 
 **Decisión de Lautaro tras hablar con el cliente**: el cliente vio videos de
 avatares IA en Instagram y quiere ese camino — no le molesta que sea IA. El
 enfoque elegido NO es retocar los clips reales sino **recrear el lugar con
 Nano Banana usando frames del video real como referencia** (mismo pipeline que
 el cartel IA de /franquicia) y animar con image-to-video.
+
+**El piloto (3 pruebas) fue APROBADO por el cliente (27-ago)** y se acordó
+integrar por tandas, sede por sede, con revisión de Lautaro entre tandas.
+
+**✅ TANDA 1 — José Hernández, INTEGRADA Y DEPLOYADA (27-ago):**
+- `sede-jose-hernandez.mp4` = recreación del salón con luz solar dorada
+  (0,98 MB, pipeline ffmpeg del proyecto) + poster regenerado.
+- `galeria-jh-*.jpg` (las 5, 896×1200): reformer, fuerza, recepción, detalle
+  con placa FOSQUE, salida. Verificado: build + smoke + check-hero OK.
+- ⚠️ `galeria-jh-fuerza.jpg` es la única INVENTADA de cero (el video real no
+  muestra la sala de fuerza) — si el cliente la quiere fiel, pedir foto real.
+- ⚠️ En `galeria-jh-salida.jpg` el vidrio dice "PILATE…" cortado (texto IA
+  menor); regenerar si molesta, igual que se hizo con recepción (v1 traía un
+  cartel con texto ilegible).
+- 🔑 **Truco del logo**: pasarle a Nano Banana el lockup oficial como imagen de
+  referencia aparte (recorte de `app/opengraph-image.png`, crop 440:130:50:50)
+  con "reproduced EXACTLY" → sale nítido. Sin eso lo deforma (pasó con el buzo).
+- Los originales PNG 2K + los clips candidatos quedan en
+  `Desktop/Claude/fosque/pruebas-ia/` (PC principal, fuera del repo).
+
+**Próximas tandas**: Emilio Castro (mismo pipeline, frames de
+`sede-emilio-castro.mp4` como referencia) → Núñez (sin referencia real: pedir
+fotos del local, aunque sean de celular) → hero/metodo/historia/franquicia si
+el cliente quiere. Créditos Higgsfield tras tanda 1: ~256 de 456 (imagen ≈2,
+video 5s 1080p = 45).
 
 **Piloto (2 pruebas) generado vía Higgsfield MCP, esperando el OK del cliente:**
 - Pipeline: frames del MP4 real (`ffmpeg fps=1`) → `media_upload` →
