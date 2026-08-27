@@ -297,10 +297,20 @@ integrar por tandas, sede por sede, con revisión de Lautaro entre tandas.
   "FOSQU"; en la de mantenimiento las máquinas salieron más de madera clara que
   las reales. Regenerar si el cliente los marca.
 
+**✅ TANDA 4 — metodo.mp4 e historia.mp4 de la home (27-ago), SIN créditos:**
+- Reemplazados por videos "Ken Burns" (zoom lento sobre still) hechos con
+  ffmpeg `zoompan` a partir de imágenes IA ya aprobadas: metodo = la profe
+  corrigiendo el estiramiento (crop 1080×1350 de `ia-reformers.png`), historia
+  = el salón cálido de JH (`ia-salon.png`, 1920×1080). ~10s cada uno, mismas
+  dimensiones que los clips reales que reemplazan.
+- Receta anti-tembleque del zoompan: upscale grande ANTES del zoompan
+  (`scale=3240:4052` / `5504:3072`) y zoom de 0.0003 por frame. Sin eso el
+  Ken Burns tiembla.
+
 **Próximas tandas**: Núñez (sin referencia real: pedir fotos del local, aunque
-sean de celular) → hero/metodo/historia/franquicia si el cliente quiere.
-⚠️ Créditos Higgsfield tras tanda 3: **~91 de 456** (imagen ≈2, video 5s
-1080p = 45) — para más tandas con video hace falta recargar.
+sean de celular) → hero/franquicia si el cliente quiere.
+⚠️ Créditos Higgsfield: **~91 de 456** (imagen ≈2, video 5s 1080p = 45) — para
+más tandas con video IA hace falta recargar; los Ken Burns salen gratis.
 
 **Piloto (2 pruebas) generado vía Higgsfield MCP, esperando el OK del cliente:**
 - Pipeline: frames del MP4 real (`ffmpeg fps=1`) → `media_upload` →
