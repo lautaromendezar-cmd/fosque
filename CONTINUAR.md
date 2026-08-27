@@ -407,6 +407,27 @@ corta para WhatsApp).
 - Decap CMS para que Vero publique novedades sola (guía provisoria: `COMO-PUBLIR.md.txt` en la carpeta del proyecto de la PC principal).
 - Transición home → sede con barrido de arcos (idea vieja, baja prioridad).
 
+## 🔄 Traspaso 27-ago (2ª sesión, PC principal → PC de casa)
+
+Todo lo de hoy está DEPLOYADO y en el repo — para continuar alcanza `git pull`:
+
+1. **Tandas IA 1-4 en vivo**: JH (video + 5 galería), EC (montaje 3 tomas + 4
+   galería), serie equipo (6 fotos: home + /equipo + sedes), metodo/historia de
+   la home como Ken Burns (gratis, ffmpeg zoompan).
+2. **Instagram por sede cargados** (bloqueante resuelto): cards home + landing
+   con @handle + footer. Falta el IG/FB GENERAL (nav sigue en `#`).
+3. **Fix mobile**: las cards de sedes se clipeaban 60px abajo (entrance `y:60`
+   dentro del scroller nativo). Mobile ahora anima solo opacidad.
+4. **`pruebas-ia/` ahora viaja EN el repo** (20MB: clips fuente + stills en JPG
+   + README con el pipeline). Los PNG 2K originales quedaron en la PC principal
+   (`Desktop/Claude/fosque/pruebas-ia/`) y en el historial de Higgsfield.
+
+**Para seguir (en la PC de casa conviene porque AHÍ está el material en bruto):**
+- **Núñez**: pedir fotos del local al cliente (nunca se filmó, no hay referencia).
+- **Créditos Higgsfield: quedan ~91** — recargar antes de más videos IA
+  (45/clip). Fotos (~2) y Ken Burns (gratis) alcanzan con lo que hay.
+- Pendientes de siempre: EVO URL, IG/FB general, horarios por sede, fosque.com.
+
 ## 🗂️ Otros archivos fuera del repo (PC de casa, Desktop/Claude/fosque/)
 
 `CONTINUAR.md` viejo (reemplazado por este), `lineamientos nuevos fosque.txt` (copiado a `docs/`), `files/` (brief y prototipos originales). Nada de esto hace falta: para trabajar el SITIO alcanza con el repo. Lo único que sí puede faltar es el material en bruto del rodaje (ver arriba).
