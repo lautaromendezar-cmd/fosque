@@ -296,6 +296,18 @@ integrar por tandas, sede por sede, con revisión de Lautaro entre tandas.
 - Detalles menores aceptados por Lautaro: en la grupal el estampado chico dice
   "FOSQU"; en la de mantenimiento las máquinas salieron más de madera clara que
   las reales. Regenerar si el cliente los marca.
+- 🔁 **`equipo-mantenimiento.jpg` REGENERADA (27-ago, 2ª pasada)**: la mujer de
+  la v1 tenía la cara de una **profe** — la IA la sacó de los frames del rodaje,
+  donde las que aparecen son las profesoras. Poner esa cara limpiando es
+  atribuirle a una persona real un puesto que no es el suyo. La v2 es la misma
+  escena y la misma luz, pero **de espaldas y con la cabeza girada hacia abajo:
+  no se ve nada de la cara, ni de perfil**. Regla que queda: en esta serie,
+  **cualquier rol que no sea "profe" va sin cara reconocible** — de espaldas o
+  plano cerrado. Bonus: de espaldas no se ve el logo del pecho, así que se
+  esquiva la deformación de siempre. Prompt: "recreate this EXACT interior…
+  change ONLY the person, photographed strictly FROM BEHIND… no part of her face
+  is visible, not even a sliver of profile". El 2K fuente está en
+  `pruebas-ia/eq-mantenimiento.jpg` (pisó al anterior).
 
 **✅ TANDA 4 — metodo.mp4 e historia.mp4 de la home (27-ago), SIN créditos:**
 - Reemplazados por videos "Ken Burns" (zoom lento sobre still) hechos con
