@@ -243,6 +243,49 @@ el que lo lee es el propio scroll.
    termina en el extremo opuesto de la pantalla. Se deja el origen por defecto.
    (Lo cazó una captura, no el test: es de las cosas que hay que mirar.)
 
+## 🎬 Pendiente abierto: "mejorar los videos con IA"
+
+Pedido del cliente (27-ago-2026), **sin resolver y sin idea todavía**. Lo que
+dijo es que no le gusta cómo se ven sus locales. Ojo con lo que eso significa:
+**el problema no es técnico** (resolución, compresión, nitidez) sino la luz y el
+espacio real. Eso cambia cuál es la herramienta.
+
+**La trampa a evitar.** Ya está documentado en otro proyecto que el upscale de
+IA **no escala: regenera** — reescribió texto de etiquetas en las 3 pruebas que
+se hicieron. Sobre el local REAL de un negocio eso es peor que feo: la persona
+que reserva **va a ir físicamente ahí**. Mostrar un salón que la IA mejoró es
+venderle un lugar que no existe. Antes de hacer nada de esto hay que planteárselo
+al cliente en esos términos, no como un problema técnico.
+
+**Lo que sí se puede hacer sin inventar nada, en orden de rendimiento:**
+
+1. **Corrección de color.** Los seis clips salieron de Premiere y acá se
+   comprimieron con ffmpeg (CRF 23) — **el grading nunca se tocó**. Levantar
+   sombras, calentar hacia la paleta de la marca (crema/durazno) y sacarle el
+   verde a la luz fluorescente es, con bastante probabilidad, el 80% de "no me
+   gusta cómo se ve". Es lo primero que hay que probar y no necesita IA.
+2. **Cambiar el plano, no el local.** Hay **296 clips en bruto** sin usar (ver
+   abajo): los 6 que están servidos son un recorte mínimo. Si lo que no le gusta
+   es el salón, la respuesta editorial es no mostrarlo entero — planos cerrados
+   de reformer, manos, caras — y no maquillarlo.
+3. **Higgsfield** (MCP conectado): `upscale_video` 2K/4K, `reframe`,
+   `motion_control`. Probar en **UN** clip corto y comparar mirando
+   específicamente si reescribe carteles, logos o el equipamiento del local.
+   No prometerle nada antes de esa prueba.
+
+⚠️ **Núñez es caso aparte**: esa sede nunca se filmó, así que `sede-nunez.mp4`
+ya es 100% IA. Ahí el pedido es al revés — hace falta material real, no mejor.
+
+## 🗂️ Material en bruto: está en la PC de casa, NO viaja
+
+`Desktop/Fosque` — **23 GB**, fuera del repo: 99 ARW + 296 clips 1080p a
+119,88 fps con audio, del rodaje del 12-ago (solo las 2 sedes de Mataderos).
+Es de donde salieron los 6 videos servidos. **Si en la otra PC hay que tocar los
+videos, este material tiene que viajar**: sin él solo se pueden retocar los MP4
+ya comprimidos, que es partir de mucho menos.
+Los exports intermedios de Premiere (641 MB) se perdieron en un temporal: se
+reexportan si hacen falta.
+
 ## ⏳ Pendientes
 
 📋 Todo lo que falta de parte del cliente, junto y listo para mandarle:
@@ -277,6 +320,6 @@ corta para WhatsApp).
 - Decap CMS para que Vero publique novedades sola (guía provisoria: `COMO-PUBLIR.md.txt` en la carpeta del proyecto de la PC principal).
 - Transición home → sede con barrido de arcos (idea vieja, baja prioridad).
 
-## 🗂️ Archivos fuera del repo (PC principal, Desktop/Claude/fosque/)
+## 🗂️ Otros archivos fuera del repo (PC de casa, Desktop/Claude/fosque/)
 
-`CONTINUAR.md` viejo (reemplazado por este), `lineamientos nuevos fosque.txt` (copiado a `docs/`), `files/` (brief y prototipos originales). Todo lo necesario para trabajar está EN el repo.
+`CONTINUAR.md` viejo (reemplazado por este), `lineamientos nuevos fosque.txt` (copiado a `docs/`), `files/` (brief y prototipos originales). Nada de esto hace falta: para trabajar el SITIO alcanza con el repo. Lo único que sí puede faltar es el material en bruto del rodaje (ver arriba).
