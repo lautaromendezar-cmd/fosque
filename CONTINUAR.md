@@ -383,7 +383,7 @@ corta para WhatsApp).
 1. URL login EVO → `EVO_URL` en `components/Nav.tsx` (hoy `#`; también en Footer).
    ⚠️ El doc del 17-ago vuelve a dibujar el botón `[Ingresá a tu Perfil]` pero
    sigue sin mandar la URL.
-2. Instagram/Facebook general → `IG_URL`/`FB_URL` en `Nav.tsx` + Footer. Instagram por sede → campo `instagram` en `data/sedes.ts` (activa el botón en las cards). ⚠️ Ídem: el doc muestra el botón de IG en las 3 sedes y no manda las URLs.
+2. ~~Instagram por sede~~ ✅ RESUELTO (27-ago): el cliente mandó las 3 URLs y están cargadas en `data/sedes.ts` (cards home + landing con @handle + footer). Falta: Instagram/Facebook GENERAL → `IG_URL`/`FB_URL` en `Nav.tsx` (los íconos del nav siguen en `#`; el "Facebook" del footer también).
 3. Confirmar direcciones ⚠️ "José Hernández" pin en Bragado 5952, "Emilio Castro" en Andalgalá 1395 (`direccionPendiente: true`). Los NOMBRES ya los confirmó el doc del 17-ago (Fosque José Hernández / Emilio Castro / Núñez, FJH/FEC/FNN).
 4. **HORARIOS: hay contradicción sin resolver.** El doc del 17-ago contesta el
    mito "no tengo tiempo" con "L a V 7:00–22:00, sábados desde 9:00, domingos a
