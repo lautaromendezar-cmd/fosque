@@ -312,14 +312,28 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
             invalidateOnRefresh: true,
           },
         });
+        gsap.from(q('.sede-card'), {
+          y: 60,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: 'power2.out',
+          clearProps: 'transform,opacity',
+          scrollTrigger: { trigger: '#sedes-pin', start: 'top 75%' },
+        });
       });
-      gsap.from(q('.sede-card'), {
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: '#sedes-pin', start: 'top 75%' },
+      /* En mobile la track es un scroller nativo (overflow-x: auto): un `y`
+         residual de la entrada hace que el scroller clipee la card por abajo.
+         Ahí la entrada es solo opacidad. */
+      mm.add('(max-width: 900px)', () => {
+        gsap.from(q('.sede-card'), {
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: 'power2.out',
+          clearProps: 'opacity',
+          scrollTrigger: { trigger: '#sedes-pin', start: 'top 75%' },
+        });
       });
 
       /* ---- Mitos: filas en cascada ---- */
