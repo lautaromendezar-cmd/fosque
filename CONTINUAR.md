@@ -165,6 +165,65 @@ AA para texto grande (3:1 a 86px) pero no el 4,5 del script. Se arregla subiendo
 el velo local de `.cine-content::before` en `globals.css` — **no** oscureciendo
 la escena entera, que es lo que el cliente rechazó.
 
+## ✅ Sesión 2026-08-27 — Se va el video del hero
+
+Devolución del cliente: **el video a pantalla completa le resulta invasivo**.
+Se eligió la lectura literal (nada de video en el hero, ni siquiera contenido).
+
+1. **`#cine` es ahora fondo crema + los arcos del manual.** Dos `RingsDeco`
+   mucho más grandes que los de las secciones (`#cine .rings`: 72vw el rosa
+   arriba a la izquierda, 46vw el teal abajo a la derecha). Se fueron
+   `.cine-bg`, `.cine-veil`, el velo local `.cine-content::before`, los
+   `text-shadow`, el fundido de pie `#cine::after` y `.btn.ghost` — todos
+   existían solo para sobrevivir arriba del video.
+2. **El copy pasó a negro sobre crema.** La coreografía que el cliente pidió el
+   17-ago NO se tocó: pregunta palabra por palabra → `HOLD_PREGUNTA` (3s) →
+   frase central → botones + nav + WhatsApp.
+3. **El zoom lento del video lo reemplaza la respiración de los arcos** (24s,
+   scale 1→1.06 y ±3°, en `HomeFx`, o sea que respeta reduced-motion).
+4. **`hero.mp4` queda en `public/media/` sin usar**, a la espera de que el
+   cliente defina dónde va (opciones que se le pasaron: banda contenida
+   después del manifiesto, o sándwich como en las landings de sede).
+   ⚠️ Sigue viajando al build (6,6 MB en `out/`) aunque ninguna página lo pida.
+5. **`CineAudio.tsx` se eliminó** (está en el historial de git). Sin video no hay
+   audio que activar. ⚠️ Esto **contradice el brief del cliente**, que pide
+   expresamente "audio activable de forma orgánica" en el hero: hay que
+   decírselo. Hoy no se perdía nada real porque el clip salió mudo (-91 dB).
+
+### Lo que esto cierra
+
+- **El pendiente de contraste se resolvió solo.** Venía 3,45:1 contra el frame
+  más claro del clip; ahora el título da **14,64:1** y la frase **8,85:1**.
+- **Lighthouse >90 en performance pasa a ser realista**: era el video fullscreen
+  en autoplay lo que lo hacía imposible.
+- Ya no hay que recalcular `HERO_RATE` ni volver a medir contraste cada vez que
+  se cambia el clip del hero.
+
+### Dos bugs de medición que aparecieron al hacerlo
+
+1. **`opacity` en `.cine-content .sub` no existía en la práctica**: la intro
+   anima esa misma propiedad con `autoAlpha` y al cerrar deja `opacity: 1`
+   inline. O sea que el ablande solo se veía en reduced-motion, donde no corre
+   la animación — las dos entradas quedaban distintas. Ahora va por **color**
+   (`rgba(26, 24, 21, 0.82)`), que la animación no pisa.
+2. **`check-hero.mjs` medía de más**: parseaba el color con `/\d+/` y se comía
+   el alfa de `rgba()`, así que daba 14,64 para `.sub` en vez de 8,85. Además
+   el chequeo 2 se reescribió entero: ya no recorre el video segundo a segundo
+   sino que mide **los renglones reales** (rects de un `Range`, no la caja del
+   elemento, que en un `h1` centrado de 16ch tiene aire a los costados) y
+   calcula el contraste **píxel a píxel** mezclando el color del texto con el
+   fondo. Sigue teniendo sentido: los arcos SÍ pintan color bajo el título.
+   Y como los arcos se mueven, **se los clava con `!important` en los dos
+   extremos del ciclo** antes de medir (el inline de GSAP pierde contra eso):
+   sin eso daba 14,64 en una corrida y 11,62 en la siguiente. Es la misma
+   lección de agosto con el video, en otra forma: **nunca medir sobre algo que
+   se está moviendo.**
+3. **Los arcos con `transformOrigin` en la esquina se van de cuadro.** Anclar el
+   pivote en el centro de los círculos parecía más prolijo, pero `.rings.tl` ya
+   trae `rotate(180deg)` del CSS y con el origen corrido el elemento entero
+   termina en el extremo opuesto de la pantalla. Se deja el origen por defecto.
+   (Lo cazó una captura, no el test: es de las cosas que hay que mirar.)
+
 ## ⏳ Pendientes
 
 📋 Todo lo que falta de parte del cliente, junto y listo para mandarle:
@@ -185,7 +244,7 @@ corta para WhatsApp).
    doc dice "a la mañana". No tocar hasta que confirme sede por sede.
 5. ¿Los mitos son 7 o 3? El doc del 17-ago lista 3; en el sitio están los 7 que
    él mismo mandó en agosto. Se asumió que los 3 son ejemplos y NO se borró nada.
-6. Media real del rodaje: reemplazar por nombre en `public/media/` — prioridad `hero.mp4` CON AUDIO (relato continuo: rutina/cansancio → Fosque → transformación), `franquicia.mp4`, `equipo-mantenimiento.jpg`, y todas las fotos IA (las del "equipo" son IA: cambiarlas antes del lanzamiento real).
+6. Media real del rodaje: reemplazar por nombre en `public/media/` — `franquicia.mp4`, `equipo-mantenimiento.jpg`, y todas las fotos IA (las del "equipo" son IA: cambiarlas antes del lanzamiento real). ⚠️ Desde el 27-ago el hero NO usa video: definir con el cliente dónde va `hero.mp4` (o si se descarta).
    ⚠️ El rodaje del 12-ago cubrió **solo las 2 sedes de Mataderos** (material en
    `Desktop/Fosque`, fuera del repo: 99 ARW + 296 clips 1080p a 119,88fps con
    audio). **Núñez no se filmó** y el doc pide material real de cada sede.
@@ -194,8 +253,8 @@ corta para WhatsApp).
 
 **Técnicos:**
 - Dominio fosque.com + setear `NEXT_PUBLIC_SITE_URL` en Vercel (para el OG de WhatsApp). ⚠️ El doc del cliente lo encabeza como si el dominio ya existiera: hoy es fosque.vercel.app. Definir quién lo compra.
-- Botón de audio del hero: `HERO_CON_AUDIO` en `app/page.tsx` (hoy `false`). Ponerlo en `true` cuando `hero.mp4` traiga pista de audio — el cliente lo pide expresamente. Y ahí `HERO_RATE` (`HomeFx.tsx`) tiene que volver a 1: a 0,55x el audio se deforma.
-- Lighthouse >90 que pide el doc: alcanzable en accesibilidad / best practices / SEO. En **performance** con video fullscreen en autoplay no es realista; se mejora con el poster + comprimir el clip del rodaje. Conviene fijarle la expectativa antes de que reclame el número.
+- **Confirmarle al cliente que el botón de audio del hero se cayó** con el video (lo pide el brief). Vuelve solo si el video vuelve al hero de alguna forma.
+- Lighthouse >90 que pide el doc: **ahora sí es alcanzable en las cuatro categorías** — el techo era el video fullscreen en autoplay. Falta medirlo.
 - Decap CMS para que Vero publique novedades sola (guía provisoria: `COMO-PUBLIR.md.txt` en la carpeta del proyecto de la PC principal).
 - Transición home → sede con barrido de arcos (idea vieja, baja prioridad).
 

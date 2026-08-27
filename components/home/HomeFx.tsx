@@ -16,12 +16,6 @@ let homeMontoEnEsteDoc = false;
    texto": es la pausa para procesar, así que se toca acá y en ningún otro lado. */
 const HOLD_PREGUNTA = 3;
 
-/* Velocidad del hero.mp4 durante la intro. El clip real del rodaje (21,8s) cubre
-   de sobra los ~9,3s de la intro, así que va a velocidad natural y se respeta el
-   ritmo del montaje. El 0.55x anterior existía solo porque el clip provisorio de
-   IA duraba 8s y loopeaba a la vista en mitad del trailer. */
-const HERO_RATE = 1;
-
 /**
  * Motor de animación de la home. El contenido llega server-rendered como
  * children; acá solo se anima (regla de oro: "use client" solo donde se anima).
@@ -54,20 +48,12 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         mostrarNav(0.2);
       };
 
-      /* Intro del hero (doc del cliente 2026-08-17): el video viene corriendo
-         desde el segundo 0 sobre fondo de paleta —no hay telón negro ni corte
-         técnico—, la pregunta queda sola en pantalla el tiempo de leerla y el
-         resto del copy se SUMA encima en capas, sin reemplazarla. */
+      /* Intro del hero: la pregunta queda sola en pantalla el tiempo de leerla
+         y el resto del copy se SUMA encima en capas, sin reemplazarla (doc del
+         cliente 2026-08-17). Desde el 27-ago corre sobre el fondo crema con los
+         arcos, no sobre el video. */
       const film = () => {
-        const video = q('#cine video')[0] as HTMLVideoElement | undefined;
-        if (video) {
-          // la intro empieza por el primer frame: el video venía reproduciéndose
-          // detrás del preloader y arrancaría por la mitad
-          video.currentTime = 0;
-          video.playbackRate = HERO_RATE;
-        }
-        // el bloque de copy (con su velo local) entra fundido, no de golpe:
-        // si aparece seco se lee como un escalón de luz sobre el video
+        // el bloque de copy entra fundido, no de golpe
         const tl = gsap.timeline({ delay: 0.15 });
         tl.to(q('.cine-content'), { opacity: 1, duration: 0.9, ease: 'sine.out' }, 0)
           // la pregunta sube palabra por palabra dentro de ese mismo fundido
@@ -116,7 +102,7 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         }
       } else {
         sessionStorage.setItem('fosque-seen', '1');
-        // el video NO se oculta: cuando el preloader se desvanece la escena ya
+        // el fondo NO se oculta: cuando el preloader se desvanece la escena ya
         // está ahí, en paleta, y no hay salto de fondo. Lo que arranca oculto
         // es el copy que se suma después, más el nav y el WhatsApp.
         gsap.set(q('.cine-content .sub, .cine-content .ctas'), { autoAlpha: 0, y: 20 });
@@ -136,9 +122,9 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           .to(counter, { innerText: 100, duration: 1.2, snap: 'innerText', ease: 'power1.inOut' }, 0)
           .to(fpath, { fillOpacity: 1, duration: 0.35, ease: 'power1.in' }, 0.95)
           .to(q('#preloader .fmark'), { scale: 22, opacity: 0, duration: 0.9, ease: 'power3.in' }, 1.35)
-          // disolvencia larga: el preloader crema se funde CON el video ya
-          // corriendo debajo, así el paso a la escena es un fundido y no un
-          // corte de luminancia (medido: sin este tramo el salto era de golpe)
+          // disolvencia larga: el preloader crema se funde con la escena que ya
+          // está debajo, así el paso es un fundido y no un corte de luminancia
+          // (medido: sin este tramo el salto era de golpe)
           .to(pre, { opacity: 0, duration: 0.9, ease: 'sine.inOut' }, 1.7);
       }
 
@@ -211,15 +197,38 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         });
       });
 
-      /* ---- Hero cine: zoom lentísimo del video, respiración de película ---- */
-      const cineVideo = q('#cine video')[0];
-      if (cineVideo) {
+      /* ---- Hero: respiración lentísima de los arcos ----
+         Ocupa el lugar del zoom que tenía el video. Ciclo largo y amplitud
+         corta: tiene que notarse solo si mirás fijo, si no vuelve a ser
+         invasivo, que es justo lo que el cliente rechazó.
+         La rotación va EXPLÍCITA en el fromTo: el CSS ya rota .rings.tl 180° y
+         un tween que tocara solo scale reescribe el transform entero y se la
+         comería. Y el origen se deja en el centro: anclarlo en la esquina de
+         los círculos parecía más prolijo, pero con rotate(180deg) el pivote
+         corrido tira el elemento entero fuera de cuadro (verificado con
+         captura: los arcos rosas se iban al otro extremo de la pantalla). */
+      (
+        [
+          ['#cine .rings.tl', 180, 3.5],
+          ['#cine .rings.br', 0, -3],
+        ] as const
+      ).forEach(([sel, rot, giro], i) => {
+        const el = q(sel)[0];
+        if (!el) return;
         gsap.fromTo(
-          cineVideo,
-          { scale: 1 },
-          { scale: 1.07, duration: 16, ease: 'sine.inOut', yoyo: true, repeat: -1 },
+          el,
+          { rotation: rot, scale: 1 },
+          {
+            rotation: rot + giro,
+            scale: 1.06,
+            duration: 24,
+            ease: 'sine.inOut',
+            yoyo: true,
+            repeat: -1,
+            delay: i * 3,
+          },
         );
-      }
+      });
 
       /* ---- Sedes: carrusel horizontal con pin (solo desktop) ---- */
       const mm = gsap.matchMedia();

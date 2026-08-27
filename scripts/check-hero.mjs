@@ -3,12 +3,13 @@
  *
  *   1. LUMINANCIA: en ningún instante de la intro la pantalla puede irse a
  *      negro ni pegar un salto de luz de golpe.
- *   2. CONTRASTE: el copy sobre el video tiene que llegar a AA (4,5:1) contra
- *      el frame MÁS CLARO del clip, no contra un promedio.
+ *   2. CONTRASTE: el copy tiene que llegar a AA (4,5:1) contra el píxel MÁS
+ *      OSCURO que quede bajo cada renglón, no contra el fondo nominal.
  *   3. CAMINOS: carga fresca / recarga / volver navegando / reduced-motion.
  *
- * Correr SIEMPRE después de reemplazar hero.mp4 por el del rodaje: un video
- * más claro que el actual tira abajo el contraste sin que se note a ojo.
+ * Desde el 27-ago-2026 el hero no tiene video: es crema con los arcos. El
+ * chequeo 2 sigue existiendo porque los arcos SÍ pintan color bajo el texto si
+ * alguien los agranda o los reposiciona.
  *
  *   npm run build && node scripts/check-hero.mjs
  */
@@ -90,83 +91,121 @@ let peorSalto = 0;
 for (let i = 1; i < serie.length; i++) {
   peorSalto = Math.max(peorSalto, Math.abs(serie[i] - serie[i - 1]));
 }
-ok(peorSalto <= 110, 'sin cortes de luz entre frames', `peor salto ${Math.round(peorSalto)}/255 en 300ms`);
+ok(
+  peorSalto <= 110,
+  'sin cortes de luz entre frames',
+  `peor salto ${Math.round(peorSalto)}/255 en 300ms`,
+);
 await page.close();
 
-/* ---------- 2. CONTRASTE DEL COPY CONTRA EL FRAME MÁS CLARO ---------- */
-console.log('\n2) Contraste del copy sobre el video (AA = 4,5:1)');
-const rel = (v) => {
-  const s = v / 255;
-  return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-};
-const L_CREMA = 0.2126 * rel(240) + 0.7152 * rel(233) + 0.0722 * rel(216);
+/* ---------- 2. CONTRASTE DEL COPY CONTRA LO QUE HAY DEBAJO ---------- */
+console.log('\n2) Contraste del copy sobre el fondo del hero (AA = 4,5:1)');
 
-/* El video LOOPEA para siempre debajo del texto, así que no alcanza con
-   muestrear la reproducción en vivo: cada corrida caía en tramos distintos y el
-   mismo clip daba 3,49 en una y 4,86 en otra. Se pausa y se recorre el clip
-   ENTERO segundo a segundo, que es determinista y cubre el 100%. */
+/* Dos trampas que ya nos dieron números falsos antes y que este chequeo evita:
+   - la caja del ELEMENTO no es la del texto (un h1 centrado de 16ch tiene aire
+     a los costados que baja el peor caso): se miden los rects de un Range, o
+     sea los renglones reales;
+   - la opacidad del texto es parte del contraste. `.sub` va al 0,86, así que el
+     color que se ve es la mezcla con el fondo. Se calcula PÍXEL A PÍXEL:
+     mezcla = a·color + (1-a)·píxel, y se compara contra ese mismo píxel. */
 for (const sel of ['.cine-content h1', '.cine-content .sub']) {
   page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(base, { waitUntil: 'networkidle' });
   await page.waitForTimeout(11000); // que termine la intro y el copy esté fijo
-  const caja = await page.evaluate((s) => {
-    const r = document.querySelector(s).getBoundingClientRect();
-    return {
-      x: Math.round(r.x),
-      y: Math.round(r.y),
-      width: Math.round(r.width),
-      height: Math.round(r.height),
-    };
-  }, sel);
-  // se oculta el texto para medir SOLO el fondo bajo su caja, y se congela el video
-  const dur = await page.evaluate((s) => {
-    document.querySelector(s).style.visibility = 'hidden';
-    const v = document.querySelector('#cine video');
-    v.pause();
-    return v.duration;
+
+  // renglones reales + color y opacidad efectiva heredada
+  const { lineas, color, alpha } = await page.evaluate((s) => {
+    const el = document.querySelector(s);
+    const r = document.createRange();
+    r.selectNodeContents(el);
+    const lineas = [...r.getClientRects()]
+      .filter((b) => b.width > 4 && b.height > 4)
+      .map((b) => ({
+        x: Math.floor(b.x),
+        y: Math.floor(b.y),
+        width: Math.ceil(b.width),
+        height: Math.ceil(b.height),
+      }));
+    const cs = getComputedStyle(el);
+    // rgba(): el alfa del PROPIO color cuenta igual que el opacity heredado.
+    // Parsear solo /\d+/ se comía el 0.82 de .sub y el chequeo daba de más.
+    const canal = cs.color.match(/[\d.]+/g).map(Number);
+    const [cr, cg, cb] = canal;
+    let a = canal[3] ?? 1;
+    for (let n = el; n && n !== document.body; n = n.parentElement) {
+      a *= parseFloat(getComputedStyle(n).opacity || '1');
+    }
+    return { lineas, color: [cr, cg, cb], alpha: a };
   }, sel);
 
+  // se oculta el texto para fotografiar SOLO lo que hay detrás
+  await page.evaluate((s) => {
+    document.querySelector(s).style.visibility = 'hidden';
+  }, sel);
+
+  /* Los arcos respiran (24s, scale 1→1.06 y ±3°), así que medir "cuando toque"
+     da un número distinto en cada corrida: la primera vez que se corrió esto
+     dio 14,64 y la siguiente 11,65. Se los CLAVA con !important en los dos
+     extremos del ciclo —el inline que escribe GSAP pierde contra eso— y se
+     toma el peor de los dos. Determinista y cubre el recorrido entero. */
+  const ESTADOS = [
+    ['rotate(180deg) scale(1)', 'rotate(0deg) scale(1)'],
+    ['rotate(183.5deg) scale(1.06)', 'rotate(-3deg) scale(1.06)'],
+  ];
+
   let peor = 99;
-  let peorT = 0;
-  for (let t = 0; t < dur; t += 1) {
+  for (const [tl, br] of ESTADOS) {
     await page.evaluate(
-      (t) =>
-        new Promise((res) => {
-          const v = document.querySelector('#cine video');
-          v.addEventListener('seeked', res, { once: true });
-          v.currentTime = t;
-        }),
-      t,
+      ([tl, br]) => {
+        let st = document.getElementById('pin-arcos');
+        if (!st) {
+          st = document.createElement('style');
+          st.id = 'pin-arcos';
+          document.head.appendChild(st);
+        }
+        st.textContent = `#cine .rings.tl{transform:${tl}!important}#cine .rings.br{transform:${br}!important}`;
+      },
+      [tl, br],
     );
-    const b64 = (await page.screenshot({ clip: caja })).toString('base64');
-    const maxL = await page.evaluate(async (d) => {
-      const img = new Image();
-      img.src = 'data:image/png;base64,' + d;
-      await img.decode();
-      const c = document.createElement('canvas');
-      c.width = 120;
-      c.height = 40;
-      const ctx = c.getContext('2d');
-      ctx.drawImage(img, 0, 0, 120, 40);
-      const px = ctx.getImageData(0, 0, 120, 40).data;
-      const r = (v) => {
-        const s = v / 255;
-        return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-      };
-      let max = 0;
-      for (let j = 0; j < px.length; j += 4) {
-        const l = 0.2126 * r(px[j]) + 0.7152 * r(px[j + 1]) + 0.0722 * r(px[j + 2]);
-        if (l > max) max = l;
-      }
-      return max;
-    }, b64);
-    const ratio = (L_CREMA + 0.05) / (maxL + 0.05);
-    if (ratio < peor) {
-      peor = ratio;
-      peorT = t;
+    for (const caja of lineas) {
+      const b64 = (await page.screenshot({ clip: caja })).toString('base64');
+      const r = await page.evaluate(
+        async ([d, color, alpha]) => {
+          const img = new Image();
+          img.src = 'data:image/png;base64,' + d;
+          await img.decode();
+          const c = document.createElement('canvas');
+          c.width = Math.min(img.width, 240);
+          c.height = Math.min(img.height, 60);
+          const ctx = c.getContext('2d');
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          const px = ctx.getImageData(0, 0, c.width, c.height).data;
+          const lin = (v) => {
+            const x = v / 255;
+            return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+          };
+          const lum = (p) => 0.2126 * lin(p[0]) + 0.7152 * lin(p[1]) + 0.0722 * lin(p[2]);
+          let peor = 99;
+          for (let j = 0; j < px.length; j += 4) {
+            const fondo = [px[j], px[j + 1], px[j + 2]];
+            const texto = fondo.map((v, k) => alpha * color[k] + (1 - alpha) * v);
+            const a = lum(texto) + 0.05;
+            const b = lum(fondo) + 0.05;
+            const ratio = a > b ? a / b : b / a;
+            if (ratio < peor) peor = ratio;
+          }
+          return peor;
+        },
+        [b64, color, alpha],
+      );
+      if (r < peor) peor = r;
     }
   }
-  ok(peor >= 4.5, `${sel} en el peor frame del clip`, `${peor.toFixed(2)}:1 en el segundo ${peorT}`);
+  ok(
+    peor >= 4.5,
+    `${sel} en el peor píxel de sus ${lineas.length} renglones`,
+    `${peor.toFixed(2)}:1`,
+  );
   await page.close();
 }
 
@@ -201,11 +240,17 @@ page = await ctx.newPage();
 await page.goto(base, { waitUntil: 'domcontentloaded' });
 let t0 = await intro(page);
 await enT(page, t0, 2.5);
-ok((await visible(page, '.cine-content h1')) === 'visible', 'fresca: la pregunta ya está a los 2,5s');
+ok(
+  (await visible(page, '.cine-content h1')) === 'visible',
+  'fresca: la pregunta ya está a los 2,5s',
+);
 ok((await visible(page, '.cine-content .sub')) === 'oculto', 'fresca: la frase central todavía no');
 ok((await visible(page, 'nav')) === 'oculto', 'fresca: el nav no interrumpe la intro');
 await enT(page, t0, 5.8);
-ok((await visible(page, '.cine-content .sub')) === 'visible', 'fresca: la frase central a los 5,8s');
+ok(
+  (await visible(page, '.cine-content .sub')) === 'visible',
+  'fresca: la frase central a los 5,8s',
+);
 await enT(page, t0, 9);
 ok((await visible(page, '.cine-content .ctas')) === 'visible', 'fresca: los botones al cierre');
 ok((await visible(page, 'nav')) === 'visible', 'fresca: el nav al cierre');
@@ -226,12 +271,18 @@ await page.click('nav a[href="/novedades/"]');
 await page.waitForTimeout(1500);
 await page.click('nav a[href="/"]');
 await page.waitForTimeout(1200);
-ok((await visible(page, '.cine-content .ctas')) === 'visible', 'volver navegando: va directo al final');
+ok(
+  (await visible(page, '.cine-content .ctas')) === 'visible',
+  'volver navegando: va directo al final',
+);
 ok((await visible(page, '#preloader')) === 'no existe', 'volver navegando: sin preloader');
 await ctx.close();
 
 // reduced-motion: todo visible de una
-ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+ctx = await browser.newContext({
+  viewport: { width: 1440, height: 900 },
+  reducedMotion: 'reduce',
+});
 page = await ctx.newPage();
 await page.goto(base, { waitUntil: 'networkidle' });
 await page.waitForTimeout(1200);

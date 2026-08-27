@@ -92,51 +92,30 @@ section {
   overflow: hidden;
 }
 
-/* ---------- BENTO HERO (el video central devora la pantalla) ---------- */
+/* ---------- HERO (home): fondo neutro de la paleta ----------
+   Devolución del cliente 2026-08-27: se fue el video de fondo. Queda el crema
+   de la marca con los arcos del manual; el copy va en negro, así que ya no hay
+   velo, ni sombras de texto, ni fundido de pie que disimule el corte del video. */
 #cine {
   position: relative;
   height: 100vh;
   height: 100svh;
   padding: 0;
   overflow: hidden;
-  /* fondo de la escena SIEMPRE en paleta: si el video todavía no pintó, lo que
-     se ve es crema, nunca negro (doc del cliente: prohibido el salto a #000) */
   background: var(--crema);
 }
-#cine .cine-bg {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  border-radius: 0;
+/* Los arcos del hero son la pieza gráfica de la pantalla, no un adorno de
+   esquina: van mucho más grandes que los de las secciones y respiran despacio
+   (la animación vive en HomeFx, así respeta prefers-reduced-motion). */
+#cine .rings {
+  width: min(72vw, 780px);
+  height: min(72vw, 780px);
+  opacity: 0.5;
 }
-/* mientras el video bufferea, el hueco es crema y no el negro del <video> */
-#cine .cine-bg video,
-#cine .cine-bg img {
-  background: var(--crema);
-}
-/* el pie del hero se funde con el crema de la página: sin esto el video corta
-   en seco contra la sección siguiente (el cliente pidió que no haya cortes) */
-#cine::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 16vh;
-  z-index: 3;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(240, 233, 216, 0) 0%, var(--crema) 100%);
-}
-.cine-veil {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: linear-gradient(
-    180deg,
-    rgba(26, 24, 21, 0.38) 0%,
-    rgba(26, 24, 21, 0.2) 42%,
-    rgba(26, 24, 21, 0.66) 100%
-  );
+#cine .rings.br {
+  width: min(46vw, 500px);
+  height: min(46vw, 500px);
+  opacity: 0.38;
 }
 
 /* ---------- MANIFIESTO: la 2ª pantalla narrativa, saliendo del hero ---------- */
@@ -840,25 +819,7 @@ nav .links {
   transform: rotate(90deg);
 }
 
-/* ---------- HERO CINE (home): trailer de 3 frases sobre el video ---------- */
-/* Velo LOCAL detrás del copy: elipse enorme y de caída larga, así el texto
-   siempre tiene fondo suficiente (medido: sin esto el título quedaba en 2,1:1
-   sobre los frames claros del video) pero los bordes del cuadro siguen
-   luminosos y la escena no se oscurece de conjunto. Tono de paleta, no negro. */
-.cine-content::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  /* debajo del copy pero dentro del contexto de apilado del hero */
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 75% 58% at 50% 48%,
-    rgba(26, 24, 21, 0.58) 0%,
-    rgba(26, 24, 21, 0.42) 45%,
-    rgba(26, 24, 21, 0) 80%
-  );
-}
+/* ---------- HERO (home): el copy ---------- */
 .cine-content {
   position: absolute;
   inset: 0;
@@ -868,14 +829,13 @@ nav .links {
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--crema);
+  color: var(--negro);
   padding: 12vh 6vw 0;
   opacity: 0;
 }
 .cine-content h1 {
   font-size: clamp(2.4rem, 6.2vw, 5.4rem);
   max-width: 16ch;
-  text-shadow: 0 2px 34px rgba(26, 24, 21, 0.45);
 }
 .cine-content h1 .w {
   display: inline-block;
@@ -886,15 +846,17 @@ nav .links {
   display: inline-block;
   transform: translateY(110%);
 }
-/* ya no es un pie de página del título: es la 2ª frase de la película, la que
-   entra a los 3s. Cuerpo intermedio, ancho corto, para leerla de un saque. */
+/* 2ª frase de la película, la que entra a los 3s. Cuerpo intermedio, ancho
+   corto, para leerla de un saque. */
 .cine-content .sub {
   max-width: 38ch;
   margin: 3.5vh 0 0;
   font-size: clamp(1.1rem, 1.9vw, 1.5rem);
   line-height: 1.5;
-  opacity: 0.96;
-  text-shadow: 0 1px 20px rgba(26, 24, 21, 0.5);
+  /* el ablande va por COLOR y no por opacity: la intro anima .sub con autoAlpha
+     y al cerrar le deja opacity:1 inline, así que un opacity acá no se ve nunca
+     (y en reduced-motion sí, o sea que las dos entradas quedaban distintas) */
+  color: rgba(26, 24, 21, 0.82);
 }
 .cine-content .ctas {
   display: flex;
@@ -902,43 +864,6 @@ nav .links {
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 4.5vh;
-}
-/* botón fantasma sobre el video */
-.btn.ghost {
-  color: var(--crema);
-  border-color: rgba(240, 233, 216, 0.75);
-}
-.btn.ghost:hover {
-  background: var(--crema);
-  border-color: var(--crema);
-  color: var(--negro);
-}
-/* audio del video ("activable de forma orgánica") */
-.cine-audio {
-  position: absolute;
-  left: 2rem;
-  bottom: 2rem;
-  z-index: 4;
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid rgba(240, 233, 216, 0.55);
-  background: rgba(26, 24, 21, 0.28);
-  color: var(--crema);
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  transition: 0.25s;
-}
-.cine-audio:hover {
-  background: var(--crema);
-  border-color: var(--crema);
-  color: var(--negro);
-}
-.cine-audio svg {
-  width: 21px;
-  height: 21px;
 }
 @media (prefers-reduced-motion: reduce) {
   .cine-content {

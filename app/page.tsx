@@ -7,16 +7,10 @@ import RingsDeco from '@/components/RingsDeco';
 import Mitos from '@/components/Mitos';
 import HomeFx from '@/components/home/HomeFx';
 import Preloader from '@/components/home/Preloader';
-import CineAudio from '@/components/home/CineAudio';
 import { sedes, waLink, mapsLink, WA_GENERAL } from '@/data/sedes';
 import { mitosHome } from '@/data/mitos';
 
 const TITULO = '¿Qué es lo más importante de tu vida?';
-
-/* Botón mute/unmute del hero ("audio activable de forma orgánica" del brief).
-   Poner en true cuando el hero.mp4 real del rodaje traiga pista de audio —
-   con el video IA mudo actual el botón no hace nada y confunde. */
-const HERO_CON_AUDIO = false;
 
 export default function Home() {
   return (
@@ -24,18 +18,17 @@ export default function Home() {
       <Preloader />
       <Nav waNumero={WA_GENERAL} waTexto="Hola Fosque! Quiero vivir la experiencia" />
 
-      {/* ============ HERO CINE: la película Fosque ============
-          Doc del cliente 2026-08-17: el video corre desde el segundo 0 sobre
-          fondo de paleta (nada de telón negro), la pregunta queda en pantalla
-          unos segundos y el resto del copy se SUMA encima —no reemplaza—,
-          hasta que emergen los botones. */}
+      {/* ============ HERO: fondo neutro de paleta ============
+          Devolución del cliente 2026-08-27: el video a pantalla completa le
+          resulta invasivo. El fondo pasa a ser el crema de la marca con los
+          arcos concéntricos del manual ("USO DEL SISTEMA EN LOCALES"), y el
+          copy —negro sobre crema— ya no necesita velo ninguno.
+          La coreografía que pidió el 17-ago se conserva intacta: la pregunta
+          queda sola unos segundos, después se SUMA la frase y al final los
+          botones. Lo único que cambió es lo que hay detrás. */}
       <section id="cine" data-bg="#F0E9D8">
-        <Media
-          className="cine-bg"
-          file="hero.mp4"
-          shot="🎬 VIDEO HERO · Relato continuo sin cortes bruscos: rutina urbana y cansancio → llegada a Fosque → transformación, risas, abrazo · Luz cálida"
-        />
-        <div className="cine-veil" />
+        <RingsDeco id="cine-a" from="#F3A6C8" to="#CDB6D9" className="tl" />
+        <RingsDeco id="cine-b" from="#8FD5CC" to="#43A9A1" className="br" />
         <div className="cine-content">
           <h1>
             {TITULO.split(' ').map((w, i) => (
@@ -60,12 +53,11 @@ export default function Home() {
             >
               Quiero vivir la experiencia Fosque
             </a>
-            <a className="btn ghost" href="#sedes">
+            <a className="btn" href="#sedes">
               Elegí tu sucursal
             </a>
           </div>
         </div>
-        {HERO_CON_AUDIO && <CineAudio />}
       </section>
 
       {/* ============ MANIFIESTO: la 2ª pantalla narrativa del hero ============
