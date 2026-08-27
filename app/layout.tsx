@@ -28,11 +28,24 @@ const bebas = Bebas_Neue({
   display: 'swap',
 });
 
+// Ojo con `??`: una variable creada VACIA en Vercel llega como '' y lo atraviesa
+// (`??` solo atrapa null/undefined), y `new URL('')` mata el build entero.
+// Por eso se limpia y se valida, en vez de confiar en el operador.
+function urlValida(v: string | undefined): string | null {
+  const s = v?.trim();
+  if (!s) return null;
+  const conEsquema = /^https?:\/\//i.test(s) ? s : `https://${s}`;
+  try {
+    return new URL(conEsquema).origin;
+  } catch {
+    return null;
+  }
+}
+
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : 'http://localhost:3000');
+  urlValida(process.env.NEXT_PUBLIC_SITE_URL) ??
+  urlValida(process.env.VERCEL_PROJECT_PRODUCTION_URL) ??
+  'http://localhost:3000';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

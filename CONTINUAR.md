@@ -413,7 +413,34 @@ corta para WhatsApp).
    conviene separarlos por sede en `data/sedes.ts`.
 
 **Técnicos:**
-- Dominio fosque.com + setear `NEXT_PUBLIC_SITE_URL` en Vercel (para el OG de WhatsApp). ⚠️ El doc del cliente lo encabeza como si el dominio ya existiera: hoy es fosque.vercel.app. Definir quién lo compra.
+- **Dominio fosque.com: EXISTE y está mal apuntado (relevado 27-ago).** El
+  hosting armó una **redirección** `fosque.com` → `fosque.vercel.app` en vez de
+  apuntar el dominio a Vercel, y así queda:
+  - `http://fosque.com` → 301 al .vercel.app ✔, pero **`https://fosque.com` da
+    error de certificado** (`SEC_E_WRONG_PRINCIPAL`). Como WhatsApp normaliza a
+    https, el scraper no llega nunca → **el link compartido no muestra preview**.
+    Ése es el síntoma que reportó el cliente; el .vercel.app sí lo muestra.
+  - `www.fosque.com` sirve **otro sitio**: una landing vieja de **Bitrix24**
+    (CNAME a `lb.bitrix24.site`), título "Fosque Gimnasio - Pilates" y
+    descripción de plantilla en inglés. Preguntarle al cliente si es suya antes
+    de pisar el CNAME.
+  - Una redirección **no alcanza aunque le pongan SSL**: el dominio no tiene
+    identidad propia, el `og:image` y el canonical se siguen armando con el host
+    real (.vercel.app) y Google indexa el .vercel.app. Va apuntado de verdad:
+    A del apex + CNAME de www a los valores que muestra Vercel al agregar el
+    dominio (copiar de ahí, esos valores cambiaron más de una vez).
+  - ⚠️ **La zona tiene mail**: `MX → a.mx.fosque.com` en el mismo servidor
+    (`ws84.host4g.com`, 190.210.9.50). En el pedido al hosting hay que decir
+    explícito que NO toquen MX, el registro `a.mx`, el TXT de SPF ni el
+    `google-site-verification`. Verificado que el cambio del A **no rompe el
+    envío**: el SPF (`v=spf1 mx a ptr ip4:190.210.9.0/24 ip4:190.210.132.0/24`)
+    sigue autorizando al servidor por `mx` y por el bloque `ip4`.
+  - ⚠️ **Lautaro NO tiene acceso al panel de DNS** (es de otro proveedor y no le
+    dan la clave): todo cambio va por pedido escrito al hosting. Plan B si no
+    pueden: que deleguen la zona a Cloudflare.
+  - **Orden obligatorio**: agregar el dominio en Vercel → pedido al hosting →
+    y recién cuando `https://fosque.com` cargue, setear `NEXT_PUBLIC_SITE_URL=https://fosque.com`
+    y redeployar. Al revés el `og:image` apunta a un host que todavía no sirve nada.
 - **Confirmarle al cliente que el botón de audio del hero se cayó** con el video (lo pide el brief). Vuelve solo si el video vuelve al hero de alguna forma.
 - Lighthouse >90 que pide el doc: **ahora sí es alcanzable en las cuatro categorías** — el techo era el video fullscreen en autoplay. Falta medirlo.
 - Decap CMS para que Vero publique novedades sola (guía provisoria: `COMO-PUBLIR.md.txt` en la carpeta del proyecto de la PC principal).
