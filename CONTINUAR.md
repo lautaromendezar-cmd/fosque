@@ -243,7 +243,33 @@ el que lo lee es el propio scroll.
    termina en el extremo opuesto de la pantalla. Se deja el origen por defecto.
    (Lo cazó una captura, no el test: es de las cosas que hay que mirar.)
 
-## 🎬 Pendiente abierto: "mejorar los videos con IA"
+## 🎬 Pendiente abierto: "mejorar los videos con IA" — PILOTO HECHO (27-ago)
+
+**Decisión de Lautaro tras hablar con el cliente**: el cliente vio videos de
+avatares IA en Instagram y quiere ese camino — no le molesta que sea IA. El
+enfoque elegido NO es retocar los clips reales sino **recrear el lugar con
+Nano Banana usando frames del video real como referencia** (mismo pipeline que
+el cartel IA de /franquicia) y animar con image-to-video.
+
+**Piloto (2 pruebas) generado vía Higgsfield MCP, esperando el OK del cliente:**
+- Pipeline: frames del MP4 real (`ffmpeg fps=1`) → `media_upload` →
+  `nano_banana_pro` 16:9 2k con `image_references` (prompt: "recreate this
+  exact studio… preserve architecture/machines/branding, transform only the
+  atmosphere") → `seedance_2_5` mode `omni_reference` con `start_image` =
+  job_id de la imagen, 5s 1080p sin audio (45 créditos por clip).
+- Resultados en `Desktop/Claude/fosque/pruebas-ia/` (PC principal, fuera del
+  repo): `clip-salon.mp4` (recreación fiel del salón de JH con luz cálida) y
+  `clip-reformers.mp4` (fila de reformers + profe con buzo del logo).
+- Costo del piloto: ~94 créditos (2 imágenes + 2 videos). Saldo tras el piloto:
+  362 de 456.
+- ⚠️ El logo de la marca en el buzo sale semi-deformado (trampa conocida: la IA
+  regenera, no copia). En planos donde el logo se vea grande, taparlo/evitarlo
+  o corregirlo aparte.
+- Si el cliente aprueba: repetir por video a reemplazar eligiendo el mejor
+  frame de referencia de cada MP4 real; para Núñez (sin rodaje) no hay
+  referencia real — pedir fotos del local aunque sean de celular.
+
+### Contexto previo (análisis del 27-ago, antes del piloto)
 
 Pedido del cliente (27-ago-2026), **sin resolver y sin idea todavía**. Lo que
 dijo es que no le gusta cómo se ven sus locales. Ojo con lo que eso significa:
