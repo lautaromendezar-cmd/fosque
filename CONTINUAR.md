@@ -270,11 +270,27 @@ integrar por tandas, sede por sede, con revisión de Lautaro entre tandas.
 - Los originales PNG 2K + los clips candidatos quedan en
   `Desktop/Claude/fosque/pruebas-ia/` (PC principal, fuera del repo).
 
-**Próximas tandas**: Emilio Castro (mismo pipeline, frames de
-`sede-emilio-castro.mp4` como referencia) → Núñez (sin referencia real: pedir
-fotos del local, aunque sean de celular) → hero/metodo/historia/franquicia si
-el cliente quiere. Créditos Higgsfield tras tanda 1: ~256 de 456 (imagen ≈2,
-video 5s 1080p = 45).
+**✅ TANDA 2 — Emilio Castro, INTEGRADA Y DEPLOYADA (27-ago):**
+- `sede-emilio-castro.mp4` = **montaje de 3 tomas** (el original real también
+  tenía 2-3 cortes): salón amplio con la profe de espaldas y la remera blanca
+  FOSQUE (2,2s) → detalle de la placa FOSQUE en la torre con cuerda roja (1,8s)
+  → plano medio de las alumnas (2s). Pedido de Lautaro: NO poner los dos planos
+  generales seguidos. Corte con ffmpeg filter_complex trim+concat, luego el
+  pipeline de compresión de siempre (1,4 MB).
+- `galeria-ec-*.jpg` (las 4): reformer, recepción, detalle, salida. Identidad
+  EC respetada: lámparas esféricas amarillas/naranjas colgando SIEMPRE
+  presentes, galpón de chapa con lucarnas, reformers con torre, remera blanca
+  FOSQUE (vs. buzo negro de JH).
+- ⚠️ Inventadas de cero (sin referencia en el clip real): `galeria-ec-recepcion`
+  y `galeria-ec-salida` (frente vidriado). Si el cliente las quiere fieles,
+  pedir fotos del local.
+- Los 3 clips individuales de 5s + las imágenes base 2K quedan en
+  `Desktop/Claude/fosque/pruebas-ia/` para re-cortar el montaje sin regenerar.
+
+**Próximas tandas**: Núñez (sin referencia real: pedir fotos del local, aunque
+sean de celular) → hero/metodo/historia/franquicia si el cliente quiere.
+⚠️ Créditos Higgsfield tras tanda 2: **~103 de 456** (imagen ≈2, video 5s
+1080p = 45) — para más tandas con video probablemente haga falta recargar.
 
 **Piloto (2 pruebas) generado vía Higgsfield MCP, esperando el OK del cliente:**
 - Pipeline: frames del MP4 real (`ffmpeg fps=1`) → `media_upload` →
