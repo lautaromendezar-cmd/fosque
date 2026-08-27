@@ -20,6 +20,40 @@ const HOLD_PREGUNTA = 3;
  * Motor de animación de la home. El contenido llega server-rendered como
  * children; acá solo se anima (regla de oro: "use client" solo donde se anima).
  */
+/* Parte un elemento en un <span> por palabra. Se hace DESDE JS y no desde el
+   HTML/CSS a propósito: si el script no corre, el texto queda tal cual y se lee
+   igual. Nunca ocultar con CSS algo que revela el JS.
+   `mascara` envuelve cada palabra en un marco con overflow hidden, para que
+   suban desde abajo como el título del hero. */
+const partirEnPalabras = (el: HTMLElement, mascara: boolean) => {
+  if (el.dataset.partido) return Array.from(el.querySelectorAll<HTMLElement>('.pal'));
+  const palabras = (el.textContent ?? '').trim().split(/\s+/);
+  el.textContent = '';
+  const salida: HTMLElement[] = [];
+  palabras.forEach((palabra, i) => {
+    const marco = document.createElement('span');
+    marco.style.display = 'inline-block';
+    if (mascara) {
+      marco.style.overflow = 'hidden';
+      marco.style.verticalAlign = 'top';
+      /* los display van con line-height 0.95: sin este aire el marco le corta
+         la cola a la "g" de "gimnasio" y a la "q" de "Fosque" */
+      marco.style.paddingBottom = '0.16em';
+      marco.style.marginBottom = '-0.16em';
+    }
+    const pal = document.createElement('span');
+    pal.className = 'pal';
+    pal.style.display = 'inline-block';
+    pal.textContent = palabra;
+    marco.appendChild(pal);
+    el.appendChild(marco);
+    if (i < palabras.length - 1) el.appendChild(document.createTextNode(' '));
+    salida.push(pal);
+  });
+  el.dataset.partido = '1';
+  return salida;
+};
+
 export default function HomeFx({ children }: { children: React.ReactNode }) {
   const scope = useRef<HTMLDivElement>(null);
 
@@ -152,16 +186,46 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      /* ---- Manifiesto: la 2ª pantalla del hero, se descubre al scrollear ---- */
-      gsap.from(q('#manifiesto .mf-titulo, #manifiesto .mf-texto'), {
-        y: 44,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.15,
-        ease: 'power3.out',
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: '#manifiesto', start: 'top 78%' },
-      });
+      /* ---- Manifiesto: la 2ª pantalla del hero, se descubre al scrollear ----
+         El fade-up genérico que había acá no se notaba: desde que el hero es
+         crema plano, se pasa de una pantalla quieta a otra igual. Ahora el
+         título sube palabra por palabra (mismo idioma que el hero) y el párrafo
+         se ENCIENDE atado al scroll, así el que lo lee es el propio scroll. */
+      const mfTitulo = q('#manifiesto .mf-titulo')[0] as HTMLElement | undefined;
+      if (mfTitulo) {
+        gsap.fromTo(
+          partirEnPalabras(mfTitulo, true),
+          { yPercent: 115 },
+          {
+            yPercent: 0,
+            duration: 0.9,
+            ease: 'power3.out',
+            stagger: 0.08,
+            scrollTrigger: { trigger: '#manifiesto', start: 'top 72%', once: true },
+          },
+        );
+      }
+      const mfTexto = q('#manifiesto .mf-texto')[0] as HTMLElement | undefined;
+      if (mfTexto) {
+        gsap.fromTo(
+          partirEnPalabras(mfTexto, false),
+          { opacity: 0.22 },
+          {
+            opacity: 1,
+            ease: 'none',
+            stagger: 0.08,
+            scrollTrigger: {
+              trigger: '#manifiesto',
+              start: 'top 62%',
+              /* termina cuando el bloque queda bien encuadrado, no cuando ya se
+                 está yendo: con 'top 8%' las últimas palabras seguían apagadas
+                 con la sección centrada en pantalla */
+              end: 'top 20%',
+              scrub: 0.6,
+            },
+          },
+        );
+      }
 
       /* ---- Counters historia ---- */
       q('[data-count]').forEach((el) => {

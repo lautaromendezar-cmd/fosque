@@ -190,6 +190,25 @@ Se eligió la lectura literal (nada de video en el hero, ni siquiera contenido).
    expresamente "audio activable de forma orgánica" en el hero: hay que
    decírselo. Hoy no se perdía nada real porque el clip salió mudo (-91 dB).
 
+### El manifiesto tuvo que animarse de nuevo
+
+Con el hero ya en crema plano, el `fade-up` genérico del manifiesto no se veía:
+se pasaba de una pantalla quieta a otra igual. Ahora el **título sube palabra
+por palabra** con máscara (el mismo idioma que el hero) y el **párrafo se
+enciende atado al scroll** (`scrub`, de 0,22 a 1 de opacidad por palabra), así
+el que lo lee es el propio scroll.
+
+- Las palabras se parten **desde JS** (`partirEnPalabras` en `HomeFx`), nunca
+  desde el HTML con el CSS ocultando: si el script no llega, el texto queda
+  entero y legible. Hay dos chequeos nuevos en `check-hero.mjs` que lo
+  garantizan (en reduced-motion no se parte y nada queda apagado; con animación,
+  al final del scroll ninguna palabra queda a media luz).
+- El marco de la máscara lleva `padding-bottom: 0.16em` con margen negativo: los
+  display van con `line-height: 0.95` y sin ese aire el marco le corta la cola a
+  la "g" de "gimnasio".
+- El `end` del scrub va en `top 20%`, no más abajo: con el recorrido largo las
+  últimas palabras seguían apagadas con la sección ya centrada en pantalla.
+
 ### Lo que esto cierra
 
 - **El pendiente de contraste se resolvió solo.** Venía 3,45:1 contra el frame

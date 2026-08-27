@@ -290,6 +290,61 @@ for (const sel of ['.cine-content h1', '.cine-content .sub', '.cine-content .cta
   ok((await visible(page, sel)) === 'visible', `reduced-motion: ${sel} visible`);
 }
 ok((await visible(page, '#preloader')) === 'no existe', 'reduced-motion: sin preloader');
+/* El manifiesto se parte en palabras desde JS para encenderlas con el scroll.
+   Si el reveal no corre —reduced-motion, o el script que se cae— el texto tiene
+   que quedar entero y legible igual: es la regla de no ocultar nada que dependa
+   de que el JS llegue. Acá se comprueba que en reduced-motion NO se parta y que
+   ninguna palabra quede apagada. */
+const mf = await page.evaluate(() => {
+  const t = document.querySelector('#manifiesto .mf-texto');
+  if (!t) return { existe: false };
+  const pal = [...t.querySelectorAll('.pal')];
+  return {
+    existe: true,
+    partido: pal.length,
+    largo: t.textContent.trim().length,
+    minOpacidad: pal.length
+      ? Math.min(...pal.map((s) => parseFloat(getComputedStyle(s).opacity)))
+      : 1,
+  };
+});
+ok(
+  mf.existe && mf.largo > 100,
+  'reduced-motion: el manifiesto conserva su texto',
+  `${mf.largo} caracteres`,
+);
+ok(mf.partido === 0, 'reduced-motion: no se parte en palabras');
+ok(
+  mf.minOpacidad >= 0.99,
+  'reduced-motion: ninguna palabra queda apagada',
+  `mínima ${mf.minOpacidad}`,
+);
+await ctx.close();
+
+/* Y con animación: al terminar el scrub, las palabras tienen que quedar TODAS
+   encendidas. Un reveal que se queda a media luz es peor que no tenerlo. */
+ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+page = await ctx.newPage();
+await page.goto(base, { waitUntil: 'networkidle' });
+await enT(page, await intro(page), 10);
+await page.evaluate(() => {
+  const s = document.querySelector('#manifiesto');
+  window.scrollTo(0, s.getBoundingClientRect().top + window.scrollY - 60);
+});
+await page.waitForTimeout(2500);
+const mfFin = await page.evaluate(() => {
+  const pal = [...document.querySelectorAll('#manifiesto .mf-texto .pal')];
+  return {
+    partido: pal.length,
+    min: pal.length ? Math.min(...pal.map((s) => parseFloat(getComputedStyle(s).opacity))) : 0,
+  };
+});
+ok(mfFin.partido > 20, 'manifiesto: el texto se parte en palabras', `${mfFin.partido} palabras`);
+ok(
+  mfFin.min >= 0.99,
+  'manifiesto: al final del scroll no queda ninguna apagada',
+  `mínima ${mfFin.min.toFixed(2)}`,
+);
 await ctx.close();
 
 await browser.close();
