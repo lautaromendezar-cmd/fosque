@@ -35,7 +35,14 @@ export default function Footer() {
           <div>
             <h4 className="h-socios">SOCIOS</h4>
             <a href="#">Ingresá a tu Perfil</a>
-            <a href="#">Instagram</a>
+            {sedes.map(
+              (s) =>
+                s.instagram && (
+                  <a key={s.slug} href={s.instagram} target="_blank" rel="noopener">
+                    Instagram {s.nombre}
+                  </a>
+                ),
+            )}
             <a href="#">Facebook</a>
           </div>
         </div>

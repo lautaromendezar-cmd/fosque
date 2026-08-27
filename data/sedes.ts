@@ -60,7 +60,7 @@ export const sedes: Sede[] = [
     disciplinas: ['Fosque Reformer', 'Fuerza y Cardio'],
     marquee: ['FOSQUE REFORMER', 'FUERZA Y CARDIO', 'NIVELES 1 · 2 · 3', 'ABIERTO FERIADOS'],
     placeId: 'ChIJEXzKSQfJvJUR7XX8NQLpogI',
-    instagram: null,
+    instagram: 'https://www.instagram.com/fosque.josehernandez/',
     descripcion:
       'La sede más completa de la red: Fosque Reformer + Fuerza y Cardio, con sala de musculación propia. Abierta de lunes a lunes para que el tiempo nunca sea excusa.',
     claim: 'La más potente',
@@ -99,7 +99,7 @@ export const sedes: Sede[] = [
     disciplinas: ['Fosque Reformer'],
     marquee: ['FOSQUE REFORMER', 'NIVELES 1 · 2 · 3', 'EVALUACIÓN SIN CARGO', 'AMBIENTE CÁLIDO'],
     placeId: 'ChIJAT7pAFfIvJURJROxKVu3WyU',
-    instagram: null,
+    instagram: 'https://www.instagram.com/fosque.emiliocastro/',
     descripcion:
       'Un espacio íntimo y cálido dedicado por completo a Fosque Reformer, la evolución de Pilates. Clases siempre con instructor y una ejecutiva que te acompaña.',
     claim: 'Íntima y cálida',
@@ -137,7 +137,7 @@ export const sedes: Sede[] = [
     disciplinas: ['Fosque Reformer'],
     marquee: ['FOSQUE REFORMER', 'NIVELES 1 · 2 · 3', 'EVALUACIÓN SIN CARGO', 'ZONA NORTE'],
     placeId: 'ChIJgxgtyCC0vJURBp2OL0nQzA0',
-    instagram: null,
+    instagram: 'https://www.instagram.com/fosque_nunez/',
     descripcion:
       'Fosque llega a zona norte: Fosque Reformer en un espacio luminoso a metros del río, para que empieces el día moviéndote.',
     claim: 'Luminosa',

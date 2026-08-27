@@ -104,7 +104,20 @@ export default async function SedePage({ params }: Props) {
               </div>
               <div className="horario">
                 <span>Instagram</span>
-                <b>{sede.instagram ?? 'Muy pronto'}</b>
+                <b>
+                  {sede.instagram ? (
+                    <a
+                      href={sede.instagram}
+                      target="_blank"
+                      rel="noopener"
+                      style={{ color: 'inherit', textDecoration: 'underline' }}
+                    >
+                      @{new URL(sede.instagram).pathname.replaceAll('/', '')}
+                    </a>
+                  ) : (
+                    'Muy pronto'
+                  )}
+                </b>
               </div>
             </div>
             <div className="card resena">
