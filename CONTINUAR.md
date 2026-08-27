@@ -287,10 +287,20 @@ integrar por tandas, sede por sede, con revisión de Lautaro entre tandas.
 - Los 3 clips individuales de 5s + las imágenes base 2K quedan en
   `Desktop/Claude/fosque/pruebas-ia/` para re-cortar el montaje sin regenerar.
 
+**✅ TANDA 3 — Serie "equipo", INTEGRADA Y DEPLOYADA (27-ago):**
+- Las 6 fotos que alimentan las cards de la home, /equipo y las landings de
+  sede: `equipo-1..4.jpg`, `equipo-mantenimiento.jpg` (antes NO existía, era
+  placeholder) y `galeria-detalle.jpg` (card mantenimiento de la home + galería
+  Núñez). Todas con los uniformes reales (buzo negro con logo F / remera blanca
+  FOSQUE) y los espacios reales (correas rosas JH, lámparas EC).
+- Detalles menores aceptados por Lautaro: en la grupal el estampado chico dice
+  "FOSQU"; en la de mantenimiento las máquinas salieron más de madera clara que
+  las reales. Regenerar si el cliente los marca.
+
 **Próximas tandas**: Núñez (sin referencia real: pedir fotos del local, aunque
 sean de celular) → hero/metodo/historia/franquicia si el cliente quiere.
-⚠️ Créditos Higgsfield tras tanda 2: **~103 de 456** (imagen ≈2, video 5s
-1080p = 45) — para más tandas con video probablemente haga falta recargar.
+⚠️ Créditos Higgsfield tras tanda 3: **~91 de 456** (imagen ≈2, video 5s
+1080p = 45) — para más tandas con video hace falta recargar.
 
 **Piloto (2 pruebas) generado vía Higgsfield MCP, esperando el OK del cliente:**
 - Pipeline: frames del MP4 real (`ffmpeg fps=1`) → `media_upload` →
