@@ -38,6 +38,11 @@ Este archivo NO se sube: es la guia para vos. El paquete se genera solo.
      Sin ella queda el texto pelado, sin estilos ni animaciones.
    - Si en la raiz hay un sitio viejo (un index.php, un WordPress, la landing
      de Bitrix24), sacarlo primero o el hosting va a seguir sirviendo eso.
+   - Adentro de _next/static/chunks/app/ hay una carpeta que se llama
+     literalmente [sede] (con corchetes: es la ruta dinamica de las 3 sedes).
+     Es valida y tiene que subir igual. Si algun cliente FTP se hace el vivo con
+     los corchetes y la saltea, las 3 paginas de sede cargan pero les falta el
+     JS. Chequear que este arriba.
 
    Truco para no romper nada en una prueba: crear una carpeta _original en el
    servidor y mover ahi lo que ya estaba (es un move del lado del server,
@@ -51,21 +56,26 @@ Este archivo NO se sube: es la guia para vos. El paquete se genera solo.
    fosque.com/asdasd        -> sale el 404 propio (confirma que subio .htaccess)
 
 
-4) FALTA EL SSL (bloqueante, no depende de nosotros)
-----------------------------------------------------
-   El hosting tiene que emitir el certificado para fosque.com Y www.fosque.com.
-   Hasta que eso pase, el link compartido por WhatsApp sigue sin mostrar la
-   vista previa: ESE es el problema que reporto el cliente, y no lo arregla
-   mudar el sitio de Vercel al hosting.
+4) EL SSL YA ESTA (resuelto 3-sep-2026)
+----------------------------------------
+   El hosting emitio el certificado Let's Encrypt que cubre fosque.com Y
+   www.fosque.com (valido hasta el 2-dic-2026, se renueva solo), saco el CNAME
+   viejo de Bitrix24 de www, y ya redirige http -> https el solo. Los dos hosts
+   pegan contra el Apache del hosting (190.210.9.50) y hoy devuelven 403
+   Forbidden: es la raiz web VACIA esperando esta subida. No hay que pedir nada
+   mas: subir y listo.
 
-   Cuando https://fosque.com cargue bien:
-   - Descomentar el bloque "Forzar HTTPS" en deploy/.htaccess
-   - npm run ftp  y volver a subir el .htaccess
-   - Probar el preview mandandose el link por WhatsApp
-   - Search Console: dar de alta la propiedad https://fosque.com
+   Por eso en deploy/.htaccess el "forzar HTTPS" queda COMENTADO a proposito
+   (el hosting ya lo hace; activarlo puede armar un loop si terminan el TLS en
+   un proxy) y en cambio SI va activo el 301 de www -> fosque.com.
 
-   El pedido al hosting, ya redactado, esta en docs/PEDIDO-AL-HOSTING.md
-
+   Despues de subir:
+   - Mandarse el link por WhatsApp y confirmar que ahora si sale la vista previa
+     (ese era el sintoma que reporto el cliente).
+   - Search Console: dar de alta la propiedad https://fosque.com.
+   - Vercel: fosque.vercel.app sigue vivo. Ya no es el sitio publico, es la
+     copia de laboratorio. El canonical de todas las paginas apunta a
+     fosque.com, asi que Google se queda con el dominio propio.
 
 5) UN CAMBIO MAS ADELANTE
 -------------------------

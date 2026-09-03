@@ -51,8 +51,8 @@ npm run probar                             # lo sirve por HTTP y abre el navegad
   a Apache. ⚠️ Abrir `index.html` con doble clic NO sirve: rutas absolutas.
 - `deploy/.htaccess` — 404 propio, gzip y cache. El HTML va con **`no-cache`** a
   propósito, para que un cambio subido por FTP se vea; `_next/static` (con hash
-  en el nombre) va con cache de un año. El bloque **forzar HTTPS está COMENTADO**:
-  se descomenta recién cuando exista el certificado, si no el sitio se cae.
+  en el nombre) va con cache de un año. El bloque **forzar HTTPS está COMENTADO**
+  (ver abajo: el hosting ya redirige solo) y lleva el **301 de `www` → apex**.
 - `deploy/LEEME-SUBIDA.txt` — instructivo de FileZilla. **No se sube** (quedaría
   público en la raíz); tampoco lo copia el script.
 - `deploy-ftp/` está en `.gitignore`: es generado, no se versiona.
@@ -60,33 +60,43 @@ npm run probar                             # lo sirve por HTTP y abre el navegad
 ⚠️ **YA NO HAY DEPLOY AUTOMÁTICO.** Un `git push` publica en Vercel, no en el
 hosting del cliente. Lo que ve la gente es lo que esté subido por FTP.
 
-**Estado real del dominio (verificado en vivo el 3-sep):**
+**Estado real del dominio — el hosting lo arregló ESE MISMO DÍA.** Lo de arriba
+(la tabla del relevamiento de la mañana: apex redirigiendo y `www` en Bitrix24)
+quedó viejo en horas. Verificado en vivo el 3-sep a las 18:30:
 
-| URL | Qué sirve hoy |
+| Qué | Cómo está ahora |
 |---|---|
-| `fosque.com` (apex) | 301 → `https://fosque.vercel.app` (Apache, `190.210.9.50`) |
-| `www.fosque.com` | **Bitrix24.Sites** — el sitio VIEJO de Fosque, **con HTTPS válido** |
+| `fosque.com` y `www.fosque.com` | los **dos** al Apache del hosting, `190.210.9.50` — se acabó la redirección al `.vercel.app` |
+| Certificado | **Let's Encrypt emitido el 3-sep 18:48 UTC**, SAN = `fosque.com` + `www.fosque.com`, vence el 2-dic (se renueva solo) |
+| `http://` | ya redirige a `https://` **solo, a nivel de servidor** (por eso el forzar-HTTPS del `.htaccess` queda comentado) |
+| `https://` (los dos) | **403 Forbidden** de Apache = la raíz web está VACÍA, esperando esta subida |
+| FTP | vivo en `ftp.fosque.com:21`, **Pure-FTPd con TLS** (SFTP/22 cerrado: es FTPS explícito, no SFTP) |
+| MX | intacto: `MX 0 a.mx.fosque.com`. El mail no se tocó |
 
-⚠️ Corrección a lo anotado el 27-ago: lo de `www` **no es una landing abandonada**.
-Es el sitio viejo real, con nav completo (Historia, Método, Sedes, **Planes**,
-Contactanos) y un **chat widget "Asesor Fosque"** que probablemente esté metiendo
-consultas en el CRM de Bitrix24. Antes de pisarlo hay que preguntarle al cliente:
-si lo da de baja, quién atiende ese chat, y qué pasa con la sección **Planes**
-(que el sitio nuevo NO tiene).
+✅ **El bloqueante del SSL murió**: era exactamente lo que pedía
+`docs/PEDIDO-AL-HOSTING.md` y lo hicieron completo. Ya no hay nada que esperar
+de nadie: subir `deploy-ftp/` por FTP y el sitio queda en el dominio propio, con
+el preview de WhatsApp andando.
 
-Que `https://www.fosque.com` funcione bien confirma el diagnóstico: **el
-certificado roto es solo el del apex**. El hosting sabe emitir SSL; falta que lo
-haga para `fosque.com` a secas.
+⚠️ **Efecto colateral que hay que avisarle al cliente:** al mover `www` al
+hosting, el hosting **desenchufó el sitio viejo de Bitrix24** — `www.fosque.com`
+ya no lo sirve. Con él se cayeron el chat **"Asesor Fosque"** (si entraban
+consultas al CRM, dejaron de entrar por ahí) y la sección **Planes**, que el
+sitio nuevo no tiene. No lo hicimos nosotros, pero pasó hoy: preguntarle si el
+chat estaba en uso y si Planes tiene que existir en el sitio nuevo.
 
-**BLOQUEANTE: el SSL.** Mudar el sitio al hosting propio NO resuelve por sí solo
-el problema del preview de WhatsApp — la causa es el certificado del apex.
-Pedido ya redactado (un solo mensaje de WhatsApp) en `docs/PEDIDO-AL-HOSTING.md`:
-acceso FTP, anular la redirección (después de subir, no antes), apuntar `www` al
-mismo servidor, emitir SSL de los dos nombres, y la lista explícita de lo que NO
-deben tocar (MX, `a.mx`, SPF, `google-site-verification`, NS y el A del apex, que
-ya está bien). Incluye plan B por Vercel con los valores de DNS.
+**Ajustes de esta sesión (3-sep, PC de casa), ya con el SSL resuelto:**
+- `deploy/.htaccess`: el forzar-HTTPS **sigue comentado a propósito** (el hosting
+  ya lo hace solo; activarlo puede armar un loop si terminan el TLS en un proxy)
+  y en su lugar entra un **301 de `www` → apex**, que ahora sí es seguro porque
+  el certificado cubre los dos nombres.
+- `app/layout.tsx`: `alternates: { canonical: './' }` → todas las páginas salen
+  con `<link rel="canonical">` a `https://fosque.com/...`. Antes no había
+  ninguno y Google se quedaba con el `.vercel.app`.
 
-**Próximo paso: esperando que el hosting mande el acceso FTP.**
+**Próximo paso: subir `deploy-ftp/` por FTP** (paquete regenerado el 3-sep con
+los dos ajustes de arriba). Después: WhatsApp para ver el preview, y dar de alta
+`https://fosque.com` en Search Console.
 
 ## 📄 Qué es el sitio
 
@@ -474,34 +484,12 @@ corta para WhatsApp).
    conviene separarlos por sede en `data/sedes.ts`.
 
 **Técnicos:**
-- **Dominio fosque.com: EXISTE y está mal apuntado (relevado 27-ago).** El
-  hosting armó una **redirección** `fosque.com` → `fosque.vercel.app` en vez de
-  apuntar el dominio a Vercel, y así queda:
-  - `http://fosque.com` → 301 al .vercel.app ✔, pero **`https://fosque.com` da
-    error de certificado** (`SEC_E_WRONG_PRINCIPAL`). Como WhatsApp normaliza a
-    https, el scraper no llega nunca → **el link compartido no muestra preview**.
-    Ése es el síntoma que reportó el cliente; el .vercel.app sí lo muestra.
-  - `www.fosque.com` sirve **otro sitio**: una landing vieja de **Bitrix24**
-    (CNAME a `lb.bitrix24.site`), título "Fosque Gimnasio - Pilates" y
-    descripción de plantilla en inglés. Preguntarle al cliente si es suya antes
-    de pisar el CNAME.
-  - Una redirección **no alcanza aunque le pongan SSL**: el dominio no tiene
-    identidad propia, el `og:image` y el canonical se siguen armando con el host
-    real (.vercel.app) y Google indexa el .vercel.app. Va apuntado de verdad:
-    A del apex + CNAME de www a los valores que muestra Vercel al agregar el
-    dominio (copiar de ahí, esos valores cambiaron más de una vez).
-  - ⚠️ **La zona tiene mail**: `MX → a.mx.fosque.com` en el mismo servidor
-    (`ws84.host4g.com`, 190.210.9.50). En el pedido al hosting hay que decir
-    explícito que NO toquen MX, el registro `a.mx`, el TXT de SPF ni el
-    `google-site-verification`. Verificado que el cambio del A **no rompe el
-    envío**: el SPF (`v=spf1 mx a ptr ip4:190.210.9.0/24 ip4:190.210.132.0/24`)
-    sigue autorizando al servidor por `mx` y por el bloque `ip4`.
-  - ⚠️ **Lautaro NO tiene acceso al panel de DNS** (es de otro proveedor y no le
-    dan la clave): todo cambio va por pedido escrito al hosting. Plan B si no
-    pueden: que deleguen la zona a Cloudflare.
-  - **Orden obligatorio**: agregar el dominio en Vercel → pedido al hosting →
-    y recién cuando `https://fosque.com` cargue, setear `NEXT_PUBLIC_SITE_URL=https://fosque.com`
-    y redeployar. Al revés el `og:image` apunta a un host que todavía no sirve nada.
+- ~~**Dominio fosque.com mal apuntado**~~ ✅ **RESUELTO el 3-sep**: el hosting
+  apuntó los dos nombres a su Apache y emitió el SSL. El relevamiento del 27-ago
+  que estaba acá (redirección al `.vercel.app`, certificado roto, `www` en
+  Bitrix24) quedó obsoleto — el estado real y lo que falta está arriba, en
+  "2026-09-03 — El sitio se muda al hosting del cliente (FTP)". Lo único que
+  queda es **subir `deploy-ftp/` por FTP**.
 - **Confirmarle al cliente que el botón de audio del hero se cayó** con el video (lo pide el brief). Vuelve solo si el video vuelve al hero de alguna forma.
 - Lighthouse >90 que pide el doc: **ahora sí es alcanzable en las cuatro categorías** — el techo era el video fullscreen en autoplay. Falta medirlo.
 - Decap CMS para que Vero publique novedades sola (guía provisoria: `COMO-PUBLIR.md.txt` en la carpeta del proyecto de la PC principal).

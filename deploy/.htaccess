@@ -5,14 +5,27 @@ DirectoryIndex index.html
 # --- Pagina de error propia -------------------------------------------------
 ErrorDocument 404 /404.html
 
-# --- Forzar HTTPS -----------------------------------------------------------
-# DESCOMENTAR SOLO cuando el hosting ya tenga el certificado SSL emitido
-# para fosque.com Y www.fosque.com. Si se activa antes, el sitio queda caido.
+# --- HTTPS y host canonico --------------------------------------------------
+# SSL RESUELTO (3-sep-2026): el hosting emitio un Let's Encrypt que cubre
+# fosque.com Y www.fosque.com, y ya redirige http -> https EL SOLO a nivel de
+# servidor (http://fosque.com devuelve 301 con la raiz todavia vacia). Por eso
+# el "forzar HTTPS" queda comentado: seria redundante y, si el hosting termina
+# el TLS en un proxy, %{HTTPS} llega en off y se arma un loop infinito.
+# Descomentarlo SOLO si algun dia http:// deja de redirigir solo.
 # <IfModule mod_rewrite.c>
 #   RewriteEngine On
 #   RewriteCond %{HTTPS} !=on
 #   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 # </IfModule>
+
+# www -> apex. El canonical y el og:image se hornean con https://fosque.com:
+# sin esto el sitio queda servido igual en los dos hosts y Google lo indexa
+# duplicado. Si www tuviera su propia carpeta, esta regla simplemente no corre.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^www\.fosque\.com$ [NC]
+  RewriteRule ^(.*)$ https://fosque.com/$1 [R=301,L]
+</IfModule>
 
 # --- Compresion -------------------------------------------------------------
 <IfModule mod_deflate.c>

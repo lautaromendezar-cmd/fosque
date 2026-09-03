@@ -49,6 +49,10 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  // Canonical relativo a metadataBase: cada pagina declara su URL en fosque.com.
+  // Sin esto el sitio queda servido igual en fosque.com, www y el .vercel.app, y
+  // Google elige el que quiere (venia indexando el .vercel.app).
+  alternates: { canonical: './' },
   title: {
     default: 'Fosque — Mejora la Vida',
     template: '%s · Fosque',
