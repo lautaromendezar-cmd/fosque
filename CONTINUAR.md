@@ -51,8 +51,9 @@ npm run probar                             # lo sirve por HTTP y abre el navegad
   a Apache. ⚠️ Abrir `index.html` con doble clic NO sirve: rutas absolutas.
 - `deploy/.htaccess` — 404 propio, gzip y cache. El HTML va con **`no-cache`** a
   propósito, para que un cambio subido por FTP se vea; `_next/static` (con hash
-  en el nombre) va con cache de un año. El bloque **forzar HTTPS está COMENTADO**
-  (ver abajo: el hosting ya redirige solo) y lleva el **301 de `www` → apex**.
+  en el nombre) va con cache de un año — aunque ojo: `mod_expires` y
+  `mod_headers` **no están cargados** en este hosting, así que esos bloques no
+  aplican (ver abajo). **Sin `RewriteRule`**: acá tira 403 en todo el sitio.
 - `deploy/LEEME-SUBIDA.txt` — instructivo de FileZilla. **No se sube** (quedaría
   público en la raíz); tampoco lo copia el script.
 - `deploy-ftp/` está en `.gitignore`: es generado, no se versiona.
@@ -86,17 +87,87 @@ sitio nuevo no tiene. No lo hicimos nosotros, pero pasó hoy: preguntarle si el
 chat estaba en uso y si Planes tiene que existir en el sitio nuevo.
 
 **Ajustes de esta sesión (3-sep, PC de casa), ya con el SSL resuelto:**
-- `deploy/.htaccess`: el forzar-HTTPS **sigue comentado a propósito** (el hosting
-  ya lo hace solo; activarlo puede armar un loop si terminan el TLS en un proxy)
-  y en su lugar entra un **301 de `www` → apex**, que ahora sí es seguro porque
-  el certificado cubre los dos nombres.
+- `deploy/.htaccess`: se intentó meter un **301 de `www` → apex**… y **tiró el
+  sitio entero a 403**. Ver la sección de abajo: en este Apache `mod_rewrite`
+  está prohibido. Quedó afuera, y también se borró el bloque comentado de
+  "forzar HTTPS" para que nadie lo descomente (el hosting ya redirige solo).
 - `app/layout.tsx`: `alternates: { canonical: './' }` → todas las páginas salen
   con `<link rel="canonical">` a `https://fosque.com/...`. Antes no había
   ninguno y Google se quedaba con el `.vercel.app`.
 
-**Próximo paso: subir `deploy-ftp/` por FTP** (paquete regenerado el 3-sep con
-los dos ajustes de arriba). Después: WhatsApp para ver el preview, y dar de alta
-`https://fosque.com` en Search Console.
+## 🟢 3-sep, 18:50 — **EL SITIO ESTÁ ONLINE EN https://fosque.com**
+
+Subido por FTP a `/htdocs` y **verificado en vivo**: las 7 páginas en 200, el 404
+propio andando, y **46 assets + 7 fuentes (14,1 MB) sin un solo roto**, con los
+MIME correctos (`video/mp4`, `font/woff2`). gzip activo: la home viaja 102 KB →
+**19 KB**. `<link rel="canonical">` y `og:image` absoluto salen bien servidos.
+
+### ⛔ Lo que hay que saber de este Apache (aprendido a los golpes)
+
+**`mod_rewrite` NO SE PUEDE USAR. Nunca.** El vhost tiene `FollowSymLinks` y
+`SymLinksIfOwnerMatch` **apagados**, y en ese caso Apache prohíbe `RewriteRule`
+en `.htaccess` y contesta **403 a TODO el sitio** — no al pedido que matchea: a
+todo. Un 301 de `www` → apex de tres líneas dejó `fosque.com` entero caído. Se
+diagnostica en un minuto con el log (ver abajo):
+
+```
+AH00670: Options FollowSymLinks and SymLinksIfOwnerMatch are both off, so the
+RewriteRule directive is also forbidden ... /users/webs/fosque.com/htdocs/
+```
+
+Por eso `deploy/.htaccess` ya **no tiene ni el bloque comentado** de "forzar
+HTTPS": descomentarlo tiraba el sitio. Tampoco hace falta, el hosting redirige
+`http` → `https` solo, a nivel de servidor.
+
+**Qué módulos hay y cuáles no:**
+
+| Módulo | ¿Anda? | Consecuencia |
+|---|---|---|
+| `mod_deflate` | ✅ | gzip andando, la home baja a 19 KB |
+| `mod_mime` | ✅ | `AddType` aplicado (woff2 y mp4 correctos) |
+| `mod_rewrite` | ⛔ **prohibido** | cualquier `RewriteRule` = 403 en todo el sitio |
+| `mod_expires` | ❌ no cargado | el `<IfModule>` lo saltea en silencio |
+| `mod_headers` | ❌ no cargado | ídem |
+
+⚠️ Como `mod_expires`/`mod_headers` no están, **el HTML sale sin `Cache-Control`**.
+No es grave (Apache manda `Last-Modified` + `ETag` y el navegador revalida por
+heurística), pero después de subir un cambio por FTP alguien puede ver el HTML
+viejo un rato. Si molesta, pedirle al hosting que habilite los dos módulos.
+
+### 🔎 Los logs del vhost están en el FTP
+
+En la raíz del FTP (un nivel arriba de `htdocs`) están **`fosque.com.error.log`
+y `fosque.com.access.log`**, al día. Ante cualquier cosa rara, bajarlos y leer el
+final: ahí salió el `AH00670` con la ruta real del `DocumentRoot`
+(`/users/webs/fosque.com/htdocs`), que es lo que destrabó todo. **No commitear
+los logs**: tienen IPs de visitantes y pesan.
+
+### 🗂️ Cómo quedó el FTP
+
+| Carpeta | Qué es |
+|---|---|
+| `/htdocs` | **la raíz web** — acá vive el sitio nuevo |
+| `/htdocs/.htaccess.off` | la redirección vieja al `.vercel.app`, desactivada por el hosting. Inerte, dejarla |
+| `/htdocs.off` | el sitio viejo de 2022 (`send-mail.php`, `js/`, `images/`). Parkeado por ellos, **no borrar** |
+| `/subdomains` | vacío |
+| `/web_fosque_vieja.rar` | backup de 2017, ignorar |
+
+### Pendiente menor: el 301 de `www`
+
+`www.fosque.com` sirve el **mismo** contenido en 200 (mismo docroot) en vez de
+redirigir al apex. No se puede arreglar por `.htaccess` (sería un `RewriteRule`).
+El daño real —que Google indexe duplicado— ya lo tapan los `<link rel="canonical">`
+de las 9 páginas, que apuntan todos a `https://fosque.com/`. Si se quiere el 301
+de verdad, pedírselo al hosting junto con `mod_headers`/`mod_expires`.
+
+### Lo que sigue
+
+1. **Probar el preview de WhatsApp** mandándose el link: era EL síntoma que
+   reportó el cliente. Si no aparece la imagen, sospechar del `og:image`, que
+   pesa **384 KB** (WhatsApp suele cortar cerca de 300 KB); se baja a 131 KB
+   re-encodeando el PNG a paleta de 256 colores con sharp, sin tocar la URL.
+2. Dar de alta `https://fosque.com` en Search Console.
+3. Avisarle al cliente lo del Bitrix24 caído (chat "Asesor Fosque" y Planes).
 
 ## 📄 Qué es el sitio
 

@@ -6,26 +6,24 @@ DirectoryIndex index.html
 ErrorDocument 404 /404.html
 
 # --- HTTPS y host canonico --------------------------------------------------
-# SSL RESUELTO (3-sep-2026): el hosting emitio un Let's Encrypt que cubre
-# fosque.com Y www.fosque.com, y ya redirige http -> https EL SOLO a nivel de
-# servidor (http://fosque.com devuelve 301 con la raiz todavia vacia). Por eso
-# el "forzar HTTPS" queda comentado: seria redundante y, si el hosting termina
-# el TLS en un proxy, %{HTTPS} llega en off y se arma un loop infinito.
-# Descomentarlo SOLO si algun dia http:// deja de redirigir solo.
-# <IfModule mod_rewrite.c>
-#   RewriteEngine On
-#   RewriteCond %{HTTPS} !=on
-#   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-# </IfModule>
-
-# www -> apex. El canonical y el og:image se hornean con https://fosque.com:
-# sin esto el sitio queda servido igual en los dos hosts y Google lo indexa
-# duplicado. Si www tuviera su propia carpeta, esta regla simplemente no corre.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteCond %{HTTP_HOST} ^www\.fosque\.com$ [NC]
-  RewriteRule ^(.*)$ https://fosque.com/$1 [R=301,L]
-</IfModule>
+# ⛔ ACA NO SE PUEDE USAR mod_rewrite. NUNCA. El vhost tiene FollowSymLinks y
+# SymLinksIfOwnerMatch APAGADOS, y en ese caso Apache prohibe RewriteRule y
+# contesta 403 a TODO el sitio (no al pedido que matchea: a todo). Probado en
+# vivo el 3-sep: un RewriteRule de www -> apex dejo fosque.com entero en 403 y
+# el error_log lo dice con nombre y apellido:
+#
+#   AH00670: Options FollowSymLinks and SymLinksIfOwnerMatch are both off, so
+#   the RewriteRule directive is also forbidden ... /users/webs/fosque.com/htdocs/
+#
+# Por eso tampoco existe mas el bloque de "forzar HTTPS" comentado que venia
+# aca: si alguien lo descomentaba, tiraba el sitio igual. No hace falta: el
+# hosting YA redirige http -> https solo, a nivel de servidor.
+#
+# Si algun dia hace falta el 301 de www -> fosque.com, hay que pedirle al
+# hosting que habilite Options +FollowSymLinks (o que haga el 301 ellos en el
+# vhost). Mientras tanto lo cubre el <link rel="canonical"> que llevan las 9
+# paginas: apuntan todas a https://fosque.com/... asi que Google se queda con
+# el dominio propio igual.
 
 # --- Compresion -------------------------------------------------------------
 <IfModule mod_deflate.c>

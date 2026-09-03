@@ -56,26 +56,36 @@ Este archivo NO se sube: es la guia para vos. El paquete se genera solo.
    fosque.com/asdasd        -> sale el 404 propio (confirma que subio .htaccess)
 
 
-4) EL SSL YA ESTA (resuelto 3-sep-2026)
-----------------------------------------
-   El hosting emitio el certificado Let's Encrypt que cubre fosque.com Y
-   www.fosque.com (valido hasta el 2-dic-2026, se renueva solo), saco el CNAME
-   viejo de Bitrix24 de www, y ya redirige http -> https el solo. Los dos hosts
-   pegan contra el Apache del hosting (190.210.9.50) y hoy devuelven 403
-   Forbidden: es la raiz web VACIA esperando esta subida. No hay que pedir nada
-   mas: subir y listo.
+4) YA ESTA ONLINE (3-sep-2026) — Y UNA REGLA DE ORO
+---------------------------------------------------
+   El sitio esta en https://fosque.com, subido a /htdocs y verificado: las 7
+   paginas, el 404 propio, 46 assets y 7 fuentes, todo en 200 y con gzip.
 
-   Por eso en deploy/.htaccess el "forzar HTTPS" queda COMENTADO a proposito
-   (el hosting ya lo hace; activarlo puede armar un loop si terminan el TLS en
-   un proxy) y en cambio SI va activo el 301 de www -> fosque.com.
+   ⛔ REGLA DE ORO DE ESTE HOSTING: NO SE PUEDE USAR mod_rewrite.
+   El vhost tiene FollowSymLinks apagado y Apache, en ese caso, prohibe
+   RewriteRule en el .htaccess y contesta 403 EN TODO EL SITIO. No en la URL
+   que matchea: en todo. Ya paso una vez (un 301 de www -> apex de 3 lineas
+   dejo fosque.com entero caido). Si alguna vez el sitio da 403 en todo
+   despues de tocar el .htaccess, es esto.
 
-   Despues de subir:
-   - Mandarse el link por WhatsApp y confirmar que ahora si sale la vista previa
-     (ese era el sintoma que reporto el cliente).
-   - Search Console: dar de alta la propiedad https://fosque.com.
-   - Vercel: fosque.vercel.app sigue vivo. Ya no es el sitio publico, es la
-     copia de laboratorio. El canonical de todas las paginas apunta a
-     fosque.com, asi que Google se queda con el dominio propio.
+   Como se diagnostica: en la RAIZ del FTP (un nivel arriba de htdocs) estan
+   fosque.com.error.log y fosque.com.access.log, al dia. Bajar el de errores y
+   mirar el final. NO subirlos al repo (tienen IPs de visitantes).
+
+   Tampoco estan cargados mod_expires ni mod_headers: los bloques de cache del
+   .htaccess no hacen nada. gzip (mod_deflate) y los AddType si funcionan.
+
+   Ojo con las carpetas vecinas: /htdocs.off es el sitio viejo de 2022 que el
+   hosting dejo parkeado y /htdocs/.htaccess.off es la redireccion vieja al
+   .vercel.app. Las dos estan inertes: NO BORRARLAS.
+
+   Lo que queda por hacer:
+   - Mandarse el link por WhatsApp y confirmar la vista previa (era el sintoma
+     que reporto el cliente).
+   - Search Console: dar de alta https://fosque.com.
+   - www.fosque.com sirve lo mismo en 200 en vez de redirigir. El 301 hay que
+     pedirselo al hosting (por .htaccess seria un RewriteRule = 403). No es
+     urgente: las 9 paginas llevan <link rel="canonical"> al apex.
 
 5) UN CAMBIO MAS ADELANTE
 -------------------------
