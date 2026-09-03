@@ -1,6 +1,7 @@
 # FOSQUE — Estado del proyecto y cómo continuar
 
-**EN VIVO: https://fosque.vercel.app/** · Repo: https://github.com/lautaromendezar-cmd/fosque (main = deploy automático a Vercel).
+**EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
+Repo: https://github.com/lautaromendezar-cmd/fosque — **es repo y backup, NO deploy**: pushear a `main` ya no publica en ningún lado.
 
 ## 🖥️ Arrancar en una PC nueva
 
@@ -23,7 +24,7 @@ node scripts/check-hero.mjs   # luminancia + contraste + los 4 caminos del hero
 `SMOKE_PORT` / `HERO_PORT` cambian el puerto si otro proyecto tiene tomado el
 default (4173 / 4194).
 
-Pushear a `main` deploya solo a Vercel. ⚠️ En Claude Code el cwd se resetea entre comandos bash: siempre `cd` absoluto antes de npm/git.
+⚠️ Pushear a `main` **NO publica**: publicar es subir por FTP. ⚠️ En Claude Code el cwd se resetea entre comandos bash: siempre `cd` absoluto antes de npm/git.
 
 ⚠️ "No se ven las animaciones": revisar "Mostrar animaciones en Windows" / "Reducir movimiento" del SO — el sitio respeta `prefers-reduced-motion` a propósito (trailer del hero y preloader no corren; counters muestran valor final). Preloader y trailer: solo 1ª visita por sesión (`sessionStorage fosque-seen`).
 
@@ -58,8 +59,9 @@ npm run probar                             # lo sirve por HTTP y abre el navegad
   público en la raíz); tampoco lo copia el script.
 - `deploy-ftp/` está en `.gitignore`: es generado, no se versiona.
 
-⚠️ **YA NO HAY DEPLOY AUTOMÁTICO.** Un `git push` publica en Vercel, no en el
-hosting del cliente. Lo que ve la gente es lo que esté subido por FTP.
+⚠️ **YA NO HAY DEPLOY AUTOMÁTICO NI STAGING.** El proyecto de Vercel se borró
+(ver abajo). Un `git push` no publica en ningún lado: lo que ve la gente es lo
+que esté subido por FTP, y para probar antes está `npm run probar`.
 
 **Estado real del dominio — el hosting lo arregló ESE MISMO DÍA.** Lo de arriba
 (la tabla del relevamiento de la mañana: apex redirigiendo y `www` en Bitrix24)
@@ -160,21 +162,27 @@ El daño real —que Google indexe duplicado— ya lo tapan los `<link rel="cano
 de las 9 páginas, que apuntan todos a `https://fosque.com/`. Si se quiere el 301
 de verdad, pedírselo al hosting junto con `mod_headers`/`mod_expires`.
 
-### 🧪 Vercel se conserva, como copia de laboratorio (decidido el 3-sep)
+### 🗑️ Vercel: el proyecto SE BORRA (decidido el 3-sep)
 
-`fosque.vercel.app` **no se borra**. Pero atención a las dos trampas:
+`fosque.vercel.app` deja de existir. Motivo: consumía cuota del plan free (los
+bots crawlean esa copia y cada push gasta minutos de build), y el Hobby de Vercel
+además prohíbe uso comercial. Con el sitio en el hosting del cliente, no cumple
+ninguna función.
 
-1. **Un `git push` actualiza Vercel y NO el sitio real.** Lo que ve la gente es
-   lo que esté subido por FTP. Si el cliente revisa el `.vercel.app` puede estar
-   mirando algo que no está publicado — y al revés: podés dar por arreglado algo
-   que en producción sigue roto. Ante la duda, mirar **fosque.com**.
-2. ⚠️ **La variable `NEXT_PUBLIC_SITE_URL` de Vercel quedó en
-   `https://www.fosque.com`** (de cuando el `www` era el único con SSL válido).
-   Eso hace que la copia se declare canónica en `www` mientras el sitio real se
-   declara en el apex: dos hosts peleándose el mismo contenido ante Google.
-   **Arreglo (a mano, no hay CLI de Vercel en estas PCs): Settings →
-   Environment Variables → `NEXT_PUBLIC_SITE_URL` = `https://fosque.com` →
-   Redeploy.**
+**No se pierde nada**: el repo se basta solo. `npm run ftp` regenera el sitio
+entero en cualquier PC y la única variable que vivía en Vercel
+(`NEXT_PUBLIC_SITE_URL`) está horneada dentro de `scripts/armar-ftp.mjs`.
+
+⚠️ **Consecuencias, para no asustarse después:**
+- Cualquier link viejo a `fosque.vercel.app` queda muerto. El cliente tenía ese
+  link (lo usó para comparar cuando reportó lo del preview): **conviene mandarle
+  el de fosque.com** para que reemplace el que tenga guardado.
+- Google va a ir soltando las URLs del `.vercel.app` solas. No hay que hacer
+  nada: las 9 páginas del sitio real llevan `<link rel="canonical">` al apex.
+- **Ya no existe entorno de staging.** Para ver un cambio antes de publicarlo
+  está `npm run probar`, que sirve `deploy-ftp/` local imitando a Apache.
+- Un `git push` ya no publica en ningún lado: GitHub queda como repo y backup.
+  **Publicar = subir por FTP.**
 
 ### Lo que sigue
 
