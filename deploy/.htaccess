@@ -1,0 +1,52 @@
+# Fosque — sitio estatico (Next.js export). Apache / hosting compartido.
+
+DirectoryIndex index.html
+
+# --- Pagina de error propia -------------------------------------------------
+ErrorDocument 404 /404.html
+
+# --- Forzar HTTPS -----------------------------------------------------------
+# DESCOMENTAR SOLO cuando el hosting ya tenga el certificado SSL emitido
+# para fosque.com Y www.fosque.com. Si se activa antes, el sitio queda caido.
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} !=on
+#   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+# </IfModule>
+
+# --- Compresion -------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  # Los .woff2, .mp4, .jpg y .png YA vienen comprimidos: no re-comprimir.
+</IfModule>
+
+# --- Tipos MIME (por si el hosting es viejo y no los trae) ------------------
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType video/mp4 .mp4
+  AddType image/svg+xml .svg
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+# --- Cache ------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # El HTML NO se cachea: si no, subis un cambio por FTP y nadie lo ve.
+  ExpiresByType text/html "access plus 0 seconds"
+  # Los assets de /_next/static llevan hash en el nombre: cache eterno seguro.
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  # Media: nombre fijo, cache corto para poder reemplazar videos y fotos.
+  ExpiresByType video/mp4 "access plus 7 days"
+  ExpiresByType image/jpeg "access plus 7 days"
+  ExpiresByType image/png "access plus 7 days"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>

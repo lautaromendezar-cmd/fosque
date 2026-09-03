@@ -1,0 +1,85 @@
+FOSQUE - COMO PUBLICAR EL SITIO POR FTP
+=======================================
+Este archivo NO se sube: es la guia para vos. El paquete se genera solo.
+
+
+0) DESDE CUALQUIER PC (recien clonada o recien prendida)
+-------------------------------------------------------
+   git pull
+   npm install        (solo la primera vez en esa PC)
+   npm run ftp
+
+   Eso buildea y deja la carpeta deploy-ftp/ lista, ~16 MB.
+   El dominio (https://fosque.com) ya va fijo adentro del script: no hace falta
+   acordarse de exportar ninguna variable.
+
+
+1) PROBARLO ANTES DE SUBIR
+--------------------------
+   npm run probar        (o doble clic en "PROBAR SITIO.bat")
+
+   Abre el navegador solo. Revisar la home, /equipo/, una sede, y una URL
+   inventada (tiene que salir el 404 propio).
+
+   NO probar haciendo doble clic en index.html: el sitio usa rutas absolutas
+   (/_next/, /media/) y por file:// se ve el texto sin estilos. Parece roto y
+   no lo esta.
+
+
+2) SUBIR CON FILEZILLA
+----------------------
+   Arrastrar el CONTENIDO de deploy-ftp/ (no la carpeta) a la raiz web del
+   hosting (public_html / htdocs / www).
+
+   - Modo de transferencia: Auto (el default) o Binario. NUNCA ASCII.
+   - Ver archivos ocultos, si no el .htaccess no aparece:
+     Servidor > Forzar mostrar archivos ocultos.
+   - La carpeta _next tiene que subir COMPLETA (empieza con guion bajo).
+     Sin ella queda el texto pelado, sin estilos ni animaciones.
+   - Si en la raiz hay un sitio viejo (un index.php, un WordPress, la landing
+     de Bitrix24), sacarlo primero o el hosting va a seguir sirviendo eso.
+
+   Truco para no romper nada en una prueba: crear una carpeta _original en el
+   servidor y mover ahi lo que ya estaba (es un move del lado del server,
+   instantaneo). Asi el original queda intacto sin depender de un backup local.
+
+
+3) CHEQUEAR DESPUES DE SUBIR
+----------------------------
+   fosque.com               -> home con colores, logo y arcos (Ctrl+F5)
+   fosque.com/equipo/       -> carga
+   fosque.com/asdasd        -> sale el 404 propio (confirma que subio .htaccess)
+
+
+4) FALTA EL SSL (bloqueante, no depende de nosotros)
+----------------------------------------------------
+   El hosting tiene que emitir el certificado para fosque.com Y www.fosque.com.
+   Hasta que eso pase, el link compartido por WhatsApp sigue sin mostrar la
+   vista previa: ESE es el problema que reporto el cliente, y no lo arregla
+   mudar el sitio de Vercel al hosting.
+
+   Cuando https://fosque.com cargue bien:
+   - Descomentar el bloque "Forzar HTTPS" en deploy/.htaccess
+   - npm run ftp  y volver a subir el .htaccess
+   - Probar el preview mandandose el link por WhatsApp
+   - Search Console: dar de alta la propiedad https://fosque.com
+
+   El pedido al hosting, ya redactado, esta en docs/PEDIDO-AL-HOSTING.md
+
+
+5) UN CAMBIO MAS ADELANTE
+-------------------------
+   Editar el codigo -> npm run ftp -> npm run probar -> subir por FTP pisando.
+   - Para texto o diseño alcanza con subir los .html y _next/
+   - media/ solo si cambiaron videos o fotos (son los archivos pesados)
+   - El .htaccess no cambia entre builds: no hace falta resubirlo cada vez
+
+   OJO: ya NO hay deploy automatico. Un git push publica en Vercel, no en el
+   hosting del cliente. Lo que ve la gente es lo que este subido por FTP.
+
+
+NOTA: hero.mp4
+--------------
+El paquete NO incluye media/hero.mp4 (6,6 MB). Desde el 27-ago el hero no usa
+video y ese archivo no lo pide nadie. Sigue en el repo por si vuelve.
+Esta excluido en scripts/armar-ftp.mjs (constante NO_SUBIR).

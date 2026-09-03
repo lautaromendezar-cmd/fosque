@@ -27,6 +27,67 @@ Pushear a `main` deploya solo a Vercel. ⚠️ En Claude Code el cwd se resetea 
 
 ⚠️ "No se ven las animaciones": revisar "Mostrar animaciones en Windows" / "Reducir movimiento" del SO — el sitio respeta `prefers-reduced-motion` a propósito (trailer del hero y preloader no corren; counters muestran valor final). Preloader y trailer: solo 1ª visita por sesión (`sessionStorage fosque-seen`).
 
+## 🚚 2026-09-03 — El sitio se muda al hosting del cliente (FTP)
+
+**DECISIÓN DEL CLIENTE: el sitio va alojado en SU hosting, no en Vercel.** No hay
+que convertir nada: ya era `output: 'export'` + `trailingSlash: true` +
+`images.unoptimized`, sin API routes ni middleware → HTML plano que anda en un
+Apache pelado. **Probado de verdad**: se subió por FTP al hosting de otro cliente
+y funcionó (rutas, estilos, fuentes, videos, 404 propio).
+
+**Todo se regenera con un comando, desde cualquier PC:**
+
+```
+git pull && npm install && npm run ftp     # deja deploy-ftp/ listo (~16 MB)
+npm run probar                             # lo sirve por HTTP y abre el navegador
+```
+
+- `scripts/armar-ftp.mjs` — buildea con `NEXT_PUBLIC_SITE_URL=https://fosque.com`
+  **fijo adentro del script** (si falta, el fallback es `localhost:3000` y el
+  preview de WhatsApp queda roto igual), copia `out/`, suma `deploy/.htaccess`,
+  saca `media/hero.mp4` (huérfano desde el 27-ago, 6,6 MB que no pide nadie) y
+  **verifica** que el HTML tenga el dominio y estén `_next/`, `media/`, `.htaccess`.
+- `scripts/probar-ftp.mjs` (+ `PROBAR SITIO.bat`) — sirve `deploy-ftp/` imitando
+  a Apache. ⚠️ Abrir `index.html` con doble clic NO sirve: rutas absolutas.
+- `deploy/.htaccess` — 404 propio, gzip y cache. El HTML va con **`no-cache`** a
+  propósito, para que un cambio subido por FTP se vea; `_next/static` (con hash
+  en el nombre) va con cache de un año. El bloque **forzar HTTPS está COMENTADO**:
+  se descomenta recién cuando exista el certificado, si no el sitio se cae.
+- `deploy/LEEME-SUBIDA.txt` — instructivo de FileZilla. **No se sube** (quedaría
+  público en la raíz); tampoco lo copia el script.
+- `deploy-ftp/` está en `.gitignore`: es generado, no se versiona.
+
+⚠️ **YA NO HAY DEPLOY AUTOMÁTICO.** Un `git push` publica en Vercel, no en el
+hosting del cliente. Lo que ve la gente es lo que esté subido por FTP.
+
+**Estado real del dominio (verificado en vivo el 3-sep):**
+
+| URL | Qué sirve hoy |
+|---|---|
+| `fosque.com` (apex) | 301 → `https://fosque.vercel.app` (Apache, `190.210.9.50`) |
+| `www.fosque.com` | **Bitrix24.Sites** — el sitio VIEJO de Fosque, **con HTTPS válido** |
+
+⚠️ Corrección a lo anotado el 27-ago: lo de `www` **no es una landing abandonada**.
+Es el sitio viejo real, con nav completo (Historia, Método, Sedes, **Planes**,
+Contactanos) y un **chat widget "Asesor Fosque"** que probablemente esté metiendo
+consultas en el CRM de Bitrix24. Antes de pisarlo hay que preguntarle al cliente:
+si lo da de baja, quién atiende ese chat, y qué pasa con la sección **Planes**
+(que el sitio nuevo NO tiene).
+
+Que `https://www.fosque.com` funcione bien confirma el diagnóstico: **el
+certificado roto es solo el del apex**. El hosting sabe emitir SSL; falta que lo
+haga para `fosque.com` a secas.
+
+**BLOQUEANTE: el SSL.** Mudar el sitio al hosting propio NO resuelve por sí solo
+el problema del preview de WhatsApp — la causa es el certificado del apex.
+Pedido ya redactado (un solo mensaje de WhatsApp) en `docs/PEDIDO-AL-HOSTING.md`:
+acceso FTP, anular la redirección (después de subir, no antes), apuntar `www` al
+mismo servidor, emitir SSL de los dos nombres, y la lista explícita de lo que NO
+deben tocar (MX, `a.mx`, SPF, `google-site-verification`, NS y el A del apex, que
+ya está bien). Incluye plan B por Vercel con los valores de DNS.
+
+**Próximo paso: esperando que el hosting mande el acceso FTP.**
+
 ## 📄 Qué es el sitio
 
 Next.js 15 App Router, `output: 'export'` (100% estático). GSAP + ScrollTrigger vía `useGSAP`, Lenis sincronizado (`SmoothScroll.tsx`). Tipografías del manual: Momo Trust Display (local, títulos), Baloo Bhaijaan 2 (texto), Bebas Neue (etiquetas). Logo oficial vectorizado del PDF (`components/logo/paths.ts`, regenerable con `scripts/trace-logo.mjs` + `gen-logo.mjs`). OG image: `scripts/gen-og.mjs`.

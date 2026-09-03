@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "ftp": "node scripts/armar-ftp.mjs",
+    "probar": "node scripts/probar-ftp.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
