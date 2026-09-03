@@ -160,6 +160,22 @@ El daño real —que Google indexe duplicado— ya lo tapan los `<link rel="cano
 de las 9 páginas, que apuntan todos a `https://fosque.com/`. Si se quiere el 301
 de verdad, pedírselo al hosting junto con `mod_headers`/`mod_expires`.
 
+### 🧪 Vercel se conserva, como copia de laboratorio (decidido el 3-sep)
+
+`fosque.vercel.app` **no se borra**. Pero atención a las dos trampas:
+
+1. **Un `git push` actualiza Vercel y NO el sitio real.** Lo que ve la gente es
+   lo que esté subido por FTP. Si el cliente revisa el `.vercel.app` puede estar
+   mirando algo que no está publicado — y al revés: podés dar por arreglado algo
+   que en producción sigue roto. Ante la duda, mirar **fosque.com**.
+2. ⚠️ **La variable `NEXT_PUBLIC_SITE_URL` de Vercel quedó en
+   `https://www.fosque.com`** (de cuando el `www` era el único con SSL válido).
+   Eso hace que la copia se declare canónica en `www` mientras el sitio real se
+   declara en el apex: dos hosts peleándose el mismo contenido ante Google.
+   **Arreglo (a mano, no hay CLI de Vercel en estas PCs): Settings →
+   Environment Variables → `NEXT_PUBLIC_SITE_URL` = `https://fosque.com` →
+   Redeploy.**
+
 ### Lo que sigue
 
 1. **Probar el preview de WhatsApp** mandándose el link: era EL síntoma que
