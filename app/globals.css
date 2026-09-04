@@ -2067,3 +2067,119 @@ footer .claim {
     scroll-behavior: auto;
   }
 }
+
+/* ---------- 404 ----------------------------------------------------------
+   Quien cae acá casi siempre viene de Google, con un link del sitio viejo de
+   Bitrix24 (/nunez/home/, /emiliocastro/home/, y las sedes de franquicia que
+   este sitio no cubre). Por eso no es un cartel de error: es un desvío a las
+   sedes. Fondo crema como el resto — el cliente pidió que no quede ninguna
+   superficie oscura en el sitio. */
+#e404 {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 14vh;
+  padding-bottom: 10vh;
+}
+#e404 .wrap {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+#e404 h1 {
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  margin: 0.4rem 0 1.1rem;
+}
+#e404 .intro {
+  max-width: 46ch;
+  line-height: 1.6;
+  margin-bottom: 4vh;
+}
+
+/* Las tres sedes: es lo que vino a buscar el 90% de los que caen acá */
+#e404 .e404-sedes {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 3.5vh;
+  max-width: 720px;
+}
+#e404 .e404-sede {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1rem 1.4rem;
+  border: 2px solid var(--negro);
+  border-radius: var(--r-sm);
+  text-decoration: none;
+  color: var(--negro);
+  background: transparent;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+#e404 .e404-sede .num {
+  font-family: var(--label);
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  /* 0.65 y no menos: a 0.5 el numero daba 3,23:1 sobre el crema y no pasaba AA */
+  opacity: 0.65;
+}
+#e404 .e404-sede .txt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+#e404 .e404-sede strong {
+  font-family: var(--disp);
+  font-weight: 400;
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
+}
+#e404 .e404-sede small {
+  font-size: 0.82rem;
+  opacity: 0.65;
+  line-height: 1.35;
+}
+#e404 .e404-sede .arrow {
+  font-size: 1.3rem;
+  transition: transform 0.25s ease;
+}
+#e404 .e404-sede:hover {
+  background: var(--negro);
+  color: var(--crema);
+}
+#e404 .e404-sede:hover .num,
+#e404 .e404-sede:hover small {
+  opacity: 0.75;
+}
+#e404 .e404-sede:hover .arrow {
+  transform: translateX(6px);
+}
+
+#e404 .e404-mas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+@media (max-width: 900px) {
+  #e404 {
+    padding-top: 16vh;
+  }
+  #e404 .e404-sede {
+    padding: 1rem 1.15rem;
+    gap: 0.8rem;
+  }
+  #e404 .e404-sede strong {
+    font-size: 1.2rem;
+  }
+}
+
+/* El desvío no puede depender de que corra una animación */
+@media (prefers-reduced-motion: reduce) {
+  #e404 .e404-sede,
+  #e404 .e404-sede .arrow {
+    transition: none;
+  }
+}

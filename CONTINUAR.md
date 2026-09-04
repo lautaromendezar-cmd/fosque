@@ -1,7 +1,7 @@
 # FOSQUE — Estado del proyecto y cómo continuar
 
 **EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
-Repo: https://github.com/lautaromendezar-cmd/fosque. Pushear a `main` deploya a **fosque.vercel.app**, que ya NO es el sitio público: es **staging**.
+Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep** (ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
 
 ## 🖥️ Arrancar en una PC nueva
 
@@ -24,7 +24,7 @@ node scripts/check-hero.mjs   # luminancia + contraste + los 4 caminos del hero
 `SMOKE_PORT` / `HERO_PORT` cambian el puerto si otro proyecto tiene tomado el
 default (4173 / 4194).
 
-⚠️ Pushear a `main` deploya a Vercel, que es **staging**: publicar de verdad es subir por FTP. ⚠️ En Claude Code el cwd se resetea entre comandos bash: siempre `cd` absoluto antes de npm/git.
+⚠️ Un `git push` NO publica nada: el sitio se publica subiendo `deploy-ftp/` por FTP. ⚠️ En Claude Code el cwd se resetea entre comandos bash: siempre `cd` absoluto antes de npm/git.
 
 ⚠️ "No se ven las animaciones": revisar "Mostrar animaciones en Windows" / "Reducir movimiento" del SO — el sitio respeta `prefers-reduced-motion` a propósito (trailer del hero y preloader no corren; counters muestran valor final). Preloader y trailer: solo 1ª visita por sesión (`sessionStorage fosque-seen`).
 
@@ -59,9 +59,9 @@ npm run probar                             # lo sirve por HTTP y abre el navegad
   público en la raíz); tampoco lo copia el script.
 - `deploy-ftp/` está en `.gitignore`: es generado, no se versiona.
 
-⚠️ **YA NO HAY DEPLOY AUTOMÁTICO.** Un `git push` actualiza el staging de
-Vercel, no el sitio del cliente. Lo que ve la gente es lo que esté subido por
-FTP.
+⚠️ **YA NO HAY DEPLOY AUTOMÁTICO, EN NINGÚN LADO.** Desde que se borró Vercel
+(3-sep), un `git push` no actualiza ninguna copia navegable. Lo que ve la gente
+es, literalmente, lo último que se subió por FTP.
 
 **Estado real del dominio — el hosting lo arregló ESE MISMO DÍA.** Lo de arriba
 (la tabla del relevamiento de la mañana: apex redirigiendo y `www` en Bitrix24)
@@ -162,28 +162,115 @@ El daño real —que Google indexe duplicado— ya lo tapan los `<link rel="cano
 de las 9 páginas, que apuntan todos a `https://fosque.com/`. Si se quiere el 301
 de verdad, pedírselo al hosting junto con `mod_headers`/`mod_expires`.
 
-### 🧪 Vercel queda como STAGING — se borra al cerrar el proyecto
+### 🗑️ Vercel se borró (3-sep, 2ª sesión) — Google lo tenía indexado
 
-Idea descartada por ahora: mientras queden cambios por hacer, tener dónde ver un
-cambio deployado vale más que la cuota que consume. **Se borra cuando el sitio
-esté cerrado**, y ahí sí conviene: los bots crawlean esa copia, cada push gasta
-minutos de build y el plan Hobby prohíbe uso comercial. Borrarlo no pierde nada
-(el repo se basta solo y `NEXT_PUBLIC_SITE_URL` está horneada en
-`scripts/armar-ftp.mjs`); lo único es avisarle al cliente que reemplace el link
-viejo, porque él lo tiene.
+**El proyecto de Vercel ya no existe.** `fosque.vercel.app` responde **404
+DEPLOYMENT_NOT_FOUND**, verificado. No quedó nada que mantener sincronizado: el
+repo es sólo código y backup, y **un `git push` no publica en ningún lado**.
 
-⚠️ **Las dos trampas mientras siga vivo:**
+**Por qué se borró antes de lo previsto:** Google lo tenía indexado y lo mostraba
+en los resultados con la URL `fosque.vercel.app`, compitiéndole al dominio real.
+Servía en 200, sin `X-Robots-Tag` ni `meta robots`, y encima con
+`<link rel="canonical">` a **`https://www.fosque.com/`** (la variable de entorno
+en Vercel había quedado en `www`): la cadena era `vercel.app → www → apex`, dos
+saltos para llegar al dominio bueno.
 
-1. **Un `git push` actualiza Vercel y NO el sitio real.** Si el cliente revisa
-   `fosque.vercel.app` puede estar mirando algo que no está publicado — y al
-   revés: podés dar por arreglado algo que en producción sigue roto. Ante la
-   duda, **mirar fosque.com**. (Alternativa local sin Vercel: `npm run probar`.)
-2. ⚠️ **`NEXT_PUBLIC_SITE_URL` en Vercel quedó en `https://www.fosque.com`** (de
-   cuando el `www` era el único con SSL válido). Eso hace que el staging se
-   declare canónico en `www` mientras el sitio real se declara en el apex: dos
-   hosts peleándose el mismo contenido ante Google. **Arreglo, a mano (no hay CLI
-   de Vercel en estas PCs): Settings → Environment Variables →
-   `NEXT_PUBLIC_SITE_URL` = `https://fosque.com` → Redeploy.**
+⚠️ **Por qué NO se le puso `noindex`, que era el reflejo obvio:** Google
+desaconseja combinar `noindex` con un `canonical` que apunta a otra página,
+porque el `noindex` puede propagarse al destino — y acá el canonical apuntaba al
+sitio real. No se arriesga el sitio bueno para limpiar una copia. (`robots.txt`
+tampoco servía: bloquea el rastreo, no desindexa, y encima le tapa a Google el
+`noindex`.) Si alguna vez hace falta un staging navegable, el lever correcto es
+**Deployment Protection → Vercel Authentication**, no `noindex`.
+
+**Qué reemplaza al staging:** `npm run probar`, que sirve `deploy-ftp/` imitando
+a Apache. Es mejor que lo que daba Vercel, porque prueba **el paquete exacto que
+se sube**: el build de Vercel era distinto (otro `NEXT_PUBLIC_SITE_URL`, incluía
+`hero.mp4`, y no tenía el `.htaccess`).
+
+⏳ **Falta que Google lo suelte.** Las URLs caen solas cuando recrawlea el 404;
+suele tardar días, a veces un par de semanas. Si urge, la herramienta de
+Eliminaciones de Search Console lo esconde en ~1 día, pero exige verificar
+`fosque.vercel.app` como propiedad — y eso ya no se puede, porque para
+verificarlo había que poder desplegar ahí. **Es la única contra de haber borrado
+primero: ahora sólo queda esperar.**
+
+📢 **Avisarle al cliente**: él tenía el link del `.vercel.app`. Ahora está muerto.
+
+### 🧭 El 404 dejó de ser el de Next (3-sep, 2ª sesión)
+
+Hasta hoy `out/404.html` era **el 404 de fábrica de Next**: pantalla negra, en
+inglés, "This page could not be found", sin salida. El `ErrorDocument 404` del
+`.htaccess` estaba bien enchufado — lo que faltaba era la página. Ahora existe
+`app/not-found.tsx`.
+
+**Por qué importa más de lo que parece:** Google todavía tiene indexado el sitio
+viejo de Bitrix24, con URLs `/<sede>/home/`. Verificado buscando: están vivas en
+el índice `www.fosque.com/nunez/home/`, `/emiliocastro/home/` y
+`/sanmartin/home/`. Todo eso cae al 404, así que el 404 es una página de entrada
+real, no un rincón.
+
+- Fondo crema y no negro, a propósito: el cliente pidió que no quede ninguna
+  superficie oscura en el sitio.
+- Lleva Nav y Footer completos, y las **3 sedes como destino principal**: quien
+  entra por `/nunez/home/` viene buscando Núñez, no una disculpa.
+- `alternates: { canonical: null }` — sin eso heredaba el canonical del layout y
+  el 404 salía declarándose canónico en `/_not-found/`, una URL que no existe.
+  El `noindex` lo pone Next solo, no hace falta repetirlo.
+- `scripts/smoke.mjs` ahora navega **`/nunez/home/`**, que no es una ruta
+  inventada: es una de las URLs viejas que Google tiene indexadas.
+- Contraste medido sobre el fondo real: `small` y el número de sede dan 5,08:1 y
+  los botones 14,64:1. El número estaba en `opacity: .5` y daba **3,23:1** (no
+  pasaba AA) → subió a `.65`.
+
+⚠️ **`.eyebrow` es un problema de TODO el sitio, no del 404**: con `opacity:
+.55` sobre el crema da **3,74:1** y no pasa AA. Está en home, sedes, novedades,
+equipo y franquicia. No se tocó acá porque cambiarlo altera el aspecto de todas
+las secciones ya aprobadas: es decisión de diseño, no un bug del 404.
+
+### ⏭️ Los 301 de las URLs viejas — PENDIENTE, decisión abierta
+
+El 404 es la red que atrapa **todas** las URLs viejas, incluidas las que no
+conocemos. Aparte de eso, para las que sí conocemos un 301 sería mejor (conserva
+posicionamiento y no le hace perder el viaje a nadie):
+
+| URL vieja indexada | Debería ir a |
+|---|---|
+| `/nunez/home/` | `/nunez/` |
+| `/emiliocastro/home/` | `/emilio-castro/` |
+| `/josehernandez/home/` | `/jose-hernandez/` |
+
+⚠️ Ojo: los slugs viejos van **sin guion** (`emiliocastro`), los nuevos con.
+
+**No está implementado.** `RewriteRule` acá está prohibido (tira 403 en todo el
+sitio, ver arriba), pero **`Redirect` es de `mod_alias`, que es otro módulo y NO
+exige `FollowSymLinks`** — el error AH00670 habla sólo de `RewriteRule`. O sea
+que en principio esto sí se puede:
+
+```apache
+<IfModule mod_alias.c>
+  Redirect 301 /nunez/home/ https://fosque.com/nunez/
+  Redirect 301 /emiliocastro/home/ https://fosque.com/emilio-castro/
+  Redirect 301 /josehernandez/home/ https://fosque.com/jose-hernandez/
+</IfModule>
+```
+
+El `<IfModule>` hace que, si el módulo no está, el bloque se ignore en vez de
+tirar 500. Aun así, **después del 403 del 301 de www no se sube a ciegas**:
+probar con UNA línea, cargar el sitio, y si algo huele mal borrarla y volver a
+subir el `.htaccess`. Nunca un `Redirect` sobre `/nunez/` a secas: eso sí haría
+un loop con la página nueva.
+
+**Antes de escribir la lista completa conviene dar de alta fosque.com en Search
+Console** (ya está en la lista de pendientes) y leer el informe de cobertura:
+ahí está la lista REAL de URLs viejas indexadas, en vez de las 3 que
+encontramos buscando a mano.
+
+⚠️ **Y un tema para el cliente, no técnico:** el sitio viejo cubría TODAS las
+sedes de la marca (San Martín, Monte Grande, Adrogué, Villa del Parque), y este
+sitio tiene sólo 3. Quien busque "Fosque Monte Grande" cae al 404 y no encuentra
+su sede en ningún lado. Hay que preguntarle si las franquicias tienen que
+aparecer de alguna forma.
 
 ### Lo que sigue
 
@@ -191,11 +278,13 @@ viejo, porque él lo tiene.
    reportó el cliente. Si no aparece la imagen, sospechar del `og:image`, que
    pesa **384 KB** (WhatsApp suele cortar cerca de 300 KB); se baja a 131 KB
    re-encodeando el PNG a paleta de 256 colores con sharp, sin tocar la URL.
-2. **Vercel → `NEXT_PUBLIC_SITE_URL` = `https://fosque.com`** (sin `www`) +
-   Redeploy, para que el staging deje de declararse canónico en otro host.
-3. Dar de alta `https://fosque.com` en Search Console.
-4. Avisarle al cliente lo del Bitrix24 caído (chat "Asesor Fosque" y Planes).
-5. Cuando el sitio esté cerrado: borrar el proyecto de Vercel.
+2. ~~Vercel → `NEXT_PUBLIC_SITE_URL`~~ ✅ moot: **Vercel se borró el 3-sep**.
+3. **Dar de alta `https://fosque.com` en Search Console.** Ahora es lo más
+   urgente de la lista: es lo único que muestra si Google soltó el `.vercel.app`
+   y qué URLs viejas de Bitrix24 tiene indexadas (hacen falta para los 301).
+4. Avisarle al cliente lo del Bitrix24 caído (chat "Asesor Fosque" y Planes), y
+   que el link del `.vercel.app` que él tenía ya no existe.
+5. ~~Borrar el proyecto de Vercel~~ ✅ **HECHO el 3-sep.**
 
 ## 📄 Qué es el sitio
 

@@ -94,9 +94,11 @@ Este archivo NO se sube: es la guia para vos. El paquete se genera solo.
    - media/ solo si cambiaron videos o fotos (son los archivos pesados)
    - El .htaccess no cambia entre builds: no hace falta resubirlo cada vez
 
-   OJO: ya NO hay deploy automatico. Un git push actualiza fosque.vercel.app,
-   que quedo como STAGING, no el sitio del cliente. Lo que ve la gente es lo que
-   este subido por FTP. Para probar sin Vercel esta npm run probar.
+   OJO: NO hay deploy automatico en ningun lado. El proyecto de Vercel se
+   borro el 3-sep-2026 (Google lo tenia indexado y le competia al dominio
+   real), asi que un git push no actualiza ninguna copia navegable: el repo es
+   solo codigo y backup. Lo que ve la gente es, literalmente, lo ultimo que se
+   subio por FTP. Para ver un cambio antes de subirlo: npm run probar.
 
 
 NOTA: hero.mp4
