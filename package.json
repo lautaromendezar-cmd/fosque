@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "ftp": "node scripts/armar-ftp.mjs",
-    "probar": "node scripts/probar-ftp.mjs"
+    "probar": "node scripts/probar-ftp.mjs",
+    "check-sorteo": "node scripts/check-sorteo.mjs",
+    "check-nav": "node scripts/check-nav.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

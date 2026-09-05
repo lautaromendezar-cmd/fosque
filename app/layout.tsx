@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Baloo_Bhaijaan_2, Bebas_Neue } from 'next/font/google';
 import localFont from 'next/font/local';
 import SmoothScroll from '@/components/SmoothScroll';
+import Sorteo from '@/components/Sorteo';
 import './globals.css';
 
 // Titulares: Momo Trust Display, la del manual de marca (SIL OFL, gratuita).
@@ -73,7 +74,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className={`${momo.variable} ${baloo.variable} ${bebas.variable}`}>
       <body>
-        <SmoothScroll>{children}</SmoothScroll>
+        <SmoothScroll>
+          {children}
+          {/* Pop-up del sorteo de estreno. Va acá y no en la home porque quien
+              llega desde el Instagram de una sede cae en la landing de esa
+              sede, no en la portada. Se apaga solo por fecha: ver Sorteo.tsx.
+              Adentro de SmoothScroll para poder frenar a Lenis mientras está
+              abierto (useLenis necesita el provider arriba). */}
+          <Sorteo />
+        </SmoothScroll>
       </body>
     </html>
   );

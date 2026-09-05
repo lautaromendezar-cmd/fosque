@@ -4,6 +4,9 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
+// TEMPORAL (se va con el sorteo): que el pop-up no se le siente encima a los
+// screenshots ni a los chequeos de consola
+import { apagarSorteo, esHtml } from './sorteo-off.mjs';
 
 const OUT = path.join(process.cwd(), 'out');
 // puerto configurable: 4173 lo suele tener tomado otro proyecto en la misma PC
@@ -23,6 +26,10 @@ const server = http.createServer((req, res) => {
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
   if (!fs.existsSync(file)) file = path.join(OUT, '404.html');
   res.setHeader('Content-Type', MIME[path.extname(file)] ?? 'application/octet-stream');
+  if (esHtml(file)) {
+    res.end(apagarSorteo(fs.readFileSync(file, 'utf8')));
+    return;
+  }
   res.end(fs.readFileSync(file));
 });
 

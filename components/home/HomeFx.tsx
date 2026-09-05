@@ -11,6 +11,12 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
    navegación client-side, se resetea con cada carga/recarga de página) */
 let homeMontoEnEsteDoc = false;
 
+/* La intro de la home terminó: el pop-up del sorteo espera este aviso para no
+   aparecer encima del preloader ni del trailer. Se dispara en los TRES caminos
+   (reduced-motion, visita repetida y película completa), así el que escucha no
+   depende de cuál se tomó. */
+const avisarIntroLista = () => window.dispatchEvent(new Event('fosque:intro-lista'));
+
 /* Segundos que la pregunta queda SOLA en pantalla antes de que se sume la
    frase central. El doc del cliente pide "0s–3s la pregunta, a los 3s el
    texto": es la pausa para procesar, así que se toca acá y en ningún otro lado. */
@@ -108,7 +114,8 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
             { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out' },
             '+=0.9',
           )
-          .add(() => mostrarNav(), '<');
+          .add(() => mostrarNav(), '<')
+          .add(avisarIntroLista);
       };
 
       /* ---- PRELOADER + TRAILER ----
@@ -134,6 +141,8 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           // vuelta a la home sin recargar: directo al estado final
           reveal();
         }
+        // sin intro no hay nada que esperar: el hero ya está en su estado final
+        avisarIntroLista();
       } else {
         sessionStorage.setItem('fosque-seen', '1');
         // el fondo NO se oculta: cuando el preloader se desvanece la escena ya

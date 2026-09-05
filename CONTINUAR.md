@@ -19,6 +19,8 @@ Verificación antes de CADA push (cazó varios bugs reales):
 npm run build                 # export estático a out/
 node scripts/smoke.mjs        # Playwright: consola + screenshots de las 5 rutas
 node scripts/check-hero.mjs   # luminancia + contraste + los 4 caminos del hero
+npm run check-sorteo          # TEMPORAL: el pop-up del sorteo (se va tras el 10/09)
+npm run check-nav             # el nav en 15 anchos: no engorda, y los 3 IG se alcanzan
 ```
 
 `SMOKE_PORT` / `HERO_PORT` cambian el puerto si otro proyecto tiene tomado el
@@ -27,6 +29,185 @@ default (4173 / 4194).
 ⚠️ Un `git push` NO publica nada: el sitio se publica subiendo `deploy-ftp/` por FTP. ⚠️ En Claude Code el cwd se resetea entre comandos bash: siempre `cd` absoluto antes de npm/git.
 
 ⚠️ "No se ven las animaciones": revisar "Mostrar animaciones en Windows" / "Reducir movimiento" del SO — el sitio respeta `prefers-reduced-motion` a propósito (trailer del hero y preloader no corren; counters muestran valor final). Preloader y trailer: solo 1ª visita por sesión (`sessionStorage fosque-seen`).
+
+## 📱 4-sep — Instagram por sede en el nav, y se fue Facebook
+
+Los dos íconos de redes del nav apuntaban a `'#'` desde siempre, esperando URLs
+que nunca llegaron. Ahora:
+
+- **Instagram**: el ícono ya no es un link, es un **desplegable con las tres
+  cuentas de sede** (Fosque no tiene una general). Sale de `data/sedes.ts`, con
+  el número de sede en su color y el @ debajo, reusando el `.sub` de "Tu
+  Sucursal" — mismo CSS, no hay un dropdown nuevo.
+- **Facebook: borrado** del nav, del menú mobile y del footer. Nunca llegó la
+  URL, así que eran tres links muertos repetidos en las 9 páginas. Si el cliente
+  manda la cuenta, vuelve: el ícono está en el historial de git.
+- **En el menú mobile el Instagram va al lado de cada sede**, no en una sección
+  aparte. La sección propia repetía las tres sedes y estiraba el menú 166px: el
+  tercer Instagram caía abajo del borde y había que descubrir que el menú
+  scrollea por dentro. Con el ícono en la fila, el menú vuelve a entrar sin
+  scroll en 390×844.
+- `EVO_URL` sigue en `'#'`: es lo único que queda esperando al cliente.
+
+### Tres cosas que aparecieron al hacerlo
+
+1. **Había un hueco de 400px de ancho sin Instagram.** El ícono se ocultaba en
+   `max-width: 1500px` pero el burger aparece recién en `1100px`, así que
+   **entre 1101 y 1500 no había ni ícono ni menú**. No molestaba mientras el
+   ícono fuera un link muerto; ahora sí. El breakpoint del ícono pasó a 1100:
+   mientras haya menú de escritorio, hay Instagram.
+2. **El botón "Ingresá a tu Perfil" partía su texto en dos líneas y engordaba el
+   nav 22px** (82 → 104 de alto), entre 1361 y 1500px. **Es un defecto viejo**,
+   de antes de todo esto: se ve en la medición con el ícono oculto. Arreglado con
+   `nav .btn { white-space: nowrap }`. No lo agarraba ningún chequeo porque el
+   nav no desborda ni se monta: sólo crece.
+3. **El barrio de cada sede va ahora en su propio renglón** en el menú mobile.
+   Al lado del nombre no entra en todos los anchos (medido: faltan 9px en 390 y
+   34px en 360), así que quedaba José Hernández en dos renglones y Emilio Castro
+   en uno. Se compensó bajando el aire de arriba del menú (14vh → 11vh).
+
+### Verificación
+
+`npm run check-nav` — **15 anchos** (1920, 1600, 1501, 1499, 1450, 1400, 1360,
+1200, 1150, 1101, 1099, 900, 768, 600, 390; los pares 1101/1099 y 1501/1499
+rodean los breakpoints a propósito). En cada uno: el nav no desborda, no se le
+montan los bloques, no engorda respecto del alto de referencia, ningún botón
+parte su texto, la página no scrollea de costado, y **los 3 Instagram se
+alcanzan** — con las URLs exactas de `data/sedes.ts`. En mobile, además, que los
+tres se vean **sin scrollear** el menú y que el ícono mida 44px. Aparte: que no
+quede ningún link a `'#'` fuera del EVO, que no haya rastro de Facebook, y el
+desplegable con teclado (abre al enfocar con Tab, cierra con Escape, y pasar por
+"Tu Sucursal" no abre el de Instagram).
+
+## 🎁 4-sep — Pop-up del sorteo de estreno (TEMPORAL: se borra después del 10/09)
+
+El cliente pidió un pop-up que anuncie el sorteo del combo Stanley por el
+estreno de la web. **Está hecho y verificado, pero NO subido**: falta reemplazar
+la foto del premio (ver abajo).
+
+**Se apaga solo el 11/09 a las 00:00 de Argentina, y acá eso no es un lujo:** sin
+deploy automático, un pop-up que dependiera de una subida para desaparecer
+obligaría a alguien a acordarse de rebuildear y arrastrar 16 MB por FileZilla.
+La fecha está horneada en `components/Sorteo.tsx` (`FIN`), en UTC (03:00Z = 00:00
+ART). Se compara contra el reloj del visitante, que es lo único que hay sin
+backend: si alguien tiene la fecha mal en la máquina, lo ve un día de más o de
+menos.
+
+### Los archivos
+
+| Archivo | Qué es |
+|---|---|
+| `components/Sorteo.tsx` | el pop-up entero: fecha, tiempos, foco, freno de Lenis |
+| `app/globals.css` (final) | bloque `SORTEO DE ESTRENO` |
+| `app/layout.tsx` | lo monta DENTRO de `SmoothScroll` (para poder frenar Lenis) |
+| `components/home/HomeFx.tsx` | dispara `fosque:intro-lista` en sus 3 caminos |
+| `scripts/check-sorteo.mjs` | verificador propio (`npm run check-sorteo`) |
+| `scripts/sorteo-off.mjs` | apaga el pop-up para smoke y check-hero |
+| `public/media/sorteo-premio*.jpg` | los dos recortes de la placa (ver abajo) |
+| `sorteo.jpg` (raíz del repo) | la placa original que mandó el cliente, 899×1599 |
+
+**Cuando termine el sorteo se borra todo junto**: el componente, el bloque de
+CSS, el `<Sorteo />` del layout, los dos scripts, la línea de `package.json`, la
+foto, y el `avisarIntroLista` de HomeFx queda inofensivo (o se saca también).
+
+### Decisiones que no son obvias
+
+- **Va en todas las páginas**, no sólo en la home: quien venga del Instagram de
+  una sede cae en `/nunez/` o `/emilio-castro/`, no en la portada.
+- **En la home espera a que termine la intro.** El preloader + el trailer duran
+  unos 6s y un pop-up encima le arruina la película. `HomeFx` avisa por el evento
+  `fosque:intro-lista` en sus **tres** caminos (reduced-motion, visita repetida y
+  película completa), así el que escucha no depende de cuál se tomó. En las otras
+  páginas entra a los 2,2s. El timeout de 12s de la home es sólo la red por si el
+  aviso no llega.
+- **El HTML exportado no lleva la palabra "sorteo" en ninguna parte.** El
+  componente arranca cerrado y devuelve `null`, así que el markup lo inyecta el
+  JS. Dos razones: Google está decidiendo justo ahora qué indexar de fosque.com y
+  no queremos que el snippet hable de un sorteo terminado, ni que quede texto
+  muerto en las 9 páginas. Verificado con grep sobre `out/`. Corolario bueno: si
+  el JS no corre, no aparece nada.
+- **Una sola vez por visitante**: `localStorage` (no el `sessionStorage` del
+  preloader, que vuelve en cada sesión a propósito). Sólo cerrarlo cuenta como
+  visto — si se fue de la página sin cerrarlo, vuelve.
+- **`?sorteo=ver`** en cualquier URL lo abre salteando la fecha y el "ya lo
+  cerré". Es para mostrárselo al cliente y para el verificador.
+- **La placa promete "3 formas de participar" y el copy del cliente da 2**
+  (explorar la web y seguir el IG). Se resolvió con las 2 del copy, y por eso la
+  foto va **recortada**: si se usara la placa entera, el cartel prometería tres.
+  Si aparece la tercera forma, hay que sumarla al pop-up.
+- **El rosa está oscurecido al 85% del de la placa** (`--sorteo-rosa: #a43f54`).
+  No es gusto: el mismo color tiene que servir de texto sobre el crema Y de
+  fondo para texto blanco, y las dos cosas pedían lo mismo. El rosa de la placa
+  daba 3,92:1 sobre el crema y no pasaba AA; este da 5,08:1 y el blanco encima
+  6,14:1.
+
+### Dos trampas que ya se pagaron
+
+1. **El pop-up se le sentaba encima al smoke y a check-hero.** Aparece a los
+   2,2s en las páginas internas, justo cuando esos scripts sacan screenshots y
+   miden contraste del hero: `nunez.png` salió con el modal puesto y **ninguna
+   alarma sonó** — el promedio de luminancia no lo delata porque el panel es
+   crema, y se descubrió de casualidad, porque el PNG tenía el md5 idéntico al
+   screenshot del propio pop-up. Arreglado en `scripts/sorteo-off.mjs`: el
+   servidor de prueba de los dos scripts inyecta la marca de "ya lo cerré" en el
+   HTML. Se hizo así, y no con `addInitScript`, para cubrir todas las páginas y
+   contextos de un solo lugar. El chequeo 8 de `check-sorteo` verifica que la
+   clave siga sincronizada con el componente, porque si se desincronizan el
+   fallo vuelve a ser silencioso.
+2. **Medir durante la animación de entrada da números falsos.** El panel entra
+   con `opacity 0→1` y `scale(.98)→1`; medido a mitad de camino, el contraste
+   daba 3,62:1 donde en realidad era 3,92:1, y un botón de 44px medía 43,2 y
+   hacía fallar el chequeo sin que nada estuviera mal. `check-sorteo.mjs` espera
+   a que la animación termine (`abrirPanel`) antes de medir cualquier cosa.
+
+### Verificación
+
+`npm run check-sorteo` — 8 bloques, todo en verde:
+aparece y no rompe recursos · los 3 Instagram salen de `data/sedes.ts` ·
+contraste AA de los 9 textos · z-index por encima del nav y del WhatsApp ·
+en mobile entra completo (el 3er Instagram y la fecha se ven **sin** scrollear
+el panel, y "José Hernández" no se parte) · la X mide 44px ·
+**se apaga solo** (4 fechas fingidas con `page.clock`, incluido el 10/09 a las
+23:00 y el 11/09 a las 00:30) · cierra con Esc, click afuera y la X, y después
+la página vuelve a scrollear · no vuelve a aparecer una vez cerrado · el fondo
+no scrollea detrás · el foco arranca en el panel y no se escapa en 12 tabs, y
+vuelve al cerrar · en la home no aparece a los 2,5s y sí cuando la intro
+termina · con reduced-motion entra sin animación y el fondo igual queda quieto
+(ahí Lenis está destruido y el freno lo hace el CSS).
+
+### La foto del premio: DOS recortes de la placa
+
+El cliente mandó la placa que salió en redes (`sorteo.jpg` en la raíz del repo,
+899×1599). Se midieron las bandas de texto y **no existe ninguna ventana
+vertical que tenga el termo y el mate completos y deje afuera el sello**: el
+círculo "TERMO + MATE STANLEY" está en y 605-847, justo arriba del mate. Así que
+son dos recortes, elegidos con `<picture>`:
+
+| Archivo | Recorte | Qué entra |
+|---|---|---|
+| `sorteo-premio.jpg` | 560×920 (x 180, y 500) | escritorio: termo completo, mate, **el sello de la placa** y el manuscrito |
+| `sorteo-premio-ancho.jpg` | 899×355 (x 0, y 935) | mobile: el mate y el cuerpo del termo, sin texto |
+
+- Las bandas de texto de la placa, medidas: **y 227-340** ("SORTEO"), **438-499**
+  ("¡3 FORMAS DE PARTICIPAR!"), **1317-1393** (el manuscrito) y **1435-1491**
+  ("Invitá. Compartí. Ganá."). Ninguno de los dos recortes toca el "3 FORMAS",
+  que es el que contradice los dos pasos del pop-up.
+- El sello **ya viene dentro del recorte de escritorio**, así que ahí el
+  `.sorteo-premio` tipografiado va en `display: none` y sólo aparece en mobile,
+  donde el recorte no lo incluye. Ojo con esa regla: el `display: none` tiene que
+  ir DONDE ESTABA el `display: grid`, no antes — declarado arriba, el `grid`
+  posterior lo gana y se ven los dos sellos.
+- La columna de la foto pasó a `0.95fr` (era `0.82fr`): el recorte es 0.609 de
+  ratio y con la columna más angosta `cover` le mordía el sello y el borde del
+  termo. Al texto le saca 15px, nada.
+- La banda de mobile corta en y=1290 y no en 1305: los ascendentes del
+  manuscrito asoman antes que la banda que detecta el análisis por filas.
+
+### Para avisarle al cliente
+
+- Se apaga solo el 11/09 a las 00:00; si quiere estirar el sorteo hay que
+  cambiar la fecha, rebuildear y volver a subir por FTP (no es automático).
+- La placa dice 3 formas de participar y el texto que mandó tiene 2.
 
 ## 🚚 2026-09-03 — El sitio se muda al hosting del cliente (FTP)
 
@@ -654,7 +835,7 @@ corta para WhatsApp).
 1. URL login EVO → `EVO_URL` en `components/Nav.tsx` (hoy `#`; también en Footer).
    ⚠️ El doc del 17-ago vuelve a dibujar el botón `[Ingresá a tu Perfil]` pero
    sigue sin mandar la URL.
-2. ~~Instagram por sede~~ ✅ RESUELTO (27-ago): el cliente mandó las 3 URLs y están cargadas en `data/sedes.ts` (cards home + landing con @handle + footer). Falta: Instagram/Facebook GENERAL → `IG_URL`/`FB_URL` en `Nav.tsx` (los íconos del nav siguen en `#`; el "Facebook" del footer también).
+2. ~~Instagram por sede~~ ✅ RESUELTO (27-ago): el cliente mandó las 3 URLs y están cargadas en `data/sedes.ts` (cards home + landing con @handle + footer). ~~Falta el Instagram/Facebook GENERAL~~ ✅ **CERRADO el 4-sep**: el nav ya no espera una cuenta general — el ícono despliega las 3 de sede, y **Facebook se borró** (del nav, del menú mobile y del footer) porque la URL nunca llegó y eran links muertos. Si el cliente manda la cuenta de Facebook, vuelve.
 3. Confirmar direcciones ⚠️ "José Hernández" pin en Bragado 5952, "Emilio Castro" en Andalgalá 1395 (`direccionPendiente: true`). Los NOMBRES ya los confirmó el doc del 17-ago (Fosque José Hernández / Emilio Castro / Núñez, FJH/FEC/FNN).
 4. **HORARIOS: hay contradicción sin resolver.** El doc del 17-ago contesta el
    mito "no tengo tiempo" con "L a V 7:00–22:00, sábados desde 9:00, domingos a

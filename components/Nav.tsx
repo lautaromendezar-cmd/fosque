@@ -7,9 +7,15 @@ import Logo from '@/components/logo/Logo';
 
 // URL exacta del login EVO: pendiente de cliente
 const EVO_URL = '#';
-// Redes oficiales de Fosque: URLs pendientes de cliente
-const IG_URL = '#';
-const FB_URL = '#';
+
+/* Fosque no tiene una cuenta de Instagram general: tiene UNA POR SEDE, y son
+   las que están en data/sedes.ts. Por eso el ícono del nav no es un link, es un
+   desplegable con las tres — igual que "Tu Sucursal".
+   El ícono de Facebook se fue el 4-sep: nunca llegó la URL y quedaba
+   apuntando a '#', o sea un link muerto en las 9 páginas. Si algún día manda
+   la cuenta, vuelve. */
+const sedesConIg = sedes.filter((s) => s.instagram);
+const arroba = (url: string) => `@${new URL(url).pathname.replaceAll('/', '')}`;
 
 function IconIg() {
   return (
@@ -17,14 +23,6 @@ function IconIg() {
       <rect x="3" y="3" width="18" height="18" rx="5" />
       <circle cx="12" cy="12" r="4" />
       <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function IconFb() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.2-3.2 3.3V11H9v3h2.3v7h2.2z" />
     </svg>
   );
 }
@@ -41,35 +39,55 @@ function Roll({ children }: { children: string }) {
   );
 }
 
+/* Abrir en hover y cerrar con un delay de gracia. El delay no es un adorno: sin
+   él, el puntero que cruza el hueco entre el disparador y el panel lo cierra a
+   mitad de camino. Son dos desplegables (Tu Sucursal e Instagram) con estado
+   propio: si compartieran uno, pasar por el ícono abriría también el de sedes. */
+function useDesplegable(delayCierre = 140) {
+  const [open, setOpen] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const abrir = () => {
+    if (timer.current) clearTimeout(timer.current);
+    setOpen(true);
+  };
+  const cerrar = (delay = delayCierre) => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setOpen(false), delay);
+  };
+
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
+
+  return { open, abrir, cerrar, cerrarYa: () => setOpen(false) };
+}
+
 export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: string }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [subOpen, setSubOpen] = useState(false);
-  const subTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sub = useDesplegable();
+  const ig = useDesplegable();
   const wa = waLink(waNumero, waTexto);
-
-  const openSub = () => {
-    if (subTimer.current) clearTimeout(subTimer.current);
-    setSubOpen(true);
-  };
-  const closeSub = (delay = 140) => {
-    if (subTimer.current) clearTimeout(subTimer.current);
-    subTimer.current = setTimeout(() => setSubOpen(false), delay);
-  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSubOpen(false);
+      if (e.key !== 'Escape') return;
+      sub.cerrarYa();
+      ig.cerrarYa();
     };
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('keydown', onKey);
-      if (subTimer.current) clearTimeout(subTimer.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -92,15 +110,15 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
             <Roll>Ejecutiva Fosque</Roll>
           </a>
           <div
-            className={`nlink has-sub${subOpen ? ' sub-open' : ''}`}
-            onMouseEnter={openSub}
-            onMouseLeave={() => closeSub()}
-            onFocus={openSub}
+            className={`nlink has-sub${sub.open ? ' sub-open' : ''}`}
+            onMouseEnter={sub.abrir}
+            onMouseLeave={() => sub.cerrar()}
+            onFocus={sub.abrir}
             onBlur={(e) => {
-              if (!e.currentTarget.contains(e.relatedTarget as Node)) closeSub(0);
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) sub.cerrar(0);
             }}
           >
-            <Link href="/#sedes" aria-expanded={subOpen} onClick={() => closeSub(0)}>
+            <Link href="/#sedes" aria-expanded={sub.open} onClick={() => sub.cerrar(0)}>
               <Roll>Tu Sucursal</Roll>
               <svg className="caret" viewBox="0 0 10 6" aria-hidden="true">
                 <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -108,7 +126,7 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
             </Link>
             <div className="sub">
               {sedes.map((s) => (
-                <Link key={s.slug} href={`/${s.slug}/`} onClick={() => closeSub(0)}>
+                <Link key={s.slug} href={`/${s.slug}/`} onClick={() => sub.cerrar(0)}>
                   <span className="sub-num">{s.numero}</span>
                   <span>
                     {s.nombre}
@@ -127,13 +145,42 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
         </div>
 
         <div className="right">
-          <div className="nav-social">
-            <a href={IG_URL} aria-label="Instagram de Fosque">
+          <div
+            className={`nav-social has-sub${ig.open ? ' sub-open' : ''}`}
+            onMouseEnter={ig.abrir}
+            onMouseLeave={() => ig.cerrar()}
+            onFocus={ig.abrir}
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) ig.cerrar(0);
+            }}
+          >
+            <button
+              type="button"
+              className="ig-trigger"
+              aria-expanded={ig.open}
+              aria-haspopup="true"
+              aria-label="Instagram de Fosque, por sede"
+              onClick={() => (ig.open ? ig.cerrarYa() : ig.abrir())}
+            >
               <IconIg />
-            </a>
-            <a href={FB_URL} aria-label="Facebook de Fosque">
-              <IconFb />
-            </a>
+            </button>
+            <div className="sub">
+              {sedesConIg.map((s) => (
+                <a
+                  key={s.slug}
+                  href={s.instagram as string}
+                  target="_blank"
+                  rel="noopener"
+                  onClick={() => ig.cerrar(0)}
+                >
+                  <span className="sub-num">{s.numero}</span>
+                  <span>
+                    {s.nombre}
+                    <small>{arroba(s.instagram as string)}</small>
+                  </span>
+                </a>
+              ))}
+            </div>
           </div>
           <a className="btn evo" href={EVO_URL}>
             Ingresá a tu Perfil
@@ -153,13 +200,35 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
         </div>
       </nav>
 
-      <div className={`mobile-menu${open ? ' open' : ''}`} onClick={() => setOpen(false)}>
+      <div
+        className={`mobile-menu${open ? ' open' : ''}`}
+        onClick={() => setOpen(false)}
+        /* scrollea por dentro en pantallas bajas: mismo recurso que los raíles */
+        data-lenis-prevent
+      >
         <div className="mm-inner">
+          {/* El Instagram de cada sede va acá, al lado de la sede, y no en una
+              sección aparte: el menú ya lista las tres, y repetirlas abajo lo
+              estiraba 166px — el tercer Instagram quedaba abajo del borde y
+              había que descubrir que el menú scrollea. */}
           <div className="mm-label">Tu Sucursal</div>
           {sedes.map((s) => (
-            <Link key={s.slug} className="mm-link" href={`/${s.slug}/`}>
-              {s.nombre} {s.barrio !== s.nombre && <small>{s.barrio}</small>}
-            </Link>
+            <div key={s.slug} className="mm-row">
+              <Link className="mm-link" href={`/${s.slug}/`}>
+                {s.nombre} {s.barrio !== s.nombre && <small>{s.barrio}</small>}
+              </Link>
+              {s.instagram && (
+                <a
+                  className="mm-ig"
+                  href={s.instagram}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={`Instagram de Fosque ${s.nombre}, ${arroba(s.instagram)}`}
+                >
+                  <IconIg />
+                </a>
+              )}
+            </div>
           ))}
           <div className="mm-label">Fosque</div>
           <Link className="mm-link" href="/#programa">
@@ -183,14 +252,6 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
           <a className="btn evo-m" href={EVO_URL}>
             Ingresá a tu Perfil
           </a>
-          <div className="mm-social">
-            <a href={IG_URL} aria-label="Instagram de Fosque">
-              <IconIg />
-            </a>
-            <a href={FB_URL} aria-label="Facebook de Fosque">
-              <IconFb />
-            </a>
-          </div>
         </div>
       </div>
     </>

@@ -43,7 +43,6 @@ export default function Footer() {
                   </a>
                 ),
             )}
-            <a href="#">Facebook</a>
           </div>
         </div>
       </footer>
