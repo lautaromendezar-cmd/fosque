@@ -17,8 +17,6 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
-// TEMPORAL (se va con el sorteo): sin esto el hero se mide con el pop-up encima
-import { apagarSorteo, esHtml } from './sorteo-off.mjs';
 
 const OUT = path.join(process.cwd(), 'out');
 const PORT = Number(process.env.HERO_PORT ?? 4194);
@@ -46,10 +44,6 @@ const server = http.createServer((req, res) => {
   if (fs.existsSync(f) && fs.statSync(f).isDirectory()) f = path.join(f, 'index.html');
   if (!fs.existsSync(f)) f = path.join(OUT, '404.html');
   res.setHeader('Content-Type', MIME[path.extname(f)] ?? 'application/octet-stream');
-  if (esHtml(f)) {
-    res.end(apagarSorteo(fs.readFileSync(f, 'utf8')));
-    return;
-  }
   res.end(fs.readFileSync(f));
 });
 await new Promise((r) => server.listen(PORT, r));

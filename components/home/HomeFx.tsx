@@ -11,10 +11,10 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
    navegación client-side, se resetea con cada carga/recarga de página) */
 let homeMontoEnEsteDoc = false;
 
-/* La intro de la home terminó: el pop-up del sorteo espera este aviso para no
-   aparecer encima del preloader ni del trailer. Se dispara en los TRES caminos
-   (reduced-motion, visita repetida y película completa), así el que escucha no
-   depende de cuál se tomó. */
+/* La intro de la home terminó. Aviso genérico para cualquier cosa que no deba
+   aparecer encima del preloader ni del trailer (lo usó el pop-up del sorteo de
+   estreno, ya borrado). Se dispara en los TRES caminos (reduced-motion, visita
+   repetida y película completa), así el que escucha no depende de cuál se tomó. */
 const avisarIntroLista = () => window.dispatchEvent(new Event('fosque:intro-lista'));
 
 /* Segundos que la pregunta queda SOLA en pantalla antes de que se sume la
