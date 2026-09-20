@@ -31,6 +31,25 @@ export type Sede = {
   shotHero: string; // guion de rodaje del video hero
   shotHome: string; // guion del plano en la home
   galeria: { file: string; shot: string }[];
+  /** Sala de fuerza y cardio propia (hoy solo José Hernández): sección extra en la landing */
+  fuerza?: Fuerza;
+};
+
+/**
+ * Sección "Fuerza y Cardio" de una sede con sala propia. Pedido del cliente
+ * (16-sep-2026): presentarla como COMPLEMENTO de Fosque Reformer, no como un
+ * gimnasio (la home dice "Fosque no es un gimnasio"). Copy provisorio escrito
+ * acá, a confirmar por el cliente: qué hay en la sala y si entra en la
+ * membresía de Reformer.
+ */
+export type Fuerza = {
+  titulo: string;
+  texto: string[];
+  puntos: { t: string; d: string }[];
+  waTexto: string;
+  video: string; // asset en public/media/ (cae a placeholder si no existe)
+  shotVideo: string;
+  fotos: { file: string; shot: string }[];
 };
 
 export const WA_GENERAL = '5491137719572';
@@ -71,11 +90,37 @@ export const sedes: Sede[] = [
     shotHome: '🎬 Fachada + travelling de entrada · Hora dorada',
     galeria: [
       { file: 'galeria-jh-reformer.jpg', shot: '📷 Sala Reformer en clase · plano fijo lateral' },
-      { file: 'galeria-jh-fuerza.jpg', shot: '📷 Sala de fuerza · paneo lento' },
+      { file: 'galeria-jh-fuerza.jpg', shot: '📷 Detalle sala de fuerza · discos y barra' },
       { file: 'galeria-jh-recepcion.jpg', shot: '📷 Recepción con ejecutiva sonriendo' },
       { file: 'galeria-jh-detalle.jpg', shot: '📷 Detalle equipamiento Método Fosque' },
       { file: 'galeria-jh-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
+    fuerza: {
+      titulo: 'Fuerza y Cardio, el complemento de tu Reformer.',
+      texto: [
+        'Además de las clases de Fosque Reformer, en José Hernández tenés una sala de fuerza y cardio propia. Máquinas, peso libre y cintas para completar tu entrenamiento con más fuerza y mejor resistencia.',
+        'Acá también entrenás acompañada. Un instructor te guía y te corrige en cada sesión, con la misma calidez de todas las clases Fosque.',
+      ],
+      puntos: [
+        {
+          t: 'SALA DE FUERZA',
+          d: 'Máquinas y peso libre para ganar la fuerza que cuida tu espalda y tus articulaciones.',
+        },
+        { t: 'CARDIO', d: 'Cintas para un corazón más fuerte y más energía en tu día a día.' },
+        {
+          t: 'SIEMPRE CON INSTRUCTOR',
+          d: 'Nunca entrenás sola: alguien del equipo te guía y te corrige en cada sesión.',
+        },
+      ],
+      waTexto: 'Hola! Quiero info de Fuerza y Cardio en José Hernández',
+      video: 'sede-jh-fuerza.mp4',
+      shotVideo: '🎬 VIDEO SALA DE FUERZA · Plano general con instructor asistiendo · Luz cálida',
+      fotos: [
+        { file: 'fuerza-jh-cardio.jpg', shot: '📷 Zona cardio · alumna en la cinta, de espaldas' },
+        { file: 'fuerza-jh-profe.jpg', shot: '📷 Instructor guiando en la polea' },
+        { file: 'fuerza-jh-maquinas.jpg', shot: '📷 Sala de máquinas en profundidad' },
+      ],
+    },
   },
   {
     slug: 'emilio-castro',

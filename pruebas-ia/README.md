@@ -1,4 +1,4 @@
-# pruebas-ia — assets fuente del pipeline IA (27-ago-2026)
+# pruebas-ia — assets fuente del pipeline IA (27-ago-2026, gimnasio JH 16-sep-2026)
 
 Material generado con Higgsfield (Nano Banana Pro + Seedance 2.5) usando frames
 de los videos reales como referencia. **Esta carpeta NO se sirve** (está fuera
@@ -30,3 +30,21 @@ Para que el logo FOSQUE salga EXACTO: pasarle a Nano Banana el lockup oficial
 como imagen de referencia aparte (crop de `app/opengraph-image.png`:
 `ffmpeg -i opengraph-image.png -vf "crop=440:130:50:50" logo.png`) y pedir
 "reproduced EXACTLY as in the logo reference image". Sin eso, lo deforma.
+
+## Gimnasio de José Hernández (16-sep-2026, tanda 5, vía CLI `higgsfield`)
+
+Material del rodaje del gimnasio (38 clips en `videos-gimnasio/`, fuera del repo
+por .gitignore). Mismo pipeline: frame real → Nano Banana Pro 2K con el frame
+como `image_references` → Seedance 2.5 `omni_reference` con `start_image`.
+
+- `gym-seleccion.jpg` — lámina con los 4 cuadros elegidos y su rol
+- `gym-frame-C00xx-*.jpg` — los 5 frames reales de referencia (1920×1080)
+- `gym-video-sala-base.jpg` — recreación 16:9 de C0063, base del video
+- `gym-cardio.jpg` / `gym-profe.jpg` / `gym-maquinas.jpg` / `gym-discos.jpg` —
+  recreaciones 3:4 (2K) → en vivo como `fuerza-jh-cardio/profe/maquinas.jpg`
+  y `galeria-jh-fuerza.jpg` (896×1200)
+- `clip-gym-sala.mp4` — Seedance 5 s 1080p sin comprimir → `sede-jh-fuerza.mp4`
+- `gal-jh-fuerza-v1-inventada.jpg` — la galería "fuerza" anterior, inventada
+  de cero por la IA (no había toma real). Reemplazada por los discos.
+- Ojo: en `gym-cardio.jpg` el techo salió de chapa con vigas de madera; el real
+  es cielorraso liso con spots. Regenerar si el cliente lo marca.

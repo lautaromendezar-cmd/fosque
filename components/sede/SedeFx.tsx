@@ -118,6 +118,32 @@ export default function SedeFx({ children }: { children: React.ReactNode }) {
         scrollTrigger: { trigger: '#galeria', start: 'top 70%' },
       });
 
+      /* Fuerza y Cardio (solo sedes con sala propia): el video protagonista
+         se desplaza contra el scroll y las fotos entran en cascada como en
+         #equipo. Los .card de la sección ya entran con la regla genérica. */
+      if (q('#fuerza').length) {
+        gsap.fromTo(
+          q('#fuerza .fz-video'),
+          { y: 36 },
+          {
+            y: -36,
+            ease: 'none',
+            scrollTrigger: { trigger: '#fuerza', start: 'top bottom', end: 'bottom top', scrub: 1 },
+          },
+        );
+        gsap.from(q('#fuerza .fz-fotos > *'), {
+          y: 80,
+          opacity: 0,
+          rotate: 3,
+          scale: 0.94,
+          stagger: 0.12,
+          duration: 0.85,
+          ease: 'power3.out',
+          clearProps: 'transform,opacity',
+          scrollTrigger: { trigger: '#fuerza .fz-fotos', start: 'top 85%' },
+        });
+      }
+
       /* Mitos: filas en cascada */
       gsap.from(q('.mito'), {
         y: 40,

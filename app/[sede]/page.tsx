@@ -149,6 +149,49 @@ export default async function SedePage({ params }: Props) {
         </div>
       </section>
 
+      {/* FUERZA Y CARDIO: solo sedes con sala propia (hoy José Hernández).
+          Editorial, no grilla simétrica: título grande, video protagonista a
+          todo el ancho, texto a una columna con los puntos al lado y las
+          fotos en cascada. Copy en data/sedes.ts (provisorio). */}
+      {sede.fuerza && (
+        <section id="fuerza" className="bloque clip" style={{ background: '#DCE5D9' }} data-bg="#EAF0EC">
+          <RingsDeco id="sede-fuerza" from="#F8E27A" to="#F29B38" className="bl" />
+          <div className="wrap">
+            <div className="eyebrow">Solo en {sede.nombre}</div>
+            <h2 className="fz-titulo">{sede.fuerza.titulo}</h2>
+            <Media className="fz-video" file={sede.fuerza.video} shot={sede.fuerza.shotVideo} />
+            <div className="fz-texto">
+              <div>
+                {sede.fuerza.texto.map((p) => (
+                  <p key={p}>{p}</p>
+                ))}
+                <a
+                  className="btn solid"
+                  href={waLink(sede.whatsapp, sede.fuerza.waTexto)}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Quiero conocer la sala
+                </a>
+              </div>
+              <div className="fz-puntos">
+                {sede.fuerza.puntos.map((p) => (
+                  <div key={p.t} className="card punto">
+                    <h3>{p.t}</h3>
+                    <p>{p.d}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="fz-fotos">
+              {sede.fuerza.fotos.map((g) => (
+                <Media key={g.file} file={g.file} shot={g.shot} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* GALERÍA */}
       <section id="galeria" data-bg="#F8DDE0">
         <h2 className="wrap">Conocé el espacio antes de venir.</h2>

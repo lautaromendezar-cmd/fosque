@@ -19,7 +19,6 @@ Verificación antes de CADA push (cazó varios bugs reales):
 npm run build                 # export estático a out/
 node scripts/smoke.mjs        # Playwright: consola + screenshots de las 5 rutas
 node scripts/check-hero.mjs   # luminancia + contraste + los 4 caminos del hero
-npm run check-sorteo          # TEMPORAL: el pop-up del sorteo (se va tras el 10/09)
 npm run check-nav             # el nav en 15 anchos: no engorda, y los 3 IG se alcanzan
 ```
 
@@ -29,6 +28,119 @@ default (4173 / 4194).
 ⚠️ Un `git push` NO publica nada: el sitio se publica subiendo `deploy-ftp/` por FTP. ⚠️ En Claude Code el cwd se resetea entre comandos bash: siempre `cd` absoluto antes de npm/git.
 
 ⚠️ "No se ven las animaciones": revisar "Mostrar animaciones en Windows" / "Reducir movimiento" del SO — el sitio respeta `prefers-reduced-motion` a propósito (trailer del hero y preloader no corren; counters muestran valor final). Preloader y trailer: solo 1ª visita por sesión (`sessionStorage fosque-seen`).
+
+## 🏋️ 16-sep — Sección "Fuerza y Cardio" en José Hernández + se fue el sorteo
+
+**Pedido del cliente**: la sede JH tiene gimnasio (sala de musculación y cardio)
+y quería mostrarlo **como complemento de Fosque Reformer, no como gimnasio**: la
+home dice "Fosque no es un gimnasio" y el mito "No me gustan los gimnasios" lo
+repite, así que el copy va por ese lado. Lautaro filmó 38 clips nuevos del
+gimnasio (`videos-gimnasio/`, 1,7 GB, **fuera del repo por .gitignore**, misma
+Sony: 1080p a 119,88 fps con PCM).
+
+**Estado al 20-sep-2026: HECHO, verificado y empaquetado (`deploy-ftp/`), pero
+FRENADO: se le mostró al cliente y NUNCA CONTESTÓ con los textos que quería
+modificar.** No se subió por FTP ni se commiteó: fosque.com sigue mostrando lo
+del 4-sep y **todo esto vive solo en el working tree de esta PC** (`git status`
+lo lista; en la otra PC no existe). Para retomar: reclamarle los textos, cambiar
+el copy en `data/sedes.ts`, `npm run build` + los tres checks, `npm run ftp`
+(si el clasificador lo frena, `node scripts/armar-ftp.mjs` hace lo mismo) y
+subir. Si aprueba tal cual, `deploy-ftp/` ya está listo para arrastrar.
+
+### Qué se agregó
+
+- `data/sedes.ts`: tipo `Fuerza` y campo opcional `fuerza` en `Sede`. Solo JH lo
+  tiene; la sección se renderiza si existe. Copy provisorio ahí mismo (título,
+  2 párrafos, 3 puntos, texto del WhatsApp).
+- `app/[sede]/page.tsx`: sección `#fuerza` entre INFO y GALERÍA. Bloque salvia
+  (`#DCE5D9`, body a `#EAF0EC`), arcos sol en `bl`. Editorial: eyebrow "Solo en
+  José Hernández" → título grande → **video protagonista a todo el ancho (2:1)**
+  → texto en una columna + 3 cards al lado → 3 fotos 3:4 en cascada (la del
+  medio baja 3rem). CTA "Quiero conocer la sala" → WhatsApp de la sede.
+- `app/globals.css`: bloque `FUERZA Y CARDIO` antes de la galería. Mobile: video
+  4:3, una columna, fotos 2 + 1 ancha.
+- `components/sede/SedeFx.tsx`: parallax del video (`y` 36 → -36 con scrub) y
+  cascada de las fotos como en `#equipo`. Las cards entran con la regla genérica.
+- Galería de JH: `galeria-jh-fuerza.jpg` **ya no es la inventada de cero**; ahora
+  es una recreación de los discos reales (C0052). Texto del shot actualizado.
+
+### El material (tanda 5 de IA, misma receta que las tandas 1-4)
+
+Selección de 5 clips entre los 38 (criterio: alumnas de espaldas o sin cara
+reconocible, profe con uniforme real, un ancho, un detalle, uno humano; se
+descartaron press de banca / peso muerto / abdominales por caras de alumnos en
+primer plano y los carteles con texto): **C0063** (sala completa con profe
+asistiendo → video), **C0036** (cardio, alumna de espaldas), **C0042** (máquinas
+en profundidad), **C0050** (profe con buzo FOSQUE guiando en la polea),
+**C0052** (discos). Lámina: `pruebas-ia/gym-seleccion.jpg`.
+
+Pipeline, ahora por **CLI** y no por MCP (ver abajo): frame real →
+`nano_banana_pro` 2K con el frame como `--image-references` (+ el logo-ref para
+la del buzo) → `seedance_2_5` `--mode omni_reference --start-image` 5 s 1080p sin
+audio → receta ffmpeg del proyecto (1,3 MB) → `gen-posters.mjs`. Prompts en
+`Desktop/Claude/…/scratchpad` de la sesión; la idea es la de siempre: "recreate
+this EXACT room… transform ONLY the atmosphere: warm golden sunlight, haze,
+cream/peach, no fluorescent green; posters and text become plain surfaces".
+
+Archivos en vivo: `sede-jh-fuerza.mp4` + poster, `fuerza-jh-cardio.jpg`,
+`fuerza-jh-profe.jpg`, `fuerza-jh-maquinas.jpg`, `galeria-jh-fuerza.jpg` (todas
+896×1200). Fuentes 2K y frames en `pruebas-ia/gym-*` (README actualizado).
+
+⚠️ Para mostrarle al cliente / regenerar si marca:
+- `fuerza-jh-cardio.jpg`: el techo salió **de chapa con vigas de madera**; el
+  real es cielorraso liso con spots. Es lo único que no es fiel al lugar.
+- `fuerza-jh-maquinas.jpg`: quedó una etiqueta amarilla "WARNING" legible en la
+  máquina del frente (real, pero es texto).
+- En el video la profe termina **sentada en el banco mirando a cámara** (3-5 s);
+  al loopear salta de sentada a inclinada. Igual que los otros loops de 5 s.
+- El buzo de la profe salió con el logo F + FOSQUE chico en el pecho, nítido
+  (truco del logo-ref). El estampado de la manga quedó semi-ilegible, es chico.
+
+### Copy: qué confirmar con el cliente
+
+Se escribió sin material de él. Preguntas cerradas en `docs/PEDIDO-AL-CLIENTE.md`:
+qué hay exactamente en la sala (¿solo cintas de cardio o también bicis?), si
+entra en la membresía de Reformer o es un plan aparte, y si "un instructor te
+guía y te corrige en cada sesión" es literal. Si algo no es así, se cambia en
+`data/sedes.ts` y listo.
+
+### Higgsfield ahora es CLI, no MCP
+
+El conector MCP de claude.ai no aparece en esta PC. Se instaló **`npm i -g
+@higgsfield/cli`** (1.1.25) y la sesión ya estaba autenticada
+(`higgsfield account status` → cuenta de Lautaro, plan ultimate, **1193 créditos**
+al 16-sep). Las skills `higgsfield-*` viven en `Desktop/Claude/.claude/skills/`.
+Comandos que sirvieron (los flags de media aceptan rutas locales y suben solos):
+
+```bash
+higgsfield generate create nano_banana_pro --prompt "..." --image-references frame.jpg --aspect_ratio 3:4 --resolution 2k --wait --json
+higgsfield generate create seedance_2_5 --prompt "..." --mode omni_reference --start-image base.png --duration 5 --resolution 1080p --aspect_ratio 16:9 --generate_audio false --wait --json
+```
+
+Costo de la tanda: 5 imágenes + 1 video ≈ 55 créditos.
+
+### Verificación (16-sep)
+
+`npm run build` OK · `smoke.mjs` ✓ 6 rutas · `check-hero.mjs` ✓ · `check-nav.mjs` ✓
+· `scripts/tmp/shot-fuerza.mjs` (captura propia de `#fuerza` en 1440 y 390, con y
+sin animaciones; con scroll real las fotos entran en cascada). Ojo: una captura
+de elemento más alto que el viewport **no dispara los ScrollTrigger** de lo que
+queda abajo: las cards salen vacías y no es un bug. Verificar con rueda.
+
+### Sorteo: borrado
+
+Vencido el 11/09, el 16-sep se borró todo (detalle en la sección del sorteo,
+más abajo). `npm run check-sorteo` ya no existe.
+
+### Lo que sigue (pedido del 16-sep, todavía sin material)
+
+**Sección "Opiniones"** con entrevistas filmadas por Lautaro (~1 min c/u, que
+hay que **cortar y subtitular acá**: ffmpeg + whisper están en esta PC, modelos
+base/small/medium bajados, torch sin CUDA). Falta que pase los archivos, cómo se
+nombra cada persona, de qué sede es y si aceptó salir en la web. Plan: componente
+propio, en la home con todas y en cada landing con las de esa sede; subtítulos
+quemados en la tipografía del sitio para que anden mudos con autoplay, más
+botón de audio; cortes a la mejor frase (20-30 s) con la desgrabación completa.
 
 ## 📱 4-sep — Instagram por sede en el nav, y se fue Facebook
 
@@ -79,7 +191,13 @@ quede ningún link a `'#'` fuera del EVO, que no haya rastro de Facebook, y el
 desplegable con teclado (abre al enfocar con Tab, cierra con Escape, y pasar por
 "Tu Sucursal" no abre el de Instagram).
 
-## 🎁 4-sep — Pop-up del sorteo de estreno (TEMPORAL: se borra después del 10/09)
+## 🎁 4-sep — Pop-up del sorteo de estreno — ✅ BORRADO el 16-sep-2026
+
+**Se apagó solo el 11/09 y el 16-sep se borró el código muerto**: `Sorteo.tsx`, el
+bloque CSS, el `<Sorteo />` del layout, `check-sorteo.mjs`, `sorteo-off.mjs` (y sus
+imports en smoke / check-hero / check-nav), la línea de `package.json` y las fotos
+del premio. Queda el aviso `fosque:intro-lista` de HomeFx, que es genérico. Lo de
+abajo es historia de cómo se hizo, por si vuelve a pedir un pop-up temporal.
 
 El cliente pidió un pop-up que anuncie el sorteo del combo Stanley por el
 estreno de la web. **Está hecho y verificado, pero NO subido**: falta reemplazar

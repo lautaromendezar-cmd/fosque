@@ -81,6 +81,21 @@ en fosque.vercel.app. ¿Quién compra el dominio?
 
 ---
 
+## 10. Fuerza y Cardio en José Hernández (nuevo, 16-sep)
+
+La sección ya está armada con tus tomas del gimnasio y el copy lo escribí yo
+como **complemento de Fosque Reformer**, no como gimnasio. Para que no diga
+nada que no sea cierto, tres preguntas cerradas:
+
+1. **¿Qué hay en la sala?** Escribí "máquinas, peso libre y cintas". ¿Hay
+   también bicis o elípticos que convenga nombrar?
+2. **¿Entra en la membresía de Reformer o es un plan aparte?** Hoy la sección
+   no dice nada de precio ni de plan, a propósito. Si es aparte, lo aclaramos.
+3. **"Un instructor te guía y te corrige en cada sesión"**: ¿es literal
+   (siempre hay alguien en la sala) o hay horarios sin instructor?
+
+**Si no llega**: queda como está. No promete nada de precio ni de horario.
+
 ## Versión corta para WhatsApp
 
 > Hola! Ya está online todo lo que pediste en el documento: el hero arranca con
