@@ -7,3 +7,9 @@ next-env.d.ts
 scripts/shots/
 scripts/tmp/
 deploy-ftp/
+
+# material en bruto del gimnasio JH (1,7 GB, fuera del repo)
+videos-gimnasio/
+
+# crudo de cámara de las entrevistas (4,7 GB, fuera del repo)
+entrevistas/
