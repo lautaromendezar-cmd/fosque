@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { sedes, waLink } from '@/data/sedes';
+import { sedes, waLink, PLATAFORMA_URL } from '@/data/sedes';
 import Logo from '@/components/logo/Logo';
 
-// URL exacta del login EVO: pendiente de cliente
-const EVO_URL = '#';
+// URL del login de socios (EVO): PLATAFORMA_URL vive en data/sedes.ts y sigue
+// pendiente del cliente; la comparten el nav, el footer y la sección Membresía.
 
 /* Fosque no tiene una cuenta de Instagram general: tiene UNA POR SEDE, y son
    las que están en data/sedes.ts. Por eso el ícono del nav no es un link, es un
@@ -182,7 +182,7 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
               ))}
             </div>
           </div>
-          <a className="btn evo" href={EVO_URL}>
+          <a className="btn evo" href={PLATAFORMA_URL}>
             Ingresá a tu Perfil
           </a>
           <a className="btn cta" href={wa} target="_blank" rel="noopener">
@@ -249,7 +249,7 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
           <a className="mm-link" href={wa} target="_blank" rel="noopener">
             Contacto
           </a>
-          <a className="btn evo-m" href={EVO_URL}>
+          <a className="btn evo-m" href={PLATAFORMA_URL}>
             Ingresá a tu Perfil
           </a>
         </div>

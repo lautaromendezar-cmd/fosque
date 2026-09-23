@@ -7,7 +7,7 @@ import Media from '@/components/Media';
 import Mitos from '@/components/Mitos';
 import RingsDeco from '@/components/RingsDeco';
 import SedeFx from '@/components/sede/SedeFx';
-import { sedes, getSede, waLink, mapsLink, mapsEmbed } from '@/data/sedes';
+import { sedes, getSede, waLink, mapsLink, mapsEmbed, PLATAFORMA_URL } from '@/data/sedes';
 import { mitosParaSede } from '@/data/mitos';
 
 export function generateStaticParams() {
@@ -151,34 +151,56 @@ export default async function SedePage({ params }: Props) {
 
       {/* FUERZA Y CARDIO: solo sedes con sala propia (hoy José Hernández).
           Editorial, no grilla simétrica: título grande, video protagonista a
-          todo el ancho, texto a una columna con los puntos al lado y las
-          fotos en cascada. Copy en data/sedes.ts (provisorio). */}
+          todo el ancho, promesa + ventajas a una columna con las tarjetas al
+          lado y las fotos en cascada. Todo el copy es del cliente (data/sedes.ts). */}
       {sede.fuerza && (
         <section id="fuerza" className="bloque clip" style={{ background: '#DCE5D9' }} data-bg="#EAF0EC">
           <RingsDeco id="sede-fuerza" from="#F8E27A" to="#F29B38" className="bl" />
           <div className="wrap">
-            <div className="eyebrow">Solo en {sede.nombre}</div>
+            <div className="eyebrow">{sede.fuerza.eyebrow}</div>
             <h2 className="fz-titulo">{sede.fuerza.titulo}</h2>
-            <Media className="fz-video" file={sede.fuerza.video} shot={sede.fuerza.shotVideo} />
+            {/* Díptico: la combinación, no por separado (pedido del cliente 21-sep).
+                La de Fuerza y Cardio es "la imagen más importante": columna más
+                ancha y sin offset; Reformer va más chica y calada hacia abajo. */}
+            <div className="fz-hero">
+              <Media
+                className="fz-hero-fuerza"
+                file={sede.fuerza.heroFuerza.file}
+                shot={sede.fuerza.heroFuerza.shot}
+              />
+              <Media
+                className="fz-hero-reformer"
+                file={sede.fuerza.heroReformer.file}
+                shot={sede.fuerza.heroReformer.shot}
+              />
+            </div>
             <div className="fz-texto">
               <div>
-                {sede.fuerza.texto.map((p) => (
-                  <p key={p}>{p}</p>
-                ))}
+                <p className="fz-promesa">{sede.fuerza.promesa}</p>
+                <ul className="fz-ventajas">
+                  {sede.fuerza.ventajas.map((v) => (
+                    <li key={v.t}>
+                      <strong>{v.t}.</strong> {v.d}
+                    </li>
+                  ))}
+                </ul>
                 <a
                   className="btn solid"
                   href={waLink(sede.whatsapp, sede.fuerza.waTexto)}
                   target="_blank"
                   rel="noopener"
                 >
-                  Quiero conocer la sala
+                  {sede.fuerza.cta}
                 </a>
+                <small className="fz-nota">{sede.fuerza.ctaNota}</small>
               </div>
               <div className="fz-puntos">
                 {sede.fuerza.puntos.map((p) => (
                   <div key={p.t} className="card punto">
                     <h3>{p.t}</h3>
-                    <p>{p.d}</p>
+                    <p>
+                      {p.lead && <strong>{p.lead}.</strong>} {p.d}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -191,6 +213,49 @@ export default async function SedePage({ params }: Props) {
           </div>
         </section>
       )}
+
+      {/* MEMBRESÍA F: texto del cliente (PDF 21-sep-2026), dos modelos según
+          la sede: Reformer (Emilio Castro, Núñez) o integral (José Hernández).
+          Texto y CTA a un lado, los beneficios numerados al otro. El botón
+          de acceso a la plataforma apunta a PLATAFORMA_URL, todavía pendiente. */}
+      <section id="membresia" className="bloque clip" style={{ background: '#E9E5CD' }} data-bg="#F0E9D8">
+        <RingsDeco id="sede-membresia" from="#C9C25A" to="#8F9A3E" className="tl" />
+        <div className="wrap">
+          <div className="eyebrow">Membresía F · {sede.nombre}</div>
+          <h2>{sede.membresia.titulo}</h2>
+          <div className="mb-grid">
+            <div className="mb-texto">
+              {sede.membresia.texto.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+              <div className="mb-ctas">
+                <a
+                  className="btn solid"
+                  href={waLink(sede.whatsapp, `Hola! Quiero mi Membresía F en ${sede.nombre}`)}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Quiero mi Membresía F
+                </a>
+                <a className="btn" href={PLATAFORMA_URL}>
+                  Ingresar a mi Membresía F
+                </a>
+              </div>
+            </div>
+            <div className="mb-beneficios">
+              {sede.membresia.beneficios.map((b, i) => (
+                <div key={b.t} className="mb-item">
+                  <div className="num">{String(i + 1).padStart(2, '0')}</div>
+                  <div>
+                    <h3>{b.t}</h3>
+                    <p>{b.d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* GALERÍA */}
       <section id="galeria" data-bg="#F8DDE0">

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { sedes } from '@/data/sedes';
+import { sedes, PLATAFORMA_URL } from '@/data/sedes';
 import Logo from '@/components/logo/Logo';
 import RingsDeco from '@/components/RingsDeco';
 import FooterFx from '@/components/FooterFx';
@@ -34,7 +34,7 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="h-socios">SOCIOS</h4>
-            <a href="#">Ingresá a tu Perfil</a>
+            <a href={PLATAFORMA_URL}>Ingresá a tu Perfil</a>
             {sedes.map(
               (s) =>
                 s.instagram && (

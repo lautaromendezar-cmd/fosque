@@ -31,7 +31,7 @@ await new Promise((r) => server.listen(PORT, r));
 // /nunez/home/ no es una ruta inventada: es una URL REAL del sitio viejo de
 // Bitrix24 que Google todavia tiene indexada. Sirve para probar el 404 con el
 // caso que de verdad recibe trafico.
-const pages = ['/', '/jose-hernandez/', '/emilio-castro/', '/nunez/', '/novedades/', '/nunez/home/'];
+const pages = ['/', '/jose-hernandez/', '/emilio-castro/', '/nunez/', '/novedades/', '/invitacion/', '/nunez/home/'];
 const browser = await chromium.launch();
 const shotsDir = path.join(process.cwd(), 'scripts', 'shots');
 fs.mkdirSync(shotsDir, { recursive: true });

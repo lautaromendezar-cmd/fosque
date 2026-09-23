@@ -87,14 +87,44 @@ La sección ya está armada con tus tomas del gimnasio y el copy lo escribí yo
 como **complemento de Fosque Reformer**, no como gimnasio. Para que no diga
 nada que no sea cierto, tres preguntas cerradas:
 
-1. **¿Qué hay en la sala?** Escribí "máquinas, peso libre y cintas". ¿Hay
-   también bicis o elípticos que convenga nombrar?
-2. **¿Entra en la membresía de Reformer o es un plan aparte?** Hoy la sección
-   no dice nada de precio ni de plan, a propósito. Si es aparte, lo aclaramos.
-3. **"Un instructor te guía y te corrige en cada sesión"**: ¿es literal
-   (siempre hay alguien en la sala) o hay horarios sin instructor?
+1. ~~**¿Qué hay en la sala?**~~ ✅ **Contestado el 21-sep**: mandó el texto de
+   las tres tarjetas (fuerza y peso libre; cintas con y sin motor, bicicletas
+   fijas y elípticos; siempre con instructor). Está cargado tal cual.
+2. ~~**¿Entra en la membresía de Reformer o es un plan aparte?**~~ ✅ **Contestado
+   por el PDF del 21-sep**: la Membresía F de José Hernández es integral
+   (Fuerza, Cardio + Reformer). Cargado en la sección Membresía F de JH.
+3. ~~**"Un instructor te guía y te corrige en cada sesión"**~~ ✅ **Contestado
+   el 21-sep**: "siempre hay un profesional del equipo". Es literal.
 
-**Si no llega**: queda como está. No promete nada de precio ni de horario.
+Las tres quedaron contestadas. Lo que sigue abierto está en el punto 11.
+
+## 11. Lo que llegó en el PDF del 21-sep (membresías, landing, Fuerza y Cardio)
+
+Los tres cambios ya están armados para que los veas en el preview:
+https://fosque-preview.vercel.app (la Membresía F en cada sede, la landing en
+/invitacion/ y Fuerza y Cardio con tu texto en /jose-hernandez/). Cuatro
+preguntas cerradas para cerrarlos:
+
+1. **URL de la plataforma de socios.** El PDF dice `socios.fosquereformer.com`,
+   pero esa dirección no existe (ni el dominio fosquereformer.com está
+   registrado). ¿Cuál es la URL real donde entran hoy las socias (EVO)? Es lo
+   que falta desde agosto para que "Ingresá a tu Perfil" e "Ingresar a mi
+   Membresía F" funcionen.
+2. **"Pilates Reformer" o "Fosque Reformer".** En tu PDF es siempre "Pilates
+   Reformer"; en todo el sitio es "Fosque Reformer, la evolución de Pilates".
+   Lo cargué como lo escribiste. ¿Lo dejamos así o unificamos?
+3. **Semana de Invitación (2 sesiones).** ¿Es permanente o tiene fecha de
+   inicio y fin? Si tiene fecha, la sacamos después para que el sitio no
+   prometa algo vencido.
+4. ~~**Las fotos de Fuerza y Cardio.**~~ ✅ **Resuelto el 21-sep**: la imagen
+   principal de la sección ahora es un díptico con la sala de fuerza (mayoría
+   entrenando, una sonriendo a cámara) al lado de la de Reformer, como
+   pediste. Es una foto generada, igual que el resto de la galería del sitio,
+   así que no hace falta el OK de ninguna alumna: no es nadie real.
+
+Tres retoques que hice sobre tu texto de la landing, por si no van:
+"Actívate" → "Activate" y "Anótate" → "Anotate" (el resto está en vos) e
+"Inicia" → "Inicial" en los niveles.
 
 ## Versión corta para WhatsApp
 

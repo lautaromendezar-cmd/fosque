@@ -31,6 +31,8 @@ export type Sede = {
   shotHero: string; // guion de rodaje del video hero
   shotHome: string; // guion del plano en la home
   galeria: { file: string; shot: string }[];
+  /** Membresía F: el modelo de la sede (Reformer, o integral en José Hernández) */
+  membresia: Membresia;
   /** Sala de fuerza y cardio propia (hoy solo José Hernández): sección extra en la landing */
   fuerza?: Fuerza;
 };
@@ -38,18 +40,111 @@ export type Sede = {
 /**
  * Sección "Fuerza y Cardio" de una sede con sala propia. Pedido del cliente
  * (16-sep-2026): presentarla como COMPLEMENTO de Fosque Reformer, no como un
- * gimnasio (la home dice "Fosque no es un gimnasio"). Copy provisorio escrito
- * acá, a confirmar por el cliente: qué hay en la sala y si entra en la
- * membresía de Reformer.
+ * gimnasio (la home dice "Fosque no es un gimnasio"). TODO el copy es del
+ * cliente (WhatsApp y PDF del 21-sep-2026), tal cual lo mandó: su título
+ * "Fuerza, Cardio + Pilates Reformer: Único en Fosque José Hernández" se
+ * partió en `eyebrow` + `titulo`; en puntos y ventajas, `lead`/`t` es lo que
+ * puso antes de los dos puntos y `d` lo que sigue.
+ * Sigue sin confirmar si la sala entra en la membresía de Reformer.
  */
 export type Fuerza = {
+  eyebrow: string;
+  titulo: string;
+  /** "Promesa" del cliente: una línea grande debajo del video */
+  promesa: string;
+  /** "Ventajas" del cliente: qué te da la combinación */
+  ventajas: { t: string; d: string }[];
+  /** Tarjetas: qué hay en la sala */
+  puntos: { t: string; lead?: string; d: string }[];
+  cta: string;
+  ctaNota: string;
+  waTexto: string;
+  /** Díptico del hero: Fuerza y Cardio + Reformer una al lado de la otra
+   * ("vendemos la combinación, no por separado" — PDF del cliente 21-sep).
+   * heroFuerza reemplazó al video sede-jh-fuerza.mp4 (sigue en public/media/
+   * sin usar, por si vuelve); heroReformer reusa una foto ya en vivo. */
+  heroFuerza: { file: string; shot: string };
+  heroReformer: { file: string; shot: string };
+  fotos: { file: string; shot: string }[];
+};
+
+/**
+ * "Membresía F" (PDF del cliente, 21-sep-2026). Son DOS modelos distintos y
+ * él pidió mostrarlos como tales: Reformer (Emilio Castro y Núñez) y
+ * entrenamiento integral (José Hernández, que suma Fuerza y Cardio). Texto
+ * suyo palabra por palabra; en `beneficios`, `t` es lo que puso antes de los
+ * dos puntos y `d` lo que sigue.
+ */
+export type Membresia = {
   titulo: string;
   texto: string[];
-  puntos: { t: string; d: string }[];
-  waTexto: string;
-  video: string; // asset en public/media/ (cae a placeholder si no existe)
-  shotVideo: string;
-  fotos: { file: string; shot: string }[];
+  beneficios: { t: string; d: string }[];
+};
+
+/**
+ * Acceso a la plataforma de socios (el botón "Ingresá a tu Perfil" del nav y
+ * del footer, y "Ingresar a mi Membresía F" en la sección Membresía).
+ * ⚠️ PENDIENTE DEL CLIENTE desde agosto: nunca mandó la URL real del login
+ * de EVO. En el PDF del 21-sep puso https://socios.fosquereformer.com, pero
+ * ese dominio NO EXISTE (ni siquiera está registrado fosquereformer.com).
+ * Hasta que llegue la URL real, queda en '#'.
+ */
+export const PLATAFORMA_URL = '#';
+
+const MEMBRESIA_BASE = {
+  titulo: 'Tu pasaporte a un nuevo estilo de vida para sentirte mejor todos los días.',
+  acompanamiento: {
+    t: 'Acompañamiento Personalizado',
+    d: 'Profes y Ejecutivas Fosque guiándote con amabilidad y profesionalismo día a día, semana a semana.',
+  },
+  reserva: {
+    t: 'Reserva Inteligente',
+    d: 'Gestión rápida y simple de tus horarios a través de nuestra App y plataforma digital.',
+  },
+  garantia: {
+    t: 'Garantía de Clases',
+    d: 'Agendá y administrá tus sesiones dentro del mes con total flexibilidad.',
+  },
+};
+
+/** Emilio Castro y Núñez: Pilates Reformer */
+const MEMBRESIA_REFORMER: Membresia = {
+  titulo: MEMBRESIA_BASE.titulo,
+  texto: [
+    'Ser parte de la comunidad Fosque es elegir transformar tu vida. La combinación de ejercicio físico, motivación y acompañamiento constante genera resultados reales y duraderos.',
+    'Diseñamos nuestras membresías garantizando la disponibilidad de clases para que accedas a la máxima calidad en Pilates Reformer al mejor precio del mercado, asegurando siempre tu lugar reservado y guiado por un profesional F.',
+  ],
+  beneficios: [
+    MEMBRESIA_BASE.acompanamiento,
+    MEMBRESIA_BASE.reserva,
+    MEMBRESIA_BASE.garantia,
+    {
+      t: 'Acceso Boutique',
+      d: 'Disfrutá de un ambiente agradable, salones climatizados, aromaterapia y equipamiento exclusivo de Pilates Reformer.',
+    },
+  ],
+};
+
+/** José Hernández: Fuerza, Cardio + Reformer */
+const MEMBRESIA_INTEGRAL: Membresia = {
+  titulo: MEMBRESIA_BASE.titulo,
+  texto: [
+    'Ser parte de la comunidad Fosque es elegir transformar tu vida. La combinación perfecta de Pilates Reformer, Fuerza y Cardio, junto a la motivación y el acompañamiento constante, genera resultados reales y duraderos.',
+    'Diseñamos nuestras membresías garantizando la disponibilidad de clases para que accedas a la máxima calidad de entrenamiento integral al mejor precio del mercado, asegurando siempre tu lugar reservado y guiado por un profesional F.',
+  ],
+  beneficios: [
+    {
+      t: 'Entrenamiento Integral (Fuerza, Cardio + Reformer)',
+      d: 'Acceso al método completo que combina la fluidez del Pilates Reformer con zonas equipadas de Fuerza y Cardio para potenciar tu vitalidad.',
+    },
+    MEMBRESIA_BASE.acompanamiento,
+    MEMBRESIA_BASE.reserva,
+    MEMBRESIA_BASE.garantia,
+    {
+      t: 'Acceso Boutique',
+      d: 'Disfrutá de un ambiente agradable, salones climatizados, aromaterapia y equipamiento exclusivo de Pilates Reformer, peso libre y cintas de cardio.',
+    },
+  ],
 };
 
 export const WA_GENERAL = '5491137719572';
@@ -95,26 +190,58 @@ export const sedes: Sede[] = [
       { file: 'galeria-jh-detalle.jpg', shot: '📷 Detalle equipamiento Método Fosque' },
       { file: 'galeria-jh-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
+    membresia: MEMBRESIA_INTEGRAL,
     fuerza: {
-      titulo: 'Fuerza y Cardio, el complemento de tu Reformer.',
-      texto: [
-        'Además de las clases de Fosque Reformer, en José Hernández tenés una sala de fuerza y cardio propia. Máquinas, peso libre y cintas para completar tu entrenamiento con más fuerza y mejor resistencia.',
-        'Acá también entrenás acompañada. Un instructor te guía y te corrige en cada sesión, con la misma calidez de todas las clases Fosque.',
+      eyebrow: 'Único en Fosque José Hernández',
+      titulo: 'Fuerza, Cardio + Pilates Reformer.',
+      promesa: 'La combinación perfecta para mejorar tu vida.',
+      ventajas: [
+        {
+          t: 'Energía y Movilidad',
+          d: 'Ganá movilidad corporal y activá más energía para tu día a día.',
+        },
+        {
+          t: 'Salud y Bienestar',
+          d: 'Descontracturá el cuerpo, comenzá a respirar profundo y disfrutá de dormir mejor.',
+        },
+        {
+          t: 'Vitalidad Emocional',
+          d: 'Aumentá la alegría, mejorá tu estado de ánimo y reencontrate con una actitud positiva.',
+        },
+        {
+          t: 'Transformación Integral',
+          d: 'Despertá la fuerza física e interior y conectá con tu mejor versión.',
+        },
       ],
+      cta: '¡Anotate ahora!',
+      ctaNota: 'Semana de invitación a la experiencia',
       puntos: [
         {
           t: 'SALA DE FUERZA',
-          d: 'Máquinas y peso libre para ganar la fuerza que cuida tu espalda y tus articulaciones.',
+          lead: 'Equipamiento de fuerza y peso libre',
+          d: 'Diseñado para ganar fuerza de forma progresiva. Hoy está comprobado que aumentar la fuerza y la masa muscular es clave para elevar la calidad de vida y favorecer la longevidad.',
         },
-        { t: 'CARDIO', d: 'Cintas para un corazón más fuerte y más energía en tu día a día.' },
+        {
+          t: 'CARDIO',
+          lead: 'Cintas (con y sin motor), bicicletas fijas y elípticos',
+          d: 'Equipamiento ideal para fortalecer el corazón, renovar la vitalidad y activar más energía para disfrutar tu día a día.',
+        },
         {
           t: 'SIEMPRE CON INSTRUCTOR',
-          d: 'Nunca entrenás sola: alguien del equipo te guía y te corrige en cada sesión.',
+          lead: 'Acompañamiento personalizado',
+          d: 'Nunca entrenás sola; siempre hay un profesional del equipo guiándote, corrigiendo tu técnica y acompañándote en cada sesión.',
         },
       ],
-      waTexto: 'Hola! Quiero info de Fuerza y Cardio en José Hernández',
-      video: 'sede-jh-fuerza.mp4',
-      shotVideo: '🎬 VIDEO SALA DE FUERZA · Plano general con instructor asistiendo · Luz cálida',
+      waTexto:
+        'Hola! Quiero anotarme a la Semana de invitación de Fuerza y Cardio en José Hernández',
+      heroFuerza: {
+        file: 'fuerza-jh-grupo.jpg',
+        shot: '📷 Sala de fuerza · alumnas entrenando, la mayoría en movimiento, una sonriendo a cámara',
+      },
+      heroReformer: {
+        file: 'galeria-jh-reformer.jpg',
+        shot: '📷 Sala Reformer en clase · la otra mitad de la combinación',
+      },
       fotos: [
         { file: 'fuerza-jh-cardio.jpg', shot: '📷 Zona cardio · alumna en la cinta, de espaldas' },
         { file: 'fuerza-jh-profe.jpg', shot: '📷 Instructor guiando en la polea' },
@@ -159,6 +286,7 @@ export const sedes: Sede[] = [
       { file: 'galeria-ec-detalle.jpg', shot: '📷 Detalle resortes y carro Reformer' },
       { file: 'galeria-ec-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
+    membresia: MEMBRESIA_REFORMER,
   },
   {
     slug: 'nunez',
@@ -197,6 +325,7 @@ export const sedes: Sede[] = [
       { file: 'galeria-detalle.jpg', shot: '📷 Detalle equipamiento Método Fosque' },
       { file: 'galeria-salida.jpg', shot: '📷 Alumnas saliendo felices · slow motion' },
     ],
+    membresia: MEMBRESIA_REFORMER,
   },
 ];
 

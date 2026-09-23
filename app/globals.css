@@ -1937,11 +1937,24 @@ footer .claim {
   max-width: 16ch;
   margin: 0.8rem 0 5vh;
 }
-#fuerza .fz-video {
-  aspect-ratio: 2 / 1;
+/* Díptico del hero: Fuerza y Cardio + Reformer, "la combinación, no por
+   separado" (pedido del cliente 21-sep). Editorial, no grilla simétrica:
+   columnas desiguales y la de Reformer calada hacia abajo. */
+#fuerza .fz-hero {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 1.6rem;
+  align-items: start;
+}
+#fuerza .fz-hero-fuerza,
+#fuerza .fz-hero-reformer {
+  aspect-ratio: 3 / 4;
   border-radius: var(--r-md);
   box-shadow: 0 30px 80px rgba(26, 24, 21, 0.14);
   will-change: transform;
+}
+#fuerza .fz-hero-reformer {
+  margin-top: 4rem;
 }
 #fuerza .fz-texto {
   display: grid;
@@ -1982,8 +1995,16 @@ footer .claim {
   margin-top: 3rem;
 }
 @media (max-width: 900px) {
-  #fuerza .fz-video {
+  #fuerza .fz-hero {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  #fuerza .fz-hero-fuerza,
+  #fuerza .fz-hero-reformer {
     aspect-ratio: 4 / 3;
+  }
+  #fuerza .fz-hero-reformer {
+    margin-top: 0;
   }
   #fuerza .fz-texto {
     grid-template-columns: 1fr;
@@ -2320,5 +2341,309 @@ footer .claim {
   #e404 .e404-sede,
   #e404 .e404-sede .arrow {
     transition: none;
+  }
+}
+
+/* ---------- FUERZA Y CARDIO: promesa + ventajas (copy del cliente, 21-sep) ---------- */
+#fuerza .fz-promesa {
+  font-family: var(--disp);
+  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  max-width: 18ch;
+  margin: 0 0 1.6rem;
+}
+#fuerza .fz-ventajas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.4rem;
+  max-width: 48ch;
+}
+#fuerza .fz-ventajas li {
+  line-height: 1.55;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed rgba(26, 24, 21, 0.2);
+}
+#fuerza .fz-ventajas li:last-child {
+  border-bottom: 0;
+}
+#fuerza .fz-nota {
+  display: block;
+  margin-top: 0.9rem;
+  font-family: var(--label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+/* ---------- MEMBRESÍA F (landing de sede; dos modelos según la sede) ----------
+   Título grande, el texto con los dos botones a un lado y los beneficios
+   numerados al otro, como una lista editorial: sin tarjetas para no repetir
+   las de INFO y de Fuerza y Cardio en la misma página. */
+#membresia h2 {
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  max-width: 18ch;
+  margin: 0.8rem 0 0;
+}
+#membresia .mb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5vw;
+  align-items: start;
+  margin-top: 6vh;
+}
+#membresia .mb-texto p {
+  line-height: 1.65;
+  margin-bottom: 1rem;
+  max-width: 46ch;
+}
+#membresia .mb-texto p:first-child {
+  font-size: 1.15rem;
+}
+#membresia .mb-ctas {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+}
+#membresia .mb-item {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  gap: 1rem;
+  padding: 1.3rem 0;
+  border-bottom: 1px dashed rgba(26, 24, 21, 0.2);
+}
+#membresia .mb-item:first-child {
+  padding-top: 0.4rem;
+}
+#membresia .mb-item:last-child {
+  border-bottom: 0;
+}
+#membresia .mb-item .num {
+  font-family: var(--label);
+  font-size: 1.7rem;
+  letter-spacing: 0.06em;
+  opacity: 0.45;
+  line-height: 1;
+  padding-top: 0.15rem;
+}
+#membresia .mb-item h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.02em;
+}
+#membresia .mb-item p {
+  line-height: 1.55;
+  opacity: 0.85;
+  font-size: 0.98rem;
+}
+@media (max-width: 900px) {
+  #membresia .mb-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* ---------- INVITACIÓN (landing de campaña /invitacion/) ----------
+   La pregunta gigante invade la foto del hero; después, bloques de color
+   como en el resto del sitio, dos tarjetas de sede asimétricas y un cierre
+   con un botón por sede. */
+.inv-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 16vh;
+  overflow: hidden;
+}
+.inv-hero .wrap {
+  width: 100%;
+}
+.inv-hero h1 {
+  font-family: var(--disp);
+  font-weight: 400;
+  font-size: clamp(3rem, 8.5vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  margin: 1rem 0 0;
+  position: relative;
+  z-index: 2;
+  max-width: 12ch;
+}
+.inv-hero h1 .l {
+  display: block;
+}
+.inv-hero h1 .l:nth-child(2) {
+  color: var(--terracota);
+}
+.inv-hero .inv-media {
+  aspect-ratio: 21 / 9;
+  border-radius: var(--r-lg);
+  margin: -3.5vw 0 0 18%;
+  box-shadow: 0 30px 80px rgba(26, 24, 21, 0.14);
+  position: relative;
+  z-index: 1;
+  will-change: transform;
+}
+.inv-hero .sub {
+  max-width: 46ch;
+  line-height: 1.6;
+  margin-top: 3vh;
+  font-size: 1.05rem;
+}
+.inv-hero .ctas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2.5vh;
+}
+.inv-dos {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 5vw;
+  align-items: center;
+}
+.inv-dos h2 {
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  max-width: 18ch;
+  margin: 0.8rem 0 1.4rem;
+}
+.inv-dos p {
+  line-height: 1.65;
+  max-width: 48ch;
+  margin-bottom: 1rem;
+}
+.inv-dos .inv-pregunta {
+  font-family: var(--disp);
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  line-height: 1.1;
+  margin: 1.8rem 0 1rem;
+  max-width: 20ch;
+}
+.inv-foto {
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-md);
+  box-shadow: 0 30px 80px rgba(26, 24, 21, 0.14);
+}
+#mejorar h2 {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  max-width: 14ch;
+  margin: 0.8rem 0 1.2rem;
+}
+#mejorar .inv-lead {
+  line-height: 1.65;
+  max-width: 52ch;
+  font-size: 1.05rem;
+}
+.inv-sedes {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 1.4rem;
+  margin-top: 6vh;
+  align-items: stretch;
+}
+.inv-sede {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: var(--r-md);
+  padding: 1.4rem 1.4rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.inv-sede .fotos {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 1fr;
+}
+.inv-sede.doble .fotos {
+  grid-template-columns: 1fr 1fr;
+}
+.inv-sede .vph {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-sm);
+}
+.inv-sede .eyebrow {
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
+.inv-sede h3 {
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+  line-height: 1.05;
+  max-width: 24ch;
+}
+.inv-sede .links {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 0.4rem;
+}
+.inv-statement h2 {
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
+  max-width: 26ch;
+  line-height: 1.05;
+  margin-bottom: 1.6rem;
+}
+.inv-statement p {
+  max-width: 52ch;
+  line-height: 1.65;
+  font-size: 1.05rem;
+}
+.inv-final {
+  text-align: center;
+}
+.inv-final h2 {
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  margin: 0.8rem auto 1rem;
+  max-width: 16ch;
+}
+.inv-final p {
+  max-width: 46ch;
+  margin: 0 auto 2.2rem;
+  line-height: 1.6;
+}
+.inv-cta-label {
+  font-family: var(--label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+.inv-botones {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.inv-botones .btn {
+  font-size: 0.95rem;
+  padding: 0.9rem 1.8rem;
+}
+.inv-final small {
+  display: block;
+  margin-top: 1.2rem;
+  opacity: 0.6;
+}
+@media (max-width: 900px) {
+  .inv-hero {
+    padding-top: 14vh;
+  }
+  .inv-hero .inv-media {
+    margin: 1.4rem 0 0;
+    aspect-ratio: 4 / 3;
+  }
+  .inv-dos,
+  .inv-sedes {
+    grid-template-columns: 1fr;
+  }
+  .inv-dos {
+    gap: 2.5rem;
+  }
+  .inv-foto {
+    aspect-ratio: 4 / 3;
+  }
+  .inv-botones {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

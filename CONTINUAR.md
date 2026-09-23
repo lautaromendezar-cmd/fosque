@@ -1,7 +1,7 @@
 # FOSQUE — Estado del proyecto y cómo continuar
 
 **EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
-Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep** (ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
+Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep**, pero desde el 21-sep hay un **preview en https://fosque-preview.vercel.app** (proyecto nuevo, con `noindex`, para mostrar cambios sin tocar el hosting; ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
 
 ## 🖥️ Arrancar en una PC nueva
 
@@ -29,6 +29,147 @@ default (4173 / 4194).
 
 ⚠️ "No se ven las animaciones": revisar "Mostrar animaciones en Windows" / "Reducir movimiento" del SO — el sitio respeta `prefers-reduced-motion` a propósito (trailer del hero y preloader no corren; counters muestran valor final). Preloader y trailer: solo 1ª visita por sesión (`sessionStorage fosque-seen`).
 
+## 🖼️ 21-sep — Díptico del hero de Fuerza y Cardio (sí se pudo cambiar la imagen)
+
+**El video del hero se reemplazó por dos fotos** (`fz-hero`): Fuerza y Cardio
+(más ancha, sin offset — "la imagen más importante") + Reformer (más chica,
+calada hacia abajo), tal como pidió el PDF: "vendemos la combinación, no por
+separado". `sede-jh-fuerza.mp4` queda huérfano en `public/media/` (mismo
+destino que `hero.mp4`), por si vuelve.
+
+**Por qué no se podía cumplir con material real tal cual estaba:** se armó una
+hoja de contacto de los 38 clips crudos (`videos-gimnasio/`, un frame por
+clip) para buscar alguna toma con mayoría sonriendo de frente. No hay
+ninguna — es rodaje candid, todo el mundo está concentrado, de espaldas o de
+perfil. Pedirle "mujeres sonriendo a cámara" no es algo que el material
+filmado tenga.
+
+**Lo que se generó, entonces, es 100% sintético** (no hay alumnas reales
+identificables en la foto nueva) — y esto YA es el criterio del resto de la
+galería del sitio: `galeria-jh-reformer.jpg` (la que se reusó para el lado
+Reformer del díptico) y el resto de `gal-*` en `pruebas-ia/README.md` también
+son recreaciones IA, no fotografía documental. No hace falta el OK de
+consentimiento de ninguna alumna para esto — es contenido publicitario
+inventado, como cualquier foto de stock, no un testimonio real.
+
+**Pipeline**: `nano_banana_pro`, 2 references (`gym-video-sala-base.jpg` para
+el grading cálido + `gym-frame-C0063-video-sala.jpg` para la estructura real
+del techo — la v1 sin la segunda referencia inventó un cielorraso de losetas
+blancas con spots redondos, el mismo bug ya anotado en `fuerza-jh-cardio.jpg`;
+pasarle el frame crudo lo corrigió). 3:4, 2K, 2 créditos. Resultado en
+`pruebas-ia/gym-grupo-v2.png` (fuente) → `fuerza-jh-grupo.jpg` (896×1200,
+`scripts/tmp/png2jpg-896.mjs`, mismo criterio que `png2jpg.mjs`).
+
+**Verificado**: build con tipos, smoke de 7 rutas, captura de `#fuerza` en
+1440 y 390, curl en vivo confirmando el archivo y las clases nuevas.
+
+
+## 📄 21-sep — PDF del cliente: Membresía F + landing de invitación + Fuerza y Cardio v2
+
+El PDF está en `modificaciones-21-09/` (4 páginas). Son los **3 cambios** y
+están los tres **hechos y publicados en el preview** (no en fosque.com):
+
+1. **Membresía F, dos modelos.** "Vamos a tener que meterle cabeza para
+   mostrar los dos tipos de membresía porque son dos modelos diferentes":
+   Reformer (FEC y FNN) e integral (FJH, que suma Fuerza y Cardio). Va como
+   sección `#membresia` **en cada landing de sede**, después de INFO (y de
+   Fuerza y Cardio en JH), con el modelo de esa sede. Datos en `data/sedes.ts`
+   (`MEMBRESIA_REFORMER` / `MEMBRESIA_INTEGRAL`, campo `membresia` de cada
+   sede), texto suyo palabra por palabra; beneficios como lista numerada, sin
+   tarjetas para no repetir las de INFO y F&C en la misma página. Dos botones:
+   "Quiero mi Membresía F" (WhatsApp de la sede) e "Ingresar a mi Membresía F"
+   (plataforma). Reveals en `SedeFx.tsx`.
+   ⚠️ **El acceso a socios sigue muerto.** Pide "un botón de acceso a
+   miembros" con link a `https://socios.fosquereformer.com`: **ese dominio no
+   existe y `fosquereformer.com` ni está registrado** (NXDOMAIN, verificado
+   21-sep). El botón existe en el nav y el footer desde agosto ("Ingresá a tu
+   Perfil") esperando la URL de EVO. Ahora los tres botones comparten
+   `PLATAFORMA_URL` en `data/sedes.ts`, en `'#'` hasta que mande la real.
+   Esto también contesta la duda de la membresía en JH: su Membresía F
+   integral incluye "Entrenamiento Integral (Fuerza, Cardio + Reformer)".
+2. **Landing de aterrizaje: `/invitacion/`** (`app/invitacion/page.tsx` +
+   `components/invitacion/InvitacionFx.tsx` + CSS `INVITACIÓN`). Copy suyo en
+   el mismo orden: pregunta gigante en el hero invadiendo el video de la
+   clase (`sede-emilio-castro.mp4`), "Tu mejor versión" con `metodo.mp4`,
+   "Somos el Programa para Mejorar tu Vida" con dos tarjetas asimétricas
+   (FEC+FNN / FJH) que linkean a las sedes, la frase de "Ganá movilidad…" como
+   statement y el cierre "¡Activate! Te lo merecés." con **un botón por sede**
+   al WhatsApp de esa sede (el sitio no tiene un WhatsApp general de verdad:
+   `WA_GENERAL` es el de JH). Es página de campaña: **`robots: noindex`** en
+   su metadata y no está en el nav; se llega por el link del anuncio. Tres
+   retoques mínimos al copy, avisar: "Actívate"→"Activate" y
+   "Anótate"→"Anotate" (convivían con el voseo del resto) e "Inicia"→"Inicial".
+3. **Fuerza y Cardio v2.** El WhatsApp y la p.4 del PDF traen título, promesa,
+   ventajas, CTA y notas de imagen. Su título "Fuerza, Cardio + Pilates
+   Reformer: Único en Fosque José Hernández" quedó partido en eyebrow + h2;
+   la promesa reemplaza mis dos párrafos de intro (grande, en display); las 4
+   ventajas van como lista con separadores al lado de las 3 tarjetas; el
+   botón dice "¡Anotate ahora!" con "Semana de invitación a la experiencia"
+   debajo. Tipo `Fuerza` cambiado: `eyebrow`, `promesa`, `ventajas`, `cta`,
+   `ctaNota` (se fue `texto`).
+   ⛔ **Lo único que NO se hizo: las imágenes.** Pide "mujeres ejercitándose,
+   la mayoría y con una sonrisa" y "otra con el de Fosque Reformer" porque
+   "vendemos la combinación, no por separado". Choca con el criterio de la
+   tanda 5 (sin caras de alumnas reconocibles) y hoy la sección no tiene
+   Reformer. Antes de tocar: ¿tiene el OK de las alumnas que salen en los 38
+   clips? Si no, son personas generadas en un local real. Propuesta: díptico
+   arriba (clip de sala de fuerza + clip de Reformer).
+
+**Sin decidir, para el cliente** (agregado a `docs/PEDIDO-AL-CLIENTE.md`):
+URL real de socios · "Pilates Reformer" (todo su PDF) vs "Fosque Reformer"
+(todo el sitio) · si la Semana de Invitación es permanente · las fotos con
+caras.
+
+**Verificación (21-sep)**: build con tipos, smoke de 7 rutas (se sumó
+`/invitacion/` a `smoke.mjs`), capturas de `#fuerza`, `#membresia` (JH y
+Núñez) e `/invitacion/` entera en 1440 y 390 con
+`scripts/tmp/shot-secciones.mjs`, y curl en vivo del preview.
+
+## 🔭 21-sep — Preview en Vercel: https://fosque-preview.vercel.app (fosque.com NO cambió)
+
+**Para qué**: mostrar y aprobar cambios sin tocar el hosting del cliente. Es un
+proyecto NUEVO de Vercel (`fosque-preview`, equipo `lautaro-mendez-s-projects`),
+no el `fosque` que se borró el 3-sep. **fosque.com se sigue publicando por FTP
+igual que siempre** (`npm run ftp` + FileZilla); el preview no reemplaza eso.
+
+**Cómo está blindado para que no le compita a fosque.com** (la razón por la que
+se borró el anterior):
+- `vercel.json` manda `X-Robots-Tag: noindex, nofollow, noarchive` en todo.
+- El canonical y el `og:image` apuntan **a sí mismo** (`NEXT_PUBLIC_SITE_URL=
+  https://fosque-preview.vercel.app`, cargada como env var del proyecto en
+  Production y Preview). Así no hay `noindex` + canonical a otro sitio, que era
+  la combinación que Google desaconseja y por la que antes no se puso `noindex`.
+- La URL larga del deployment (`fosque-preview-xxxx-...vercel.app`) redirige al
+  login de Vercel (Deployment Protection); **al cliente se le pasa el alias
+  corto**, que es público.
+
+**Cómo se redeploya** (desde cualquier PC, después de `git pull`):
+```
+vercel link --yes --project fosque-preview --scope lautaro-mendez-s-projects   # solo la 1ª vez en la PC
+vercel pull --yes --environment=production                                    # solo la 1ª vez en la PC
+vercel build --prod --yes && vercel deploy --prebuilt --prod --yes
+```
+Sube solo `out/` (~25 MB, deduplicado por hash); el fuente y los 25 MB de
+`pruebas-ia/` no viajan. `.vercel/` y `.env.local` (token OIDC) quedaron en
+`.gitignore`, los agregó `vercel link`. `vercel deploy --prod` sin `--prebuilt`
+también anda (Vercel corre `next build` con la env var del proyecto), pero sube
+el fuente entero.
+
+**Trampas que ya se pagaron (21-sep)**:
+- `vercel.json` con `"framework": "nextjs"` + `output: 'export'` +
+  `trailingSlash: true` → **todas las páginas dan 404 en Vercel** (los assets
+  sí responden). El `@vercel/next` del CLI 59.11.7 renombra `x/index.html` a
+  `x/index` en `overrides` y `/x/` no resuelve. Por eso el `vercel.json` es
+  `framework: null` + `buildCommand: next build` + `outputDirectory: out` +
+  `trailingSlash: true`: **Vercel sirve `out/` como archivos planos, igual que
+  el Apache**, y `404.html` sale solo. El cache `immutable` de `_next/static`
+  se declara a mano en `headers`.
+- Sin `vercel.json`, el proyecto (preset "Other") sirve `public/` en vez de
+  `out/`: quedaba solo `media/`.
+- `cd .vercel/output` en la shell deja la carpeta ocupada y el siguiente
+  `vercel build` muere con `EBUSY`. Rutas absolutas, no `cd`.
+- `armar-ftp.mjs` ignora `vercel.json`: el paquete FTP no cambia.
+
 ## 🏋️ 16-sep — Sección "Fuerza y Cardio" en José Hernández + se fue el sorteo
 
 **Pedido del cliente**: la sede JH tiene gimnasio (sala de musculación y cardio)
@@ -40,9 +181,17 @@ Sony: 1080p a 119,88 fps con PCM).
 
 **Estado al 20-sep-2026: HECHO, verificado y empaquetado (`deploy-ftp/`), pero
 FRENADO: se le mostró al cliente y NUNCA CONTESTÓ con los textos que quería
-modificar.** No se subió por FTP ni se commiteó: fosque.com sigue mostrando lo
-del 4-sep y **todo esto vive solo en el working tree de esta PC** (`git status`
-lo lista; en la otra PC no existe). Para retomar: reclamarle los textos, cambiar
+modificar.** Commiteado y pusheado el 20-sep (`b7fa00d`).
+**21-sep: el cliente mandó el texto de las tres tarjetas y está cargado tal
+cual en `data/sedes.ts`** (`lead` = lo que puso antes de los dos puntos, en
+negrita; `d` = el resto), con la intro ajustada para nombrar bicicletas y
+elípticos. Visible en https://fosque-preview.vercel.app/jose-hernandez/ .
+Verificado: build con tipos, smoke de las 6 rutas y captura de la sección en
+1440 y 390 (3 líneas por tarjeta en desktop, 4-6 en mobile;
+`scripts/tmp/shot-fuerza.mjs`). **Después llegó el PDF con título, promesa y ventajas: v2 aplicada, ver la
+sección del PDF más arriba.** La membresía quedó contestada por el PDF (la
+Membresía F de JH es integral). No se subió por FTP: fosque.com sigue mostrando lo del
+4-sep (con el pop-up del sorteo todavía puesto). Para retomar: reclamarle los textos, cambiar
 el copy en `data/sedes.ts`, `npm run build` + los tres checks, `npm run ftp`
 (si el clasificador lo frena, `node scripts/armar-ftp.mjs` hace lo mismo) y
 subir. Si aprueba tal cual, `deploy-ftp/` ya está listo para arrastrar.

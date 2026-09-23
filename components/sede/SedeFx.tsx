@@ -118,15 +118,26 @@ export default function SedeFx({ children }: { children: React.ReactNode }) {
         scrollTrigger: { trigger: '#galeria', start: 'top 70%' },
       });
 
-      /* Fuerza y Cardio (solo sedes con sala propia): el video protagonista
-         se desplaza contra el scroll y las fotos entran en cascada como en
-         #equipo. Los .card de la sección ya entran con la regla genérica. */
+      /* Fuerza y Cardio (solo sedes con sala propia): el díptico del hero se
+         desplaza contra el scroll a DOS velocidades distintas (profundidad,
+         no las dos fotos pegadas) y las fotos de abajo entran en cascada
+         como en #equipo. Los .card de la sección ya entran con la regla
+         genérica. */
       if (q('#fuerza').length) {
         gsap.fromTo(
-          q('#fuerza .fz-video'),
-          { y: 36 },
+          q('#fuerza .fz-hero-fuerza'),
+          { y: 30 },
           {
-            y: -36,
+            y: -30,
+            ease: 'none',
+            scrollTrigger: { trigger: '#fuerza', start: 'top bottom', end: 'bottom top', scrub: 1 },
+          },
+        );
+        gsap.fromTo(
+          q('#fuerza .fz-hero-reformer'),
+          { y: 50 },
+          {
+            y: -10,
             ease: 'none',
             scrollTrigger: { trigger: '#fuerza', start: 'top bottom', end: 'bottom top', scrub: 1 },
           },
@@ -143,6 +154,26 @@ export default function SedeFx({ children }: { children: React.ReactNode }) {
           scrollTrigger: { trigger: '#fuerza .fz-fotos', start: 'top 85%' },
         });
       }
+
+      /* Membresía F: el texto entra entero y los beneficios numerados en
+         cascada, uno atrás del otro */
+      gsap.from(q('#membresia .mb-texto'), {
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: '#membresia .mb-grid', start: 'top 82%' },
+      });
+      gsap.from(q('#membresia .mb-item'), {
+        y: 40,
+        opacity: 0,
+        stagger: 0.09,
+        duration: 0.7,
+        ease: 'power2.out',
+        clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: '#membresia .mb-beneficios', start: 'top 85%' },
+      });
 
       /* Mitos: filas en cascada */
       gsap.from(q('.mito'), {
