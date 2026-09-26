@@ -1325,9 +1325,14 @@ corridas en verde.
 ## 26-sep (cierre) — Dos cosas más del cliente
 
 1. **Emilio Castro estaba en 4.6 y las tres sucursales están en 4.7.** Avisó él.
-   ⚠️ **Los `reviews` también están viejos** (620 / 395 / 186, de agosto): son
-   números fijos en `data/sedes.ts` y Google sigue sumando. Conviene pedirle
-   los tres al día cuando revise, o se van a desfasar de nuevo solos.
+   Los `reviews` también estaban viejos (620 / 395 / 186, de agosto) y se
+   desfasaban solos porque son números fijos. **Resuelto de raíz: la interfaz
+   ya no muestra el conteo crudo sino "más de N opiniones"**, con
+   `opinionesDesde()` en `data/sedes.ts`, que redondea para ABAJO al múltiplo
+   de 50 (y baja uno más si cae justo, para que el "más de" no sea mentira).
+   620 → más de 600, 395 → más de 350, 186 → más de 150. El número real se
+   sigue guardando en `reviews`, así se sabe de cuándo es el dato; el que
+   envejece bien es lo que se muestra. **Ya no hay que perseguir esto.**
 
 2. **Membresía F en el menú mobile: era el último ítem**, debajo de "Contacto"
    y fuera de la pantalla, así que el cliente la veía "como una cosa más,

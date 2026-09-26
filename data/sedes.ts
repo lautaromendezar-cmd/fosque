@@ -16,6 +16,9 @@ export type Sede = {
   whatsapp: string; // solo dígitos, formato wa.me
   whatsappDisplay: string;
   rating: string;
+  /** Conteo real de Google el día que se chequeó. NO se muestra crudo: la
+   *  interfaz dice "más de N" con `opinionesDesde()`, así el número no se
+   *  vuelve mentira solo cuando Google suma reseñas. */
   reviews: number;
   horarios: Horario[];
   horarioResumen: string;
@@ -358,4 +361,17 @@ export function mapsLink(placeId: string): string {
 /** Embed sin API key: consulta por dirección (place_id requiere key en el Embed API) */
 export function mapsEmbed(direccion: string): string {
   return `https://maps.google.com/maps?q=${encodeURIComponent(direccion)}&output=embed`;
+}
+
+/**
+ * "más de N opiniones" a partir del conteo real: redondea para ABAJO al
+ * múltiplo de 50, y si cae justo en el número baja uno más, para que el "más
+ * de" sea siempre cierto (con 200 reales, "más de 200" sería falso).
+ *
+ * Nace el 26-09-2026: los conteos estaban clavados desde agosto (620/395/186)
+ * y se desfasaban solos. Así el dato envejece bien y no hay que perseguirlo.
+ */
+export function opinionesDesde(reviews: number): number {
+  const piso = Math.floor(reviews / 50) * 50;
+  return piso >= reviews ? piso - 50 : piso;
 }

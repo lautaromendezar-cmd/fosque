@@ -7,7 +7,15 @@ import Media from '@/components/Media';
 import Mitos from '@/components/Mitos';
 import RingsDeco from '@/components/RingsDeco';
 import SedeFx from '@/components/sede/SedeFx';
-import { sedes, getSede, waLink, mapsLink, mapsEmbed, PLATAFORMA_URL } from '@/data/sedes';
+import {
+  sedes,
+  getSede,
+  waLink,
+  mapsLink,
+  mapsEmbed,
+  PLATAFORMA_URL,
+  opinionesDesde,
+} from '@/data/sedes';
 import { mitosParaSede } from '@/data/mitos';
 
 export function generateStaticParams() {
@@ -46,7 +54,7 @@ export default async function SedePage({ params }: Props) {
       <Nav waNumero={sede.whatsapp} waTexto={`Hola Fosque ${sede.nombre}! Quiero empezar`} />
 
       <div className="badge">
-        ★ {sede.rating} · {sede.reviews} opiniones
+        ★ {sede.rating} · más de {opinionesDesde(sede.reviews)} opiniones
       </div>
 
       {/* HERO: nombre de sede gigante, video en sandwich */}
@@ -300,7 +308,7 @@ export default async function SedePage({ params }: Props) {
             <div className="card resena">
               <div className="stars">
                 {sede.rating}
-                <small>{sede.reviews} opiniones en Google</small>
+                <small>más de {opinionesDesde(sede.reviews)} opiniones en Google</small>
               </div>
               <p>Calificación real de la comunidad Fosque {sede.nombre} en Google Maps.</p>
             </div>

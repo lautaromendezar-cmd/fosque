@@ -8,7 +8,7 @@ import Mitos from '@/components/Mitos';
 import HomeFx from '@/components/home/HomeFx';
 import InvitacionCuerpo from '@/components/invitacion/Cuerpo';
 import Preloader from '@/components/home/Preloader';
-import { sedes, waLink, mapsLink, WA_GENERAL } from '@/data/sedes';
+import { sedes, waLink, mapsLink, WA_GENERAL, opinionesDesde } from '@/data/sedes';
 import { mitosHome } from '@/data/mitos';
 
 const TITULO = '¿Qué es lo más importante de tu vida?';
@@ -253,7 +253,7 @@ export default function Home() {
             <div key={s.slug} className="sede-card">
               <Media file={s.videoFile} shot={s.shotHome} />
               <span className="sc-badge">
-                ★ {s.rating} · {s.reviews} opiniones
+                ★ {s.rating} · más de {opinionesDesde(s.reviews)} opiniones
               </span>
               {/* link estirado a la landing; los accesos directos flotan encima */}
               <Link
