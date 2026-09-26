@@ -693,8 +693,28 @@ nav .links > * {
 .mm-link:hover {
   color: var(--terracota);
 }
-.evo-m {
-  margin-top: 2.5rem;
+/* MEMBRESÍA F destacada, primera cosa del menú mobile (26-09).
+   Compacta a propósito: el menú ya venía justo de alto en 390x844 y esto va
+   arriba de todo, así que gana jerarquía sin comerse la pantalla. */
+.mm-membresia {
+  background: var(--oliva-p);
+  border-radius: var(--r-sm);
+  padding: 1.1rem 1.2rem 1.3rem;
+  display: grid;
+  gap: 0.7rem;
+}
+.mm-membresia .mm-label {
+  margin: 0;
+  opacity: 0.75;
+}
+.mm-membresia p {
+  font-size: 1.05rem;
+  line-height: 1.45;
+  opacity: 0.8;
+}
+.mm-membresia .btn {
+  justify-self: stretch;
+  text-align: center;
 }
 
 .btn {

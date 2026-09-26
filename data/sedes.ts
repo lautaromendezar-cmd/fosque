@@ -274,7 +274,8 @@ export const sedes: Sede[] = [
     direccionPendiente: true,
     whatsapp: '5491121570202',
     whatsappDisplay: '+54 11 2157-0202',
-    rating: '4.6',
+    /* 26-09: el cliente avisó que las tres sucursales están en 4.7 */
+    rating: '4.7',
     reviews: 395,
     horarios: [
       { dias: 'Lunes a Viernes', horas: '8:00 – 21:00' },

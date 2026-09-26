@@ -210,6 +210,22 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
         data-lenis-prevent
       >
         <div className="mm-inner">
+          {/* MEMBRESÍA F, destacada y PRIMERA (26-09). Antes era el último
+              ítem del menú, debajo de "Contacto" y fuera de la pantalla: el
+              cliente la veía "como una cosa más, chiquita" siendo lo más
+              importante que vende. Ahora abre el menú, explica qué es y separa
+              las dos intenciones: sacarla y entrar a la tuya. */}
+          <div className="mm-membresia">
+            <div className="mm-label">Membresía F</div>
+            <p>Tu pasaporte a un nuevo estilo de vida para sentirte mejor todos los días.</p>
+            <a className="btn solid" href={wa} target="_blank" rel="noopener">
+              Quiero mi Membresía F
+            </a>
+            <a className="btn" href={PLATAFORMA_URL}>
+              Ingresar a mi Membresía F
+            </a>
+          </div>
+
           {/* El Instagram de cada sede va acá, al lado de la sede, y no en una
               sección aparte: el menú ya lista las tres, y repetirlas abajo lo
               estiraba 166px — el tercer Instagram quedaba abajo del borde y
@@ -251,9 +267,6 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
           </Link>
           <a className="mm-link" href={wa} target="_blank" rel="noopener">
             Contacto
-          </a>
-          <a className="btn evo-m" href={PLATAFORMA_URL}>
-            Membresía F
           </a>
         </div>
       </div>

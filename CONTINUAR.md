@@ -1320,3 +1320,21 @@ Vercel mismo—, así que no hubo nada que rotar.
 esperaba 350ms fijos contra una `transition: 0.3s` sobre `visibility` (50ms de
 margen). Ahora espera a que la transición termine, con techo de 3s. 6 de 6
 corridas en verde.
+
+
+## 26-sep (cierre) — Dos cosas más del cliente
+
+1. **Emilio Castro estaba en 4.6 y las tres sucursales están en 4.7.** Avisó él.
+   ⚠️ **Los `reviews` también están viejos** (620 / 395 / 186, de agosto): son
+   números fijos en `data/sedes.ts` y Google sigue sumando. Conviene pedirle
+   los tres al día cuando revise, o se van a desfasar de nuevo solos.
+
+2. **Membresía F en el menú mobile: era el último ítem**, debajo de "Contacto"
+   y fuera de la pantalla, así que el cliente la veía "como una cosa más,
+   chiquita" siendo lo más importante que vende. Ahora **abre el menú**: bloque
+   destacado con el nombre, una línea explicando qué es (copy suyo) y las dos
+   intenciones separadas — "Quiero mi Membresía F" (WhatsApp) e "Ingresar a mi
+   Membresía F" (plataforma, todavía en `'#'`).
+   Se mantuvo compacto a propósito: el menú venía justo de alto en 390x844.
+   Verificado que los 3 Instagram siguen alcanzándose **sin scrollear** en
+   todos los anchos, que era la restricción que ya existía.
