@@ -388,7 +388,10 @@ nav {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 1.1rem 6vw;
+  /* 26-09 · el padding vertical es variable porque el desplegable de
+     "Tu Sucursal" lo necesita para saber dónde termina la barra */
+  --nav-pv: 1.1rem;
+  padding: var(--nav-pv) 6vw;
   transition: background-color 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
 }
 nav .logo {
@@ -396,6 +399,10 @@ nav .logo {
 }
 nav .links {
   justify-self: center;
+  /* stretch dentro del grid del nav: sin esto .links mide solo el alto del
+     texto (27px) y queda centrado en una fila de ~52px, así que el `top: 100%`
+     del desplegable caía 12px más arriba del borde de la barra (26-09) */
+  align-self: stretch;
 }
 nav .right {
   justify-self: end;
@@ -417,8 +424,7 @@ nav.scrolled {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 14px 40px rgba(26, 24, 21, 0.08);
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  --nav-pv: 0.75rem;
 }
 nav.scrolled::after {
   opacity: 1;
@@ -471,6 +477,13 @@ nav .right {
 nav .links {
   display: flex;
   gap: 2rem;
+  /* stretch, no center: así .has-sub llega al borde de la fila y el
+     desplegable puede colgar del final de la barra y no de la altura del
+     texto del link (26-09) */
+  align-items: stretch;
+}
+nav .links > * {
+  display: flex;
   align-items: center;
 }
 /* 26-09 · El +20% de tipografía hizo crecer links Y botones del nav a la vez,
@@ -523,7 +536,16 @@ nav .links {
 /* dropdown sedes */
 .has-sub .sub {
   position: absolute;
-  top: calc(100% + 0.9rem);
+  /* 26-09 · antes era `calc(100% + 0.9rem)` sobre la altura del TEXTO del
+     link, así que el panel arrancaba 10px ARRIBA del borde del nav: sus
+     primeros píxeles quedaban debajo del crema translúcido de la barra y la
+     línea de gradiente lo cruzaba por encima. Ahora .has-sub llega al borde
+     de la fila, así que 100% es el final del contenido y solo hay que sumar
+     el padding de la barra para quedar justo abajo.
+     El z-index es para ganarle a nav::after (la línea), que al ser un
+     pseudo-elemento posicionado sin z-index se pintaba después del panel. */
+  z-index: 5;
+  top: calc(100% + var(--nav-pv) + 0.5rem);
   left: 50%;
   transform: translate(-50%, 8px);
   background: #fff;
@@ -2649,8 +2671,16 @@ footer .claim {
 .inv-sede.doble .fotos {
   grid-template-columns: 1fr 1fr;
 }
+/* 26-09 · Las dos tarjetas tienen distinta cantidad de fotos (una la de
+   Reformer, dos la de José Hernández) y con `aspect-ratio` fijo cada columna
+   daba una altura distinta: la de una sola foto quedaba alta, las dos de al
+   lado bajitas, y los títulos arrancaban a distinta altura. Ahora la fila de
+   fotos mide lo mismo en las dos y las imágenes la llenan. */
+.inv-sede .fotos {
+  height: clamp(190px, 21vw, 310px);
+}
 .inv-sede .vph {
-  aspect-ratio: 4 / 3;
+  height: 100%;
   border-radius: var(--r-sm);
 }
 .inv-sede .eyebrow {
@@ -2726,6 +2756,14 @@ footer .claim {
   .inv-dos,
   .inv-sedes {
     grid-template-columns: 1fr;
+  }
+  /* apiladas ya no compiten por altura: vuelve el 4/3 */
+  .inv-sede .fotos {
+    height: auto;
+  }
+  .inv-sede .vph {
+    aspect-ratio: 4 / 3;
+    height: auto;
   }
   .inv-dos {
     gap: 2.5rem;

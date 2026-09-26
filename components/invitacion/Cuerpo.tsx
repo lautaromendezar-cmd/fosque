@@ -61,10 +61,16 @@ export default function InvitacionCuerpo() {
               puedas disfrutar y cuidar lo que más valoras.
             </p>
           </div>
+          {/* 26-09: acá iba `metodo.mp4`, el mismo que el bloque del método del
+              index. Desde que este cuerpo entró al index, la misma imagen
+              aparecía dos veces en la misma página. `metodo.mp4` se queda allá
+              —es el video del método— y acá va una imagen nueva de clase.
+              Es sintética, como el resto de la galería: persona inventada, sin
+              el logo en el buzo (la IA lo deforma, ver CONTINUAR). */}
           <Media
             className="inv-foto inv-reveal"
-            file="metodo.mp4"
-            shot="🎬 VIDEO MÉTODO · Detalle de manos, resortes, deslizamiento del carro"
+            file="metodo-clase.jpg"
+            shot="📷 Clase de Fosque Reformer · profe acompañando la fila"
           />
         </div>
       </section>

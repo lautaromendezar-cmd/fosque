@@ -233,19 +233,27 @@ console.log('\n3) Teclado');
   const page = await ctx.newPage();
   await page.goto(`${base}/nunez/`, { waitUntil: 'networkidle' });
 
+  /* 26-09: esto esperaba 350ms fijos y comparaba `visibility`, pero el panel
+     tiene `transition: 0.3s` sobre esa misma propiedad: 50ms de margen. Con la
+     máquina cargada fallaba ~1 de cada 10 corridas sin que nada estuviera mal.
+     Ahora espera a que la transición TERMINE, con un techo generoso. */
+  const esperarVisibilidad = (estado) =>
+    page
+      .waitForFunction(
+        (e) => getComputedStyle(document.querySelector('.nav-social .sub')).visibility === e,
+        estado,
+        { timeout: 3000 },
+      )
+      .then(
+        () => true,
+        () => false,
+      );
+
   await page.focus('.ig-trigger');
-  await page.waitForTimeout(350);
-  const abrioConFoco = await page.evaluate(
-    () => getComputedStyle(document.querySelector('.nav-social .sub')).visibility === 'visible',
-  );
-  chequear(abrioConFoco, 'al enfocar el ícono con Tab, el desplegable abre');
+  chequear(await esperarVisibilidad('visible'), 'al enfocar el ícono con Tab, el desplegable abre');
 
   await page.keyboard.press('Escape');
-  await page.waitForTimeout(350);
-  const cerroConEsc = await page.evaluate(
-    () => getComputedStyle(document.querySelector('.nav-social .sub')).visibility === 'hidden',
-  );
-  chequear(cerroConEsc, 'Escape lo cierra');
+  chequear(await esperarVisibilidad('hidden'), 'Escape lo cierra');
 
   // y el de "Tu Sucursal" tiene que seguir funcionando por separado
   await page.hover('.has-sub.nlink');

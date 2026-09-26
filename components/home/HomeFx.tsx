@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { cuerpoReveals } from '@/components/invitacion/fx';
+import { partirEnPalabras } from '@/components/texto';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -32,35 +33,6 @@ const HOLD_PREGUNTA = 3;
    igual. Nunca ocultar con CSS algo que revela el JS.
    `mascara` envuelve cada palabra en un marco con overflow hidden, para que
    suban desde abajo como el título del hero. */
-const partirEnPalabras = (el: HTMLElement, mascara: boolean) => {
-  if (el.dataset.partido) return Array.from(el.querySelectorAll<HTMLElement>('.pal'));
-  const palabras = (el.textContent ?? '').trim().split(/\s+/);
-  el.textContent = '';
-  const salida: HTMLElement[] = [];
-  palabras.forEach((palabra, i) => {
-    const marco = document.createElement('span');
-    marco.style.display = 'inline-block';
-    if (mascara) {
-      marco.style.overflow = 'hidden';
-      marco.style.verticalAlign = 'top';
-      /* los display van con line-height 0.95: sin este aire el marco le corta
-         la cola a la "g" de "gimnasio" y a la "q" de "Fosque" */
-      marco.style.paddingBottom = '0.16em';
-      marco.style.marginBottom = '-0.16em';
-    }
-    const pal = document.createElement('span');
-    pal.className = 'pal';
-    pal.style.display = 'inline-block';
-    pal.textContent = palabra;
-    marco.appendChild(pal);
-    el.appendChild(marco);
-    if (i < palabras.length - 1) el.appendChild(document.createTextNode(' '));
-    salida.push(pal);
-  });
-  el.dataset.partido = '1';
-  return salida;
-};
-
 export default function HomeFx({ children }: { children: React.ReactNode }) {
   const scope = useRef<HTMLDivElement>(null);
 

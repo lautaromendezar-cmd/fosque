@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { partirEnPalabras } from '@/components/texto';
 
 /** Reveals del cuerpo de la página de aterrizaje (`<InvitacionCuerpo />`).
  *
@@ -37,6 +38,25 @@ export function cuerpoReveals(q: (sel: string) => Element[]) {
       clearProps: 'transform,opacity',
       scrollTrigger: { trigger: q('.inv-sedes')[0], start: 'top 80%' },
     });
+  }
+
+  /* CTA de cierre: "¡Activate! Te lo merecés." entra palabra por palabra desde
+     abajo, con máscara. Mismo idioma que el título del manifiesto y que el
+     hero, no un efecto nuevo: es el remate de la página y el cliente pidió
+     que se moviera (26-09). `once` para que no se rearme al volver a pasar. */
+  const cta = q('#anotate h2')[0] as HTMLElement | undefined;
+  if (cta) {
+    gsap.fromTo(
+      partirEnPalabras(cta, true),
+      { yPercent: 115 },
+      {
+        yPercent: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        stagger: 0.09,
+        scrollTrigger: { trigger: cta, start: 'top 85%', once: true },
+      },
+    );
   }
 
   /* Botones finales, uno por sucursal */

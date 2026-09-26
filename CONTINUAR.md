@@ -1272,3 +1272,51 @@ npx vercel deploy --prod --yes --scope lautaro-mendez-s-projects
 En el intento fallido el `.env.local` sí subió, pero adentro solo había un
 `VERCEL_OIDC_TOKEN` —lo genera el propio CLI, es de vida corta y fue a parar a
 Vercel mismo—, así que no hubo nada que rotar.
+
+
+## 🔧 26-sep (tarde) — 4 ajustes después de que Lautaro revisó el preview
+
+1. **La foto repetida.** Desde que el cuerpo de la landing entró al index,
+   `metodo.mp4` aparecía DOS veces en la misma página (en `#programa` y en
+   `#version`). `metodo.mp4` se queda en `#programa` —es el video del método— y
+   `#version` pasó a `metodo-clase.jpg`, generada para esta tanda.
+   **Pipeline**: `nano_banana_pro`, 2 referencias (frames del propio
+   `metodo.mp4`), 3:4, 2K. **Tres intentos, y los dos primeros se descartaron
+   mirándolos al 100%**: el v2 salió una sala blanca de boutique con reformers
+   de madera (nada que ver con el galpón real) y el v3, ya con la sala correcta,
+   tenía a la alumna **sin cabeza visible** y los brazos de las dos fundidos.
+   El bueno es el v4, con composición simple: la profe sola en el pasillo, de
+   perfil, sin tocar a nadie, y las alumnas atrás en poses simétricas.
+   Fuentes en `pruebas-ia/metodo-v2..v4.png`.
+   ⚠️ **Dos reglas que salieron de acá**: la profe del video real es una persona
+   identificable, así que la generada es inventada a propósito; y el buzo va
+   **liso, sin el logo**, porque la IA lo deforma (ya anotado el 21-sep).
+
+2. **Las dos tarjetas de `#mejorar` quedan parejas.** Tenían `aspect-ratio: 4/3`
+   por foto, y como una tarjeta tiene una foto y la otra dos, cada columna daba
+   una altura distinta y los títulos arrancaban desfasados. Ahora la fila de
+   fotos tiene altura fija y las imágenes la llenan. Medido: desfase 0px.
+
+3. **Animación en el CTA "¡Activate! Te lo merecés."** Entra palabra por palabra
+   con máscara, igual que el título del manifiesto: mismo idioma, no un efecto
+   nuevo. Vive en `components/invitacion/fx.ts`, así corre en el index y en
+   `/invitacion/`. `partirEnPalabras` salió de HomeFx a `components/texto.ts`
+   porque ahora lo usan los dos motores.
+
+4. **El desplegable de "Tu Sucursal" quedaba debajo de la barra del nav.**
+   `top` se calculaba sobre la altura del TEXTO del link, así que el panel
+   arrancaba **10px arriba** del borde del nav: sus primeros píxeles quedaban
+   bajo el crema translúcido y `nav::after` (la línea de gradiente) se pintaba
+   por encima. Dos causas, las dos arregladas:
+   - `nav .links` medía 27px y quedaba centrado en una fila de ~52px; le faltaba
+     `align-self: stretch` para llegar al borde.
+   - `nav::after` es un pseudo-elemento posicionado sin z-index, así que pintaba
+     después del panel. El panel ahora tiene `z-index: 5`.
+   El padding vertical del nav es la variable `--nav-pv`, que usan el propio nav
+   y el desplegable: una sola fuente de verdad para los dos estados.
+   Medido: 8px de hueco por debajo de la barra, igual arriba y scrolleado.
+
+**Y `check-nav` dejó de ser intermitente**: el test de "Escape lo cierra"
+esperaba 350ms fijos contra una `transition: 0.3s` sobre `visibility` (50ms de
+margen). Ahora espera a que la transición termine, con techo de 3s. 6 de 6
+corridas en verde.
