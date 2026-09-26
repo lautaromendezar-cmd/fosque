@@ -1241,3 +1241,28 @@ saca `HomeFx` solo en la rama mobile de `matchMedia`.
 cargada. **No es del cambio**: el desplegable tiene `transition: 0.3s` sobre
 `visibility` y el test espera 350ms fijos — 50ms de margen. Si molesta, subir
 la espera del test, no tocar el CSS.
+
+
+## ⚠️ 26-sep — Para deployar al preview hacen falta DOS cosas
+
+```bash
+npx vercel deploy --prod --yes --scope lautaro-mendez-s-projects
+```
+
+1. **El `--scope` no es opcional.** Sin él, Vercel contesta `Not authorized`
+   aunque `vercel whoami` diga que la sesión está bien: el `orgId` de
+   `.vercel/project.json` es del equipo, no del usuario.
+
+2. **Hay un `.vercelignore` y es obligatorio.** Sin él, el CLI **no respeta el
+   `.gitignore`** y empieza a subir el proyecto entero: el primer intento del
+   26-sep mandó **7,1 GB** (se llevaba `videos-gimnasio/` y `entrevistas/`,
+   el crudo de cámara) y murió con "File size limit exceeded (1 GB)".
+
+   ⚠️ **Y ojo con la trampa del `.vercelignore`: su sola existencia desactiva
+   el `.gitignore`.** Todo lo que no esté listado ahí se sube, `.env` y
+   `node_modules` incluidos. Por eso el archivo arranca listando los secretos.
+   Si agregás una carpeta pesada al proyecto, va ahí también.
+
+En el intento fallido sí se subió el `.env.local`, pero adentro solo había un
+`VERCEL_OIDC_TOKEN` —lo genera el propio CLI, es de vida corta y fue a parar a
+Vercel mismo—, así que no hubo nada que rotar.

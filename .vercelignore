@@ -1,0 +1,34 @@
+# ⚠️ OJO: la sola existencia de este archivo DESACTIVA el .gitignore para
+# Vercel. Todo lo que no esté listado acá SE SUBE, incluidos .env y node_modules.
+# Nació el 26-sep-2026 porque un `vercel deploy` empezó a subir 7,1 GB: el CLI
+# no estaba respetando el .gitignore y se llevaba el crudo de cámara entero.
+
+# secretos: van primero, por lo de arriba
+.env
+.env.*
+
+# dependencias y artefactos de build (Vercel construye de cero en su lado)
+node_modules
+.next
+out
+.vercel
+*.tsbuildinfo
+
+# material en bruto: no es parte del sitio
+videos-gimnasio
+entrevistas
+pruebas-ia
+
+# la carpeta que se arma para subir por FTP a fosque.com
+deploy-ftp
+
+# devoluciones del cliente: videos, audio y capturas de verificación
+modificaciones-21-09
+modificaciones-26-09
+
+# temporales de los scripts de verificación
+scripts/tmp
+scripts/shots
+
+.git
+.DS_Store
