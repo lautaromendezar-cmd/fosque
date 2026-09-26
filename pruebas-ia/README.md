@@ -48,3 +48,32 @@ como `image_references` → Seedance 2.5 `omni_reference` con `start_image`.
   de cero por la IA (no había toma real). Reemplazada por los discos.
 - Ojo: en `gym-cardio.jpg` el techo salió de chapa con vigas de madera; el real
   es cielorraso liso con spots. Regenerar si el cliente lo marca.
+
+## Clase de Reformer para el index (26-sep-2026, vía CLI `higgsfield`)
+
+Salió de un problema de composición, no de un pedido del cliente: cuando el
+cuerpo de la landing de invitación entró al index, `metodo.mp4` quedó
+apareciendo DOS veces en la misma página. `metodo.mp4` se queda en `#programa`
+(es el video del método) y `#version` pasó a una imagen nueva.
+
+Pipeline: dos frames del propio `metodo.mp4` como `image-references` →
+`nano_banana_pro` 3:4 2K. 6 créditos los tres intentos.
+
+- `metodo-v2.png` — ❌ **descartada**: salió una sala blanca de boutique con
+  reformers de madera clara. Composición linda, pero no es el galpón de
+  Fosque. Faltaba describir la sala, no alcanzaba con pasar el frame.
+- `metodo-v3.png` — ❌ **descartada**: la sala ya es la correcta (mural de
+  pinos, bombitas colgando, reformers metálicos con correas turquesa y
+  amarillas), pero al 100% la alumna **no tiene cabeza visible** y los brazos
+  de las dos se funden. El pedido tenía dos cuerpos entrelazados y ahí la IA
+  se rompe.
+- `metodo-v4.png` — ✅ la que quedó → `public/media/metodo-clase.jpg`
+  (896×1200). La clave fue **simplificar la composición**: la profe sola en el
+  pasillo, de perfil, sin tocar a nadie, y las alumnas atrás acostadas en
+  poses simétricas y bien separadas.
+
+⚠️ Dos reglas de esta tanda:
+- La profe del video real es una **persona identificable**. La generada es
+  inventada a propósito, no un parecido de ella.
+- El buzo va **liso, sin el logo**: la IA lo deforma (ya estaba anotado arriba,
+  y acá se evitó de entrada en vez de pelearlo).

@@ -1343,3 +1343,41 @@ corridas en verde.
    Se mantuvo compacto a propósito: el menú venía justo de alto en 390x844.
    Verificado que los 3 Instagram siguen alcanzándose **sin scrollear** en
    todos los anchos, que era la restricción que ya existía.
+
+
+## 🅿️ 26-sep — DÓNDE QUEDÓ ESTO (leer primero al retomar)
+
+**Todo lo del 26-sep está en la rama `modificaciones-26-09`, NO en `main`.**
+Está publicado en el preview y **esperando que el cliente lo mire** — el
+viernes 26 desapareció sin contestar.
+
+Desde la otra PC:
+
+```bash
+git fetch && git checkout modificaciones-26-09
+npm install
+```
+
+**Si aprueba** (y recién ahí):
+
+```bash
+npm run build && node scripts/smoke.mjs && npm run check-nav && node scripts/check-hero.mjs
+npm run ftp        # ⚠️ REGENERAR: el deploy-ftp/ que está quedó con el copy viejo
+```
+y subir `deploy-ftp/` a `/htdocs` con FileZilla (`deploy/LEEME-SUBIDA.txt`).
+Mergear a `main` es decisión de Lautaro: se dejó en rama a propósito para no
+tocar `main` con algo que el cliente todavía no aprobó.
+
+**Si pide cambios**: el crudo de su devolución (4 videos + transcripciones)
+está en `modificaciones-26-09/`, y arriba en este archivo está el detalle de
+qué se hizo y por qué.
+
+⚠️ **Lo único que sigue trabado es suyo: la URL real de socios.** Ahora pesa
+más que antes, porque "Membresía F" pasó a ser el primer bloque del menú
+mobile y el botón "Ingresar" no lleva a ningún lado. Si no la manda, evaluar
+dejar solo el botón de WhatsApp para no tener un botón muerto en el lugar más
+visible del menú.
+
+Pendiente de cobro al 26-sep: esta tanda de cambios (presupuestada en
+$150.000, ver el hilo con Lautaro), además de los $200.000 de la seña y los
+videos con IA.
