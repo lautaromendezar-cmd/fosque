@@ -16,3 +16,10 @@ entrevistas/
 
 .vercel
 .env*
+
+# devolución del cliente 26-sep: los 4 videos que grabó, el audio extraído y
+# las capturas de verificación. Las transcripciones (.txt) y las hojas de
+# contacto SÍ van al repo: son livianas y son la fuente de lo que pidió.
+modificaciones-26-09/*.mp4
+modificaciones-26-09/desgrabado/*.wav
+modificaciones-26-09/capturas/

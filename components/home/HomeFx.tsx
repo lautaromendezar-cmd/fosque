@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { cuerpoReveals } from '@/components/invitacion/fx';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -214,15 +215,20 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           },
         );
       }
-      const mfTexto = q('#manifiesto .mf-texto')[0] as HTMLElement | undefined;
-      if (mfTexto) {
+      /* 26-09: el texto del cliente pasó a ser DOS párrafos. Se parten los dos
+         y las palabras se encadenan en una sola tanda, así el encendido cruza
+         de un párrafo al otro sin cortarse (antes se animaba solo el [0] y el
+         segundo quedaba quieto). */
+      const mfParrafos = q('#manifiesto .mf-texto') as HTMLElement[];
+      if (mfParrafos.length) {
+        const palabras = mfParrafos.flatMap((el) => partirEnPalabras(el, false));
         gsap.fromTo(
-          partirEnPalabras(mfTexto, false),
+          palabras,
           { opacity: 0.22 },
           {
             opacity: 1,
             ease: 'none',
-            stagger: 0.08,
+            stagger: 0.05,
             scrollTrigger: {
               trigger: '#manifiesto',
               start: 'top 62%',
@@ -333,8 +339,14 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       });
       /* En mobile la track es un scroller nativo (overflow-x: auto): un `y`
          residual de la entrada hace que el scroller clipee la card por abajo.
-         Ahí la entrada es solo opacidad. */
+         Ahí la entrada es solo opacidad.
+         Y `data-lenis-prevent` va SOLO acá: en desktop la track queda pineada
+         ocupando toda la pantalla, así que el puntero está siempre encima y
+         Lenis se negaba a scrollear la página — la sección "se trababa"
+         (devolución del cliente 26-09, reproducido también en la PC). */
       mm.add('(max-width: 900px)', () => {
+        const track = q('.sedes-track')[0];
+        track?.setAttribute('data-lenis-prevent', '');
         gsap.from(q('.sede-card'), {
           opacity: 0,
           duration: 0.8,
@@ -343,7 +355,13 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
           clearProps: 'opacity',
           scrollTrigger: { trigger: '#sedes-pin', start: 'top 75%' },
         });
+        return () => track?.removeAttribute('data-lenis-prevent');
       });
+
+      /* ---- Página de aterrizaje embebida (26-09) ----
+         Mismos reveals que en /invitacion/, desde el módulo compartido, para
+         que el bloque se comporte igual en las dos páginas. */
+      cuerpoReveals(q);
 
       /* ---- Mitos: filas en cascada ---- */
       gsap.from(q('.mito'), {

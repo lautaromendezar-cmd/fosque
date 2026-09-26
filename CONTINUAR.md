@@ -1155,3 +1155,89 @@ Todo lo de hoy está DEPLOYADO y en el repo — para continuar alcanza `git pull
 ## 🗂️ Otros archivos fuera del repo (PC de casa, Desktop/Claude/fosque/)
 
 `CONTINUAR.md` viejo (reemplazado por este), `lineamientos nuevos fosque.txt` (copiado a `docs/`), `files/` (brief y prototipos originales). Nada de esto hace falta: para trabajar el SITIO alcanza con el repo. Lo único que sí puede faltar es el material en bruto del rodaje (ver arriba).
+
+
+## 📹 26-sep — Devolución del cliente por WhatsApp y 4 videos
+
+El material crudo está en `modificaciones-26-09/`: los 4 `.mp4` que grabó
+Gerardo, las transcripciones en `desgrabado/*.txt` (whisper small, español) y
+las capturas de verificación en `capturas/`.
+
+⚠️ **Los videos 3 y 4 mandan sobre el 1 y el 2.** Grabó los dos primeros de
+noche, después "descansó bien" y volvió a grabar los mismos pedidos mejor
+ordenados. Lo que sobrevive del 1 y el 2 es lo que el 3 y el 4 repiten.
+
+### Lo que se hizo
+
+1. **Tipografía +20%.** Textual del video 1: *"agrandar todas estas letras,
+   todas en toda la página, todas, agrandarlas por lo menos un veinte o un
+   treinta por ciento, sin miedo... porque somos todos, como dice mi abuela,
+   chicatos"*. Se escalaron 54 declaraciones de `font-size` una por una más la
+   base de `body` (la mayoría del texto corrido no tenía tamaño propio y
+   heredaba los 16px del navegador). **Los displays no se tocaron**: h1/h2,
+   títulos gigantes, contadores y statements quedan como estaban.
+
+   ⚠️ **El nav es la excepción: subió 9%, no 20%** (`.nlink` 0.88 → 0.96rem).
+   A +20% la fila de links se partía en dos renglones entre 1101 y 1400px
+   —medido en el DOM, no a ojo—. Además el nav cede padding y gap en ese tramo
+   (`@media (max-width: 1300px)`), que es lo que permitió el 9% sin romperlo.
+   Si alguna vez hay que agrandarlo más, hay que sacar un link del nav.
+
+2. **Index reordenado** (video 3): hero → "FOSQUE no es un gimnasio ni un
+   estudio de pilates" (texto nuevo suyo, dos párrafos) → **la página de
+   aterrizaje entera** → 24 años → Reformer → **Pilates Reformer + Fuerza y
+   Cardio** con botón (videos 2 y 4) → Elegí tu Fosque.
+
+3. **La landing vive en dos lados sin duplicarse.** Su cuerpo salió de
+   `app/invitacion/page.tsx` a `components/invitacion/Cuerpo.tsx`, y los
+   reveals a `components/invitacion/fx.ts`, que usan InvitacionFx y HomeFx.
+   **Tocar el copy ahí, no en las páginas.**
+   El hero de la landing NO entra al index: los dos eran, literal, la misma
+   pregunta ("¿Qué es lo más importante de tu vida?"). El hero del index se
+   quedó con la pregunta y adoptó la bajada rica de la landing.
+   `/invitacion/` sigue existiendo con su `noindex` para pautar (decisión
+   consultada y aprobada el 26-09).
+
+4. **Landing de sucursal reordenada** (videos 1 y 4). Antes la membresía caía
+   después del mapa y "se perdía". Ahora: hero → Fuerza y Cardio → Conocé el
+   espacio → equipo → mitos → Membresía F → horarios, dirección y mapa →
+   CTA final.
+
+5. **José Hernández**: el hero decía "MATADEROS" (el barrio) y ahora dice
+   **José Hernández**, con Mataderos de bajada. El título de la sección se dio
+   vuelta a **"Pilates Reformer + Fuerza y Cardio"**. El hero es un díptico
+   con **`sede-jh-fuerza.mp4`, que había quedado huérfano el 21-sep** — no se
+   reusaron las fotos del díptico de la sección, que está justo abajo.
+
+6. **"sede" → "sucursal"** en todo el copy visible. Las clases, ids, slugs y
+   el tipo `Sede` siguen igual a propósito: renombrarlos era ruido sin valor.
+
+7. **Botón "Membresía F"** en nav y footer (antes "Ingresá a tu Perfil").
+   ⚠️ Sigue apuntando a `PLATAFORMA_URL`, que **sigue en `'#'`**: el cliente
+   todavía no mandó la URL real de socios.
+
+### El scroll trabado de "Elegí tu Fosque" — arreglado
+
+No era GSAP. `.sedes-track` tenía `data-lenis-prevent` en el markup, pero ese
+atributo solo hace falta en mobile, donde la track es un scroller nativo
+(`overflow-x: auto` vive dentro de `@media (max-width: 900px)`). En desktop la
+track queda pineada ocupando toda la pantalla, el puntero está siempre encima
+y Lenis tenía orden de ignorar la rueda ahí. Ahora el atributo lo pone y lo
+saca `HomeFx` solo en la rama mobile de `matchMedia`.
+
+### Dos cosas que aparecieron al verificar
+
+- **`#info` desbordaba 20px a 360px** en José Hernández: con el texto más
+  grande, pares como "Lunes a Viernes" + "7:00 – 22:00" no entran en un
+  renglón, y los ítems de un flex no bajan de su contenido. `.horario` ahora
+  envuelve.
+- **El manifiesto animaba solo el primer párrafo** (`q('.mf-texto')[0]`).
+  Con el texto nuevo, que son dos, el segundo quedaba quieto. Ahora se parten
+  los dos y las palabras se encadenan en una sola tanda (54 palabras).
+
+### Test intermitente, preexistente
+
+`check-nav` → "Escape lo cierra" falla ~1 de cada 4 corridas con la máquina
+cargada. **No es del cambio**: el desplegable tiene `transition: 0.3s` sobre
+`visibility` y el test espera 350ms fijos — 50ms de margen. Si molesta, subir
+la espera del test, no tocar el CSS.

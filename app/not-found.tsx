@@ -12,7 +12,7 @@ import { sedes, waLink, WA_GENERAL } from '@/data/sedes';
 // al visitante el camino a su sede.
 export const metadata: Metadata = {
   title: 'Esta página no existe',
-  description: 'La página que buscabas se mudó o ya no existe. Entrá por tu sede de Fosque.',
+  description: 'La página que buscabas se mudó o ya no existe. Entrá por tu sucursal de Fosque.',
   // Next ya le pone el noindex al not-found, no hace falta repetirlo. Lo que SÍ
   // hace falta es matar el canonical heredado del layout: dejaba el 404
   // apuntando a /_not-found/, una URL que no existe.
@@ -35,7 +35,7 @@ export default function NotFound() {
             </h1>
             <p className="intro">
               Renovamos el sitio y algunas direcciones viejas quedaron dando vueltas por
-              internet. La información sigue estando: elegí tu sede y te llevamos.
+              internet. La información sigue estando: elegí tu sucursal y te llevamos.
             </p>
           </div>
 

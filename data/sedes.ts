@@ -33,6 +33,10 @@ export type Sede = {
   galeria: { file: string; shot: string }[];
   /** Membresía F: el modelo de la sede (Reformer, o integral en José Hernández) */
   membresia: Membresia;
+  /** Video de la sala de fuerza, para la mitad derecha del díptico del hero
+   *  (26-09). Solo en sucursales con sala propia. */
+  videoFuerzaFile?: string;
+  shotFuerza?: string;
   /** Sala de fuerza y cardio propia (hoy solo José Hernández): sección extra en la landing */
   fuerza?: Fuerza;
 };
@@ -154,7 +158,9 @@ export const sedes: Sede[] = [
     slug: 'jose-hernandez',
     nombre: 'José Hernández',
     heroBack: 'Fosque',
-    heroFront: 'Mataderos',
+    /* 26-09: decía 'Mataderos' (el barrio) y el cliente lo marcó: el hero
+       tiene que decir la sucursal. El barrio pasa a la bajada de abajo. */
+    heroFront: 'José Hernández',
     barrio: 'Mataderos',
     codigo: 'FJH',
     numero: '01',
@@ -176,10 +182,16 @@ export const sedes: Sede[] = [
     placeId: 'ChIJEXzKSQfJvJUR7XX8NQLpogI',
     instagram: 'https://www.instagram.com/fosque.josehernandez/',
     descripcion:
-      'La sede más completa de la red: Fosque Reformer + Fuerza y Cardio, con sala de musculación propia. Abierta de lunes a lunes para que el tiempo nunca sea excusa.',
+      'La sucursal más completa de la red: Fosque Reformer + Fuerza y Cardio, con sala de musculación propia. Abierta de lunes a lunes para que el tiempo nunca sea excusa.',
     claim: 'La más potente',
     colorFondo: '#F5E3CB',
     videoFile: 'sede-jose-hernandez.mp4',
+    /* 26-09: vuelve sede-jh-fuerza.mp4, que había quedado huérfano el 21-sep
+       cuando el hero de la sección Fuerza pasó a ser un díptico de fotos.
+       Acá es la mitad de Fuerza y Cardio del hero de la sucursal, y así el
+       hero no repite las dos fotos de la sección que viene justo abajo. */
+    videoFuerzaFile: 'sede-jh-fuerza.mp4',
+    shotFuerza: '🎬 VIDEO SALA DE FUERZA · Recorrido por la sala de musculación y la zona cardio',
     shotHero:
       '🎬 VIDEO SEDE · Travelling de entrada: puerta → recepción → sala Reformer → sala de fuerza · Un solo plano, gimbal, hora dorada',
     shotHome: '🎬 Fachada + travelling de entrada · Hora dorada',
@@ -193,7 +205,8 @@ export const sedes: Sede[] = [
     membresia: MEMBRESIA_INTEGRAL,
     fuerza: {
       eyebrow: 'Único en Fosque José Hernández',
-      titulo: 'Fuerza, Cardio + Pilates Reformer.',
+      /* 26-09: el cliente lo pidió al revés — Reformer primero. */
+      titulo: 'Pilates Reformer + Fuerza y Cardio.',
       promesa: 'La combinación perfecta para mejorar tu vida.',
       ventajas: [
         {

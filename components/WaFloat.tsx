@@ -52,8 +52,8 @@ export default function WaFloat({ numero, directo = false }: { numero: string; d
 
   return (
     <div id="wa-box" ref={box}>
-      <div className={`wa-panel${open ? ' open' : ''}`} role="dialog" aria-label="Elegí tu sede">
-        <p className="wa-q">¿Con qué sede querés hablar?</p>
+      <div className={`wa-panel${open ? ' open' : ''}`} role="dialog" aria-label="Elegí tu sucursal">
+        <p className="wa-q">¿Con qué sucursal querés hablar?</p>
         {sedes.map((s) => (
           <a
             key={s.slug}

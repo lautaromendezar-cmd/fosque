@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import { sedes, waLink, PLATAFORMA_URL } from '@/data/sedes';
 import Logo from '@/components/logo/Logo';
 
+// 26-09: el botón decía "Ingresá a tu Perfil". El cliente pidió que la
+// membresía tenga su propio botón ("un botón Membresía F, como la habíamos
+// visto"), porque en las landings "quedó relegada".
 // URL del login de socios (EVO): PLATAFORMA_URL vive en data/sedes.ts y sigue
 // pendiente del cliente; la comparten el nav, el footer y la sección Membresía.
 
@@ -159,7 +162,7 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
               className="ig-trigger"
               aria-expanded={ig.open}
               aria-haspopup="true"
-              aria-label="Instagram de Fosque, por sede"
+              aria-label="Instagram de Fosque, por sucursal"
               onClick={() => (ig.open ? ig.cerrarYa() : ig.abrir())}
             >
               <IconIg />
@@ -183,7 +186,7 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
             </div>
           </div>
           <a className="btn evo" href={PLATAFORMA_URL}>
-            Ingresá a tu Perfil
+            Membresía F
           </a>
           <a className="btn cta" href={wa} target="_blank" rel="noopener">
             Empezá hoy
@@ -250,7 +253,7 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
             Contacto
           </a>
           <a className="btn evo-m" href={PLATAFORMA_URL}>
-            Ingresá a tu Perfil
+            Membresía F
           </a>
         </div>
       </div>

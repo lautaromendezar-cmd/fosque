@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     siteName: 'Fosque',
     title: 'Fosque — Mejora la Vida',
     description:
-      'Fosque Reformer, la evolución de Pilates. Tres sedes en Buenos Aires: José Hernández, Emilio Castro y Núñez.',
+      'Fosque Reformer, la evolución de Pilates. Tres sucursales en Buenos Aires: José Hernández, Emilio Castro y Núñez.',
   },
 };
 

@@ -154,3 +154,25 @@ Tres retoques que hice sobre tu texto de la landing, por si no van:
 > 7) El dominio fosque.com, ¿lo comprás vos?
 > 8) ¿Vas a hacer publicidad paga con esto? Si sí, necesito el Pixel de Meta y
 >    Google Analytics antes de que arranque, si no no hay forma de medir.
+
+## 26-sep-2026 — Después de los 4 videos
+
+Lo de siempre, que sigue trabado:
+
+- **La URL real de socios.** El botón ahora se llama "Membresía F" en el nav y
+  en el footer, como pidió, pero sigue en `'#'`. `socios.fosquereformer.com`
+  no existe y `fosquereformer.com` ni está registrado (verificado el 21-sep).
+  Hace falta la URL de EVO.
+
+Lo nuevo de esta tanda:
+
+- **"Pilates Reformer" vs "Fosque Reformer".** Todo su material dice Pilates
+  Reformer; todo el sitio dice Fosque Reformer. En el título de José Hernández
+  se respetó lo suyo ("Pilates Reformer + Fuerza y Cardio") y quedó conviviendo
+  con el "Fosque Reformer" del resto. Hay que decidir cuál manda.
+- **La Semana de Invitación ahora está en la home.** La página de aterrizaje
+  entera entró al index, así que la promesa de "2 sesiones de invitación" pasó
+  de ser una campaña puntual a estar en la portada. ¿Es permanente? Si es una
+  promo con fecha, hay que poder apagarla.
+- **`/invitacion/` sigue viva y sin indexar**, para pautar. El contenido está
+  duplicado a propósito: si en algún momento quiere una sola, avisar.

@@ -9,7 +9,7 @@ import { WA_GENERAL } from '@/data/sedes';
 export const metadata: Metadata = {
   title: 'El Equipo Fosque',
   description:
-    'Profe Fosque, Ejecutiva Fosque y el personal de cada sede: las personas que te van a cuidar.',
+    'Profe Fosque, Ejecutiva Fosque y el personal de cada sucursal: las personas que te van a cuidar.',
 };
 
 export default function EquipoPage() {
@@ -23,7 +23,7 @@ export default function EquipoPage() {
           <h1>Las personas que te van a cuidar.</h1>
           <p className="intro">
             Detrás de cada clase hay un equipo que te conoce por tu nombre: quienes te entrenan,
-            quienes te acompañan y quienes preparan cada sede para recibirte.
+            quienes te acompañan y quienes preparan cada sucursal para recibirte.
           </p>
 
           <div className="grupo" id="profe">
@@ -59,7 +59,7 @@ export default function EquipoPage() {
             <div className="g-head">
               <h2>Personal de Mantenimiento</h2>
               <p className="g-desc">
-                Los responsables de que cada sede esté siempre limpia e impecable para recibirte.
+                Los responsables de que cada sucursal esté siempre limpia e impecable para recibirte.
               </p>
             </div>
             <div className="row">

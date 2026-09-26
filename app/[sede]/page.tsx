@@ -54,8 +54,30 @@ export default async function SedePage({ params }: Props) {
         <RingsDeco id="sede-hero" from="#8FD5CC" to="#43A9A1" className="bl" />
         <div className="stack">
           <div className="title-back">{sede.heroBack}</div>
-          <Media className="frame" file={sede.videoFile} shot={sede.shotHero} />
-          <div className="title-front">{sede.heroFront}</div>
+          {/* 26-09 (video 4): donde hay sala propia el hero muestra las DOS
+              cosas —"acá tiene que haber una imagen de Reformer y una de la
+              parte de Fuerza y Cardio"—. Las sucursales sin sala (Emilio
+              Castro y Núñez) siguen con el video único de siempre. */}
+          {sede.videoFuerzaFile ? (
+            <div className="frame hero-dipt">
+              <Media className="hd-reformer" file={sede.videoFile} shot={sede.shotHero} />
+              <Media
+                className="hd-fuerza"
+                file={sede.videoFuerzaFile}
+                shot={sede.shotFuerza as string}
+              />
+            </div>
+          ) : (
+            <Media className="frame" file={sede.videoFile} shot={sede.shotHero} />
+          )}
+          {/* `largo` achica el display cuando el nombre no entra a 11vw
+              ("José Hernández" son 14 caracteres contra los 9 de antes) */}
+          <div className={`title-front${sede.heroFront.length > 10 ? ' largo' : ''}`}>
+            {sede.heroFront}
+          </div>
+          {/* "Podría ser Mataderos abajo" (video 4): el barrio no se pierde,
+              pasa a ser bajada. En Núñez barrio y nombre son lo mismo. */}
+          {sede.barrio !== sede.heroFront && <div className="hero-barrio">{sede.barrio}</div>}
         </div>
         <p className="sub">{sede.descripcion}</p>
         <div className="ctas">
@@ -75,80 +97,13 @@ export default async function SedePage({ params }: Props) {
         </div>
       </div>
 
-      {/* INFO */}
-      <section id="info" data-bg="#DCEAEE">
-        <div className="wrap grid">
-          <div>
-            <div className="eyebrow">
-              Sede {sede.nombre} · {sede.barrio}
-            </div>
-            <h2>Todo lo que necesitás, en un solo lugar.</h2>
-            <div className="card">
-              <h3>HORARIOS</h3>
-              {sede.horarios.map((h) => (
-                <div key={h.dias} className="horario">
-                  <span>{h.dias}</span>
-                  <b>{h.horas}</b>
-                </div>
-              ))}
-            </div>
-            <div className="card">
-              <h3>CONTACTO</h3>
-              <div className="horario">
-                <span>WhatsApp</span>
-                <b>{sede.whatsappDisplay}</b>
-              </div>
-              <div className="horario">
-                <span>Dirección</span>
-                <b>{sede.direccion}</b>
-              </div>
-              <div className="horario">
-                <span>Instagram</span>
-                <b>
-                  {sede.instagram ? (
-                    <a
-                      href={sede.instagram}
-                      target="_blank"
-                      rel="noopener"
-                      style={{ color: 'inherit', textDecoration: 'underline' }}
-                    >
-                      @{new URL(sede.instagram).pathname.replaceAll('/', '')}
-                    </a>
-                  ) : (
-                    'Muy pronto'
-                  )}
-                </b>
-              </div>
-            </div>
-            <div className="card resena">
-              <div className="stars">
-                {sede.rating}
-                <small>{sede.reviews} opiniones en Google</small>
-              </div>
-              <p>Calificación real de la comunidad Fosque {sede.nombre} en Google Maps.</p>
-            </div>
-          </div>
-          <div>
-            <div className="mapa">
-              <iframe
-                src={mapsEmbed(sede.direccion)}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title={`Mapa de Fosque ${sede.nombre}`}
-              />
-              <a
-                className="btn como-llegar"
-                href={mapsLink(sede.placeId)}
-                target="_blank"
-                rel="noopener"
-              >
-                Cómo llegar
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      {/* ORDEN DE LA PÁGINA — devolución del cliente 26-09 (videos 1 y 4).
+          Antes: info (horarios/mapa) → fuerza → membresía → galería → …
+          "Eso no me gustó": la membresía quedaba abajo de los datos de la
+          sucursal y se perdía, siendo "lo más importante". Ahora la página
+          vende primero y recién al final dice dónde queda:
+          hero → Fuerza y Cardio → conocé el espacio → equipo → mitos →
+          Membresía F → horarios, dirección y mapa → CTA final. */}
       {/* FUERZA Y CARDIO: solo sedes con sala propia (hoy José Hernández).
           Editorial, no grilla simétrica: título grande, video protagonista a
           todo el ancho, promesa + ventajas a una columna con las tarjetas al
@@ -214,6 +169,46 @@ export default async function SedePage({ params }: Props) {
         </section>
       )}
 
+      {/* GALERÍA */}
+      <section id="galeria" data-bg="#F8DDE0">
+        <h2 className="wrap">Conocé el espacio antes de venir.</h2>
+        <div className="rail" data-lenis-prevent>
+          {sede.galeria.map((g) => (
+            <Media key={g.file + g.shot} file={g.file} shot={g.shot} />
+          ))}
+        </div>
+      </section>
+
+      {/* EQUIPO DE LA SEDE */}
+      <section id="equipo" data-bg="#EADFF0">
+        <RingsDeco id="sede-equipo" from="#F3A6C8" to="#CDB6D9" className="br" />
+        <div className="wrap">
+          <div className="eyebrow">El equipo de {sede.nombre}</div>
+          <h2>Las personas que te van a cuidar.</h2>
+          <div className="row">
+            <Media file="equipo-1.jpg" shot="📷 Retrato instructora · fondo crema" />
+            <Media file="equipo-2.jpg" shot="📷 Ejecutiva en recepción" />
+            <Media file="equipo-3.jpg" shot="📷 Instructor corrigiendo postura" />
+            <Media file="equipo-4.jpg" shot="📷 Equipo completo de la sede" />
+          </div>
+        </div>
+      </section>
+
+      {/* MITOS */}
+      <section
+        id="mitos"
+        className="bloque clip"
+        style={{ background: sede.colorFondo }}
+        data-bg="#F0E9D8"
+      >
+        <RingsDeco id="sede-mitos" from="#93A48D" to="#5E99A8" className="tl" />
+        <div className="wrap">
+          <div className="eyebrow">Derribando mitos</div>
+          <h2>Todo lo que pensás antes de animarte.</h2>
+          <Mitos mitos={mitosParaSede(sede)} />
+        </div>
+      </section>
+
       {/* MEMBRESÍA F: texto del cliente (PDF 21-sep-2026), dos modelos según
           la sede: Reformer (Emilio Castro, Núñez) o integral (José Hernández).
           Texto y CTA a un lado, los beneficios numerados al otro. El botón
@@ -257,43 +252,77 @@ export default async function SedePage({ params }: Props) {
         </div>
       </section>
 
-      {/* GALERÍA */}
-      <section id="galeria" data-bg="#F8DDE0">
-        <h2 className="wrap">Conocé el espacio antes de venir.</h2>
-        <div className="rail" data-lenis-prevent>
-          {sede.galeria.map((g) => (
-            <Media key={g.file + g.shot} file={g.file} shot={g.shot} />
-          ))}
-        </div>
-      </section>
-
-      {/* EQUIPO DE LA SEDE */}
-      <section id="equipo" data-bg="#EADFF0">
-        <RingsDeco id="sede-equipo" from="#F3A6C8" to="#CDB6D9" className="br" />
-        <div className="wrap">
-          <div className="eyebrow">El equipo de {sede.nombre}</div>
-          <h2>Las personas que te van a cuidar.</h2>
-          <div className="row">
-            <Media file="equipo-1.jpg" shot="📷 Retrato instructora · fondo crema" />
-            <Media file="equipo-2.jpg" shot="📷 Ejecutiva en recepción" />
-            <Media file="equipo-3.jpg" shot="📷 Instructor corrigiendo postura" />
-            <Media file="equipo-4.jpg" shot="📷 Equipo completo de la sede" />
+      {/* INFO */}
+      <section id="info" data-bg="#DCEAEE">
+        <div className="wrap grid">
+          <div>
+            <div className="eyebrow">
+              Sucursal {sede.nombre} · {sede.barrio}
+            </div>
+            <h2>Todo lo que necesitás, en un solo lugar.</h2>
+            <div className="card">
+              <h3>HORARIOS</h3>
+              {sede.horarios.map((h) => (
+                <div key={h.dias} className="horario">
+                  <span>{h.dias}</span>
+                  <b>{h.horas}</b>
+                </div>
+              ))}
+            </div>
+            <div className="card">
+              <h3>CONTACTO</h3>
+              <div className="horario">
+                <span>WhatsApp</span>
+                <b>{sede.whatsappDisplay}</b>
+              </div>
+              <div className="horario">
+                <span>Dirección</span>
+                <b>{sede.direccion}</b>
+              </div>
+              <div className="horario">
+                <span>Instagram</span>
+                <b>
+                  {sede.instagram ? (
+                    <a
+                      href={sede.instagram}
+                      target="_blank"
+                      rel="noopener"
+                      style={{ color: 'inherit', textDecoration: 'underline' }}
+                    >
+                      @{new URL(sede.instagram).pathname.replaceAll('/', '')}
+                    </a>
+                  ) : (
+                    'Muy pronto'
+                  )}
+                </b>
+              </div>
+            </div>
+            <div className="card resena">
+              <div className="stars">
+                {sede.rating}
+                <small>{sede.reviews} opiniones en Google</small>
+              </div>
+              <p>Calificación real de la comunidad Fosque {sede.nombre} en Google Maps.</p>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* MITOS */}
-      <section
-        id="mitos"
-        className="bloque clip"
-        style={{ background: sede.colorFondo }}
-        data-bg="#F0E9D8"
-      >
-        <RingsDeco id="sede-mitos" from="#93A48D" to="#5E99A8" className="tl" />
-        <div className="wrap">
-          <div className="eyebrow">Derribando mitos</div>
-          <h2>Todo lo que pensás antes de animarte.</h2>
-          <Mitos mitos={mitosParaSede(sede)} />
+          <div>
+            <div className="mapa">
+              <iframe
+                src={mapsEmbed(sede.direccion)}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title={`Mapa de Fosque ${sede.nombre}`}
+              />
+              <a
+                className="btn como-llegar"
+                href={mapsLink(sede.placeId)}
+                target="_blank"
+                rel="noopener"
+              >
+                Cómo llegar
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 

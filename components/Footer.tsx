@@ -17,7 +17,7 @@ export default function Footer() {
             <p className="claim">Mejora la Vida. Desde el año 2000.</p>
           </div>
           <div>
-            <h4 className="h-sedes">SEDES</h4>
+            <h4 className="h-sedes">SUCURSALES</h4>
             {sedes.map((s) => (
               <Link key={s.slug} href={`/${s.slug}/`}>
                 {s.nombre}
@@ -34,7 +34,8 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="h-socios">SOCIOS</h4>
-            <a href={PLATAFORMA_URL}>Ingresá a tu Perfil</a>
+            {/* 26-09: mismo nombre que el botón del nav, a pedido del cliente */}
+            <a href={PLATAFORMA_URL}>Membresía F</a>
             {sedes.map(
               (s) =>
                 s.instagram && (

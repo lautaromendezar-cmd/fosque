@@ -6,6 +6,7 @@ import Media from '@/components/Media';
 import RingsDeco from '@/components/RingsDeco';
 import Mitos from '@/components/Mitos';
 import HomeFx from '@/components/home/HomeFx';
+import InvitacionCuerpo from '@/components/invitacion/Cuerpo';
 import Preloader from '@/components/home/Preloader';
 import { sedes, waLink, mapsLink, WA_GENERAL } from '@/data/sedes';
 import { mitosHome } from '@/data/mitos';
@@ -40,9 +41,12 @@ export default function Home() {
             ))}
           </h1>
           {/* 2º tiempo: entra a los 3s, con la pregunta todavía en pantalla */}
+          {/* 26-09: la bajada pasa a ser la de /invitacion/ — más rica y la que
+              el cliente marcó en el WhatsApp. Evita además repetir la misma
+              pregunta gigante dos veces ahora que la landing entra al index. */}
           <p className="sub">
-            En Fosque nos dedicamos a que puedas disfrutar y cuidar lo que verdaderamente tiene
-            valor en tu vida.
+            ¿La familia, los hijos, la pareja, la carrera profesional, cumplir tus sueños? Todo
+            esto necesita de tu mejor versión: un cuerpo y una mente energizados y sanos.
           </p>
           <div className="ctas">
             <a
@@ -66,15 +70,26 @@ export default function Home() {
           scrollear. Fondo dentro de la paleta, sin corte con el hero. */}
       <section id="manifiesto" data-bg="#F0E9D8">
         <div className="wrap">
-          <h2 className="mf-titulo">Fosque no es un gimnasio.</h2>
+          {/* 26-09 · definición nueva del cliente, palabra por palabra (video 3) */}
+          <h2 className="mf-titulo">FOSQUE no es un gimnasio ni un estudio de pilates.</h2>
           <p className="mf-texto">
-            Es el lugar donde lográs tu mejor versión, acompañada y motivada por personas
-            maravillosas. Un espacio donde siempre sos bienvenida, guiada con amabilidad para que
-            el ejercicio físico se convierta en un hábito en tu vida y disfrutes los enormes
-            beneficios.
+            Es el lugar para quienes no les gusta sufrir, hacer esfuerzos de más ni entrenar. Acá
+            sos siempre bienvenida, acompañada y motivada con amabilidad por personas
+            maravillosas.
+          </p>
+          <p className="mf-texto">
+            FOSQUE es moverte a tu ritmo, reencontrar tu motivación y lograr que el movimiento y
+            sus enormes beneficios se conviertan en un hábito, para mejorar tu vida.
           </p>
         </div>
       </section>
+
+      {/* ============ PÁGINA DE ATERRIZAJE ============
+          26-09: el cliente pidió que la landing de /invitacion/ sea "la parte
+          principal de la página". Entra entera menos su hero, porque el hero
+          del index ya es la misma pregunta con la misma bajada.
+          Fuente única: components/invitacion/Cuerpo.tsx */}
+      <InvitacionCuerpo />
 
       {/* ============ HISTORIA ============ */}
       <section id="historia" className="bloque" style={{ background: '#F8DDE0' }} data-bg="#F5EBE2">
@@ -199,17 +214,41 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ PILATES REFORMER + FUERZA Y CARDIO ============
+          Videos 2 y 4: "después del bloque de Reformer, poner Pilates Reformer
+          + Fuerza y Cardio, como haciendo alusión a que también se puede hacer
+          eso... ponerlo también en la página principal, como también un botón".
+          El orden del título es el que pidió: Reformer primero. */}
+      <section id="combinacion" className="bloque" style={{ background: '#DCE5D9' }} data-bg="#EAF0EC">
+        <RingsDeco id="combinacion" from="#F8E27A" to="#F29B38" className="br" />
+        <div className="wrap combo">
+          <div className="eyebrow">Único en Fosque José Hernández</div>
+          <h2>
+            Pilates Reformer
+            <br />+ Fuerza y Cardio.
+          </h2>
+          <p>
+            En José Hernández podés sumar sala de fuerza y cardio propia a tus clases de Reformer.
+            La combinación perfecta para mejorar tu vida, en un solo lugar y con el mismo
+            acompañamiento de siempre.
+          </p>
+          <Link className="btn solid" href="/jose-hernandez/#fuerza">
+            Conocé Pilates Reformer + Fuerza y Cardio
+          </Link>
+        </div>
+      </section>
+
       {/* ============ SEDES: carrusel horizontal ============ */}
       <section id="sedes-pin" data-bg="#F0E9D8">
         <div id="sedes" className="sedes-head">
           <div className="eyebrow">Tres capítulos, una misma película</div>
           <h2>Elegí tu Fosque</h2>
           <p>
-            Cada sede tiene su propia energía. Todas comparten lo mismo: un lugar donde sos
+            Cada sucursal tiene su propia energía. Todas comparten lo mismo: un lugar donde sos
             bienvenida.
           </p>
         </div>
-        <div className="sedes-track" data-lenis-prevent>
+        <div className="sedes-track">
           {sedes.map((s) => (
             <div key={s.slug} className="sede-card">
               <Media file={s.videoFile} shot={s.shotHome} />
@@ -242,7 +281,7 @@ export default function Home() {
                   {s.direccion} · {s.horarioResumen}
                 </div>
                 <span className="go">
-                  Conocé la sede <span className="arrow">→</span>
+                  Conocé la sucursal <span className="arrow">→</span>
                 </span>
               </div>
               <div className="sc-actions">
@@ -334,7 +373,7 @@ export default function Home() {
             <a className="eq-card" href="/equipo/#mantenimiento">
               <Media file="galeria-detalle.jpg" shot="📷 Detalle de sala impecable" />
               <h3>Personal de Mantenimiento</h3>
-              <p>Cada sede siempre limpia e impecable.</p>
+              <p>Cada sucursal siempre limpia e impecable.</p>
               <span className="go">
                 Conocelos <span className="arrow">→</span>
               </span>

@@ -204,9 +204,12 @@ console.log('\n2) Links muertos');
     }
     return salida;
   });
-  // EVO sigue en '#' a propósito: falta que el cliente mande la URL del login
-  const evo = muertos.filter((t) => /Perfil/i.test(t));
-  const otros = muertos.filter((t) => !/Perfil/i.test(t));
+  // EVO sigue en '#' a propósito: falta que el cliente mande la URL del login.
+  // 26-09: el botón se llamaba "Ingresá a tu Perfil" y pasó a "Membresía F"
+  // por pedido del cliente. Lo que sigue pendiente es lo mismo: la URL real.
+  const esEvo = (t) => /Perfil|Membresía F/i.test(t);
+  const evo = muertos.filter(esEvo);
+  const otros = muertos.filter((t) => !esEvo(t));
   chequear(
     otros.length === 0,
     `sin links a '#' fuera del EVO${otros.length ? ': ' + otros.join(' · ') : ''}`,

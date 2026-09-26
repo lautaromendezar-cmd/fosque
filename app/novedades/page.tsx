@@ -21,7 +21,7 @@ export default function NovedadesPage() {
           <div className="eyebrow">Cartelera</div>
           <h1>Novedades Fosque</h1>
           <p className="intro">
-            Promos, eventos especiales y todo lo que pasa en tus sedes, contado por nosotras.
+            Promos, eventos especiales y todo lo que pasa en tus sucursales, contado por nosotras.
           </p>
           {novedades.length === 0 ? (
             <p>Muy pronto vas a encontrar acá todas las novedades.</p>

@@ -40,7 +40,7 @@ export default function FranquiciaPage() {
           <div className="title-front">en tu barrio</div>
         </div>
         <p className="sub">
-          24 años de método probado. Más de 30.000 vidas mejoradas. Tres sedes que son
+          24 años de método probado. Más de 30.000 vidas mejoradas. Tres sucursales que son
           comunidades. El próximo capítulo de la película Fosque puede ser tuyo.
         </p>
         <div className="ctas">
@@ -95,7 +95,7 @@ export default function FranquiciaPage() {
               <div className="num">04</div>
               <h3>Tu zona, estudiada</h3>
               <p>
-                Analizamos juntos la ubicación y te acompañamos en el armado de la sede, de la obra
+                Analizamos juntos la ubicación y te acompañamos en el armado de la sucursal, de la obra
                 a la primera clase.
               </p>
             </div>
@@ -121,7 +121,7 @@ export default function FranquiciaPage() {
               <div className="n" data-count="3">
                 0
               </div>
-              <div className="l">Sedes propias</div>
+              <div className="l">Sucursales propias</div>
             </div>
           </div>
         </div>
