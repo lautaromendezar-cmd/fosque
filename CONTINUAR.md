@@ -1358,6 +1358,12 @@ git fetch && git checkout modificaciones-26-09
 npm install
 ```
 
+**30-sep**: el proyecto `fosque-preview` en Vercel quedó con la Production
+Branch apuntando a `modificaciones-26-09` (no a `main`), a propósito. Un
+`git push` a esta rama actualiza el preview solo; no hace falta deployar a
+mano. No cambiar esa Production Branch a `main` hasta que el cliente
+apruebe y se mergee.
+
 **Si aprueba** (y recién ahí):
 
 ```bash
