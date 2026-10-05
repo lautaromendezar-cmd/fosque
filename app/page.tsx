@@ -229,15 +229,11 @@ export default function Home() {
               No importa tu estado físico actual: hay un nivel exacto para vos, sin esfuerzos de más
               ni de menos.
             </p>
-            <a
-              className="btn solid"
-              style={{ marginTop: '1.4rem' }}
-              href={waLink(WA_GENERAL, 'Hola! Quiero mi evaluación sin cargo')}
-              target="_blank"
-              rel="noopener"
-            >
-              Quiero mi evaluación sin cargo
-            </a>
+            {/* 5-oct: iba a WhatsApp ("evaluación sin cargo"); ahora a la
+                landing de la campaña Experiencia */}
+            <Link className="btn solid" style={{ marginTop: '1.4rem' }} href={EXPERIENCIA_URL}>
+              Quiero mi sesión sin cargo
+            </Link>
           </div>
         </div>
       </section>

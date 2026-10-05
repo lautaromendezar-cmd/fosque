@@ -25,6 +25,11 @@ import { EXPERIENCIA, EXPERIENCIA_URL } from '@/data/experiencia';
 const MARQUEE =
   'SEMANA DE INVITACIÓN ✦ 2 SESIONES ✦ FOSQUE REFORMER ✦ FUERZA Y CARDIO EN JOSÉ HERNÁNDEZ ✦ SIEMPRE CON PROFE ✦ ';
 
+// En el index la cinta habla de la campaña Experiencia (1 sesión), no de la
+// Semana de Invitación: el resto del home ya ofrece eso (5-oct).
+const MARQUEE_EXPERIENCIA =
+  'EXPERIENCIA FOSQUE ✦ 1 SESIÓN SIN CARGO ✦ FOSQUE REFORMER ✦ FUERZA Y CARDIO EN JOSÉ HERNÁNDEZ ✦ SIEMPRE CON PROFE ✦ ';
+
 const waTexto = (sucursal: string) =>
   `Hola! Quiero anotarme a la Semana de Invitación (2 sesiones) en Fosque ${sucursal}`;
 
@@ -35,13 +40,14 @@ const waTexto = (sucursal: string) =>
 export default function InvitacionCuerpo({ experiencia = false }: { experiencia?: boolean }) {
   const jh = sedes.filter((s) => s.slug === 'jose-hernandez');
   const reformer = sedes.filter((s) => s.slug !== 'jose-hernandez');
+  const cinta = experiencia ? MARQUEE_EXPERIENCIA : MARQUEE;
 
   return (
     <>
       <div className="marquee">
         <div className="track">
-          <span>{MARQUEE}</span>
-          <span>{MARQUEE}</span>
+          <span>{cinta}</span>
+          <span>{cinta}</span>
         </div>
       </div>
 

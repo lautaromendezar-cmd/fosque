@@ -347,15 +347,14 @@ export default async function SedePage({ params }: Props) {
           Después de esa clase recibís una devolución personalizada sobre cuáles son las mejores
           clases y planes para vos.
         </p>
-        <a
+        {/* 5-oct: iba a WhatsApp; ahora a la landing Experiencia con la sede elegida */}
+        <Link
           className="btn solid"
           style={{ fontSize: '1rem', padding: '1rem 2.2rem' }}
-          href={waLink(sede.whatsapp, `Hola! Quiero mi evaluación sin cargo en ${sede.nombre}`)}
-          target="_blank"
-          rel="noopener"
+          href={`${EXPERIENCIA_URL}?sede=${sede.slug}`}
         >
-          Reservar mi evaluación sin cargo
-        </a>
+          Reservar mi sesión sin cargo
+        </Link>
       </section>
 
       <Footer />
