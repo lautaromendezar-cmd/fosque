@@ -37,10 +37,7 @@ export default function ExperienciaPage() {
           <div className="exp-copy">
             <span className="pulso">{EXPERIENCIA.badge}</span>
             <h1>
-              {EXPERIENCIA.titulo}{' '}
-              <span className="chispa" aria-hidden="true">
-                ✨
-              </span>
+              {EXPERIENCIA.titulo}
             </h1>
             <blockquote>“{EXPERIENCIA.cita}”</blockquote>
           </div>

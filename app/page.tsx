@@ -96,7 +96,7 @@ export default function Home() {
         <div className="wrap exp-cta">
           <div>
             <span className="pulso">{EXPERIENCIA.badge}</span>
-            <h2>{EXPERIENCIA.titulo} ✨</h2>
+            <h2>{EXPERIENCIA.titulo}</h2>
             <blockquote>“{EXPERIENCIA.cita}”</blockquote>
             <Link className="btn solid" href={EXPERIENCIA_URL}>
               {EXPERIENCIA.cta}
@@ -104,8 +104,8 @@ export default function Home() {
           </div>
           <div className="exp-foto">
             <Media
-              file="galeria-reformer.jpg"
-              shot="📷 Sala Reformer en clase · plano fijo lateral"
+              file="galeria-ec-salida.jpg"
+              shot="📷 Alumnas saliendo felices de Fosque Emilio Castro"
             />
             <span className="exp-sticker">🎁 1 sesión sin cargo</span>
           </div>
