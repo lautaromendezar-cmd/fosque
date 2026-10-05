@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { sedes, getSede, waLink } from '@/data/sedes';
 import { EXPERIENCIA } from '@/data/experiencia';
 
@@ -14,6 +14,13 @@ type Enviado = { url: string; sede: string; nombre: string };
 export default function ExperienciaForm() {
   const [f, setF] = useState<Campos>({ nombre: '', telefono: '', email: '', sede: '' });
   const [enviado, setEnviado] = useState<Enviado | null>(null);
+
+  // Desde el hero de cada sede se llega con ?sede=<slug>: la sucursal viene
+  // ya elegida. Se lee al montar (export estático: no hay query en el build).
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get('sede');
+    if (slug && getSede(slug)) setF((prev) => ({ ...prev, sede: slug }));
+  }, []);
 
   const set =
     (k: keyof Campos) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>

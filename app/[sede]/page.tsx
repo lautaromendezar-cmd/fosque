@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -17,6 +18,7 @@ import {
   opinionesDesde,
 } from '@/data/sedes';
 import { mitosParaSede } from '@/data/mitos';
+import { EXPERIENCIA_URL } from '@/data/experiencia';
 
 export function generateStaticParams() {
   return sedes.map((s) => ({ sede: s.slug }));
@@ -43,11 +45,6 @@ export default async function SedePage({ params }: Props) {
   const { sede: slug } = await params;
   const sede = getSede(slug);
   if (!sede) notFound();
-
-  const waEvaluacion = waLink(
-    sede.whatsapp,
-    `Hola! Quiero mi evaluación sin cargo en ${sede.nombre}`,
-  );
 
   return (
     <SedeFx>
@@ -89,9 +86,14 @@ export default async function SedePage({ params }: Props) {
         </div>
         <p className="sub">{sede.descripcion}</p>
         <div className="ctas">
-          <a className="btn solid" href={waEvaluacion} target="_blank" rel="noopener">
-            Quiero mi evaluación sin cargo
-          </a>
+          {/* 5-oct: era "Quiero mi evaluación sin cargo" → WhatsApp. Ahora
+              lleva a la landing de la campaña Experiencia con esta sede ya
+              elegida en el formulario. En José Hernández el cliente pidió
+              nombrar la combinación ("Pilates + Musculación"), que es lo que
+              la diferencia: es la única con sala de fuerza propia. */}
+          <Link className="btn solid" href={`${EXPERIENCIA_URL}?sede=${sede.slug}`}>
+            {sede.fuerza ? 'Pilates + Musculación sin cargo' : '1 sesión sin cargo'}
+          </Link>
           <a className="btn" href="#info">
             Horarios y ubicación
           </a>
