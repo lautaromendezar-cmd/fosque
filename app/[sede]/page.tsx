@@ -91,7 +91,10 @@ export default async function SedePage({ params }: Props) {
               elegida en el formulario. En José Hernández el cliente pidió
               nombrar la combinación ("Pilates + Musculación"), que es lo que
               la diferencia: es la única con sala de fuerza propia. */}
-          <Link className="btn solid" href={`${EXPERIENCIA_URL}?sede=${sede.slug}`}>
+          <Link className="btn cta sin-cargo" href={`${EXPERIENCIA_URL}?sede=${sede.slug}`}>
+            <span className="sc-regalo" aria-hidden="true">
+              🎁
+            </span>{' '}
             {sede.fuerza ? 'Pilates + Musculación sin cargo' : '1 sesión sin cargo'}
           </Link>
           <a className="btn" href="#info">
