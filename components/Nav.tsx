@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { sedes, waLink, PLATAFORMA_URL } from '@/data/sedes';
 import Logo from '@/components/logo/Logo';
 import { EXPERIENCIA, EXPERIENCIA_URL } from '@/data/experiencia';
+import { FORM_ID } from '@/components/experiencia/IrAlForm';
 
 // 26-09: el botón decía "Ingresá a tu Perfil". El cliente pidió que la
 // membresía tenga su propio botón ("un botón Membresía F, como la habíamos
@@ -218,9 +219,24 @@ export default function Nav({
           <a className="btn evo" href={PLATAFORMA_URL}>
             Membresía F
           </a>
-          <a className="btn cta" href={wa} target="_blank" rel="noopener">
-            Empezá hoy
-          </a>
+          {/* 5-oct: era "Empezá hoy" → WhatsApp. Ahora es el llamado de la
+              campaña Experiencia, destacado (regalo + halo, como el botón del
+              hero de cada sede). En la propia landing sube al formulario. */}
+          {aviso ? (
+            <Link className="btn cta nav-sin-cargo" href={EXPERIENCIA_URL}>
+              <span className="sc-regalo" aria-hidden="true">
+                🎁
+              </span>{' '}
+              Sesión sin cargo
+            </Link>
+          ) : (
+            <a className="btn cta nav-sin-cargo" href={`#${FORM_ID}`}>
+              <span className="sc-regalo" aria-hidden="true">
+                🎁
+              </span>{' '}
+              Sesión sin cargo
+            </a>
+          )}
           <button
             className={`burger${open ? ' x' : ''}`}
             aria-label="Menú"

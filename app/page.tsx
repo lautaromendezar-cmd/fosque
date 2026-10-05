@@ -50,14 +50,10 @@ export default function Home() {
             esto necesita de tu mejor versión: un cuerpo y una mente energizados y sanos.
           </p>
           <div className="ctas">
-            <a
-              className="btn cta"
-              href={waLink(WA_GENERAL, 'Hola Fosque! Quiero vivir la experiencia')}
-              target="_blank"
-              rel="noopener"
-            >
+            {/* 5-oct: iba a WhatsApp; ahora a la landing de la campaña */}
+            <Link className="btn cta" href={EXPERIENCIA_URL}>
               Quiero vivir la experiencia Fosque
-            </a>
+            </Link>
             <a className="btn" href="#sedes">
               Elegí tu sucursal
             </a>
@@ -412,15 +408,14 @@ export default function Home() {
         {/* copy en 1ª persona: la decisión la dice ella, no la marca (doc 2026-08-17) */}
         <div className="eyebrow">Mi momento es ahora</div>
         <h2>Comienzo el cambio. Elijo ser mi mejor versión.</h2>
-        <a
+        {/* 5-oct: mismo texto que el botón del hero, mismo destino: la landing */}
+        <Link
           className="btn solid"
           style={{ fontSize: '1rem', padding: '1rem 2.2rem' }}
-          href={waLink(WA_GENERAL, 'Hola Fosque! Quiero empezar')}
-          target="_blank"
-          rel="noopener"
+          href={EXPERIENCIA_URL}
         >
           Quiero vivir la experiencia Fosque
-        </a>
+        </Link>
       </section>
 
       <Footer />

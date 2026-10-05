@@ -3234,3 +3234,53 @@ nav.con-aviso.menu-open {
     padding: 0.9rem 1rem;
   }
 }
+
+/* ---- Botón del nav: "Sesión sin cargo" (5-oct) ----
+   Reemplaza a "Empezá hoy". Pedido: "más atractivo y destacado". Mismo
+   idioma que el botón del hero de cada sede: regalo que late + halo. */
+nav .btn.nav-sin-cargo {
+  text-transform: uppercase;
+  /* compacto a propósito: más ancho que esto, en 1440 los links del centro
+     se partían en dos renglones (medido) */
+  letter-spacing: 0.03em;
+  font-size: 0.86rem;
+  padding: 0.65rem 1.05rem;
+  animation: sin-cargo-halo 2.2s ease-out infinite;
+}
+nav .btn.nav-sin-cargo .sc-regalo {
+  display: inline-block;
+  animation: av-regalo 2.4s ease-in-out infinite;
+}
+@media (max-width: 600px) {
+  nav .btn.nav-sin-cargo {
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    padding: 0.55rem 0.8rem;
+  }
+}
+/* 320px (iPhone SE viejo): sin esto el botón toca el logo */
+@media (max-width: 359px) {
+  nav .btn.nav-sin-cargo {
+    font-size: 0.74rem;
+    letter-spacing: 0;
+    padding: 0.5rem 0.65rem;
+  }
+  nav .btn.nav-sin-cargo .sc-regalo {
+    display: none;
+  }
+}
+/* Escritorio angosto (justo arriba de donde aparece la hamburguesa, y justo
+   arriba de donde reaparece "Membresía F"): el botón en versión corta, sin
+   mayúsculas ni regalo, para que los links del centro no se partan. El halo
+   se queda: es lo que lo destaca. */
+@media (min-width: 1101px) and (max-width: 1180px), (min-width: 1361px) and (max-width: 1440px) {
+  nav .btn.nav-sin-cargo {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.88rem;
+    padding: 0.6rem 0.85rem;
+  }
+  nav .btn.nav-sin-cargo .sc-regalo {
+    display: none;
+  }
+}
