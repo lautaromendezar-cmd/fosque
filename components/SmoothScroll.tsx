@@ -42,7 +42,7 @@ function LenisGsapSync() {
       if (!target) return;
       e.preventDefault();
       history.pushState(null, '', a.hash);
-      lenis.scrollTo(target as HTMLElement, { offset: -80 });
+      lenis.scrollTo(target as HTMLElement, { offset: -80 - alturaAviso() });
     };
     document.addEventListener('click', onClick);
 
@@ -62,7 +62,7 @@ function LenisGsapSync() {
     if (!window.location.hash) return;
     const target = document.querySelector(window.location.hash);
     if (!target) return;
-    const t = setTimeout(() => lenis.scrollTo(target as HTMLElement, { offset: -80 }), 120);
+    const t = setTimeout(() => lenis.scrollTo(target as HTMLElement, { offset: -80 - alturaAviso() }), 120);
     return () => clearTimeout(t);
   }, [lenis, pathname]);
 
@@ -76,4 +76,10 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       {children}
     </ReactLenis>
   );
+}
+
+/* La barra de aviso de la campaña Experiencia (fija, arriba del nav) se come
+   su alto de pantalla: las anclas tienen que caer debajo de las dos. */
+function alturaAviso(): number {
+  return (document.querySelector('.aviso') as HTMLElement | null)?.offsetHeight ?? 0;
 }

@@ -10,6 +10,7 @@ import InvitacionCuerpo from '@/components/invitacion/Cuerpo';
 import Preloader from '@/components/home/Preloader';
 import { sedes, waLink, mapsLink, WA_GENERAL, opinionesDesde } from '@/data/sedes';
 import { mitosHome } from '@/data/mitos';
+import { EXPERIENCIA, EXPERIENCIA_URL } from '@/data/experiencia';
 
 const TITULO = '¿Qué es lo más importante de tu vida?';
 
@@ -84,12 +85,39 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ CAMPAÑA EXPERIENCIA ============
+          Brief del 5-oct: "un CTA bien llamativo" en el home que lleve a la
+          landing /experiencia/ (además de la barra de aviso de arriba). Va
+          después del manifiesto y no pegado al hero: el manifiesto es la
+          pantalla que el cliente pidió descubrir al scrollear desde el hero,
+          sin corte. Textos del brief en data/experiencia.ts. */}
+      <section id="experiencia-cta" className="bloque clip" data-bg="#F0E9D8">
+        <RingsDeco id="exp-cta" from="#F3A6C8" to="#E76FA8" className="tl" />
+        <div className="wrap exp-cta">
+          <div>
+            <span className="pulso">{EXPERIENCIA.badge}</span>
+            <h2>{EXPERIENCIA.titulo} ✨</h2>
+            <blockquote>“{EXPERIENCIA.cita}”</blockquote>
+            <Link className="btn solid" href={EXPERIENCIA_URL}>
+              {EXPERIENCIA.cta}
+            </Link>
+          </div>
+          <div className="exp-foto">
+            <Media
+              file="galeria-reformer.jpg"
+              shot="📷 Sala Reformer en clase · plano fijo lateral"
+            />
+            <span className="exp-sticker">🎁 1 sesión sin cargo</span>
+          </div>
+        </div>
+      </section>
+
       {/* ============ PÁGINA DE ATERRIZAJE ============
           26-09: el cliente pidió que la landing de /invitacion/ sea "la parte
           principal de la página". Entra entera menos su hero, porque el hero
           del index ya es la misma pregunta con la misma bajada.
           Fuente única: components/invitacion/Cuerpo.tsx */}
-      <InvitacionCuerpo />
+      <InvitacionCuerpo experiencia />
 
       {/* ============ HISTORIA ============ */}
       <section id="historia" className="bloque" style={{ background: '#F8DDE0' }} data-bg="#F5EBE2">

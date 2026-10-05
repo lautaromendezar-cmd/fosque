@@ -41,10 +41,10 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const q = gsap.utils.selector(scope);
 
-      /* Nav + WhatsApp flotante: ocultos durante la intro (autoAlpha también
+      /* Barra de aviso + Nav + WhatsApp flotante: ocultos durante la intro (autoAlpha también
          corta los clicks mientras tanto), entran con los botones del hero. */
       const mostrarNav = (delay = 0) =>
-        gsap.to(q('nav, #wa-box, #wa'), {
+        gsap.to(q('.aviso, nav, #wa-box, #wa'), {
           autoAlpha: 1,
           duration: 0.8,
           ease: 'power2.out',
@@ -122,7 +122,7 @@ export default function HomeFx({ children }: { children: React.ReactNode }) {
         // está ahí, en paleta, y no hay salto de fondo. Lo que arranca oculto
         // es el copy que se suma después, más el nav y el WhatsApp.
         gsap.set(q('.cine-content .sub, .cine-content .ctas'), { autoAlpha: 0, y: 20 });
-        gsap.set(q('nav, #wa-box, #wa'), { autoAlpha: 0 });
+        gsap.set(q('.aviso, nav, #wa-box, #wa'), { autoAlpha: 0 });
         // dibujo del contorno del isologo real → relleno → devora la pantalla
         const fpath = q('#preloader .fmark path')[0] as unknown as SVGPathElement;
         const len = fpath.getTotalLength();

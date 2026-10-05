@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { sedes, waLink, PLATAFORMA_URL } from '@/data/sedes';
 import Logo from '@/components/logo/Logo';
+import { EXPERIENCIA, EXPERIENCIA_URL } from '@/data/experiencia';
 
 // 26-09: el botón decía "Ingresá a tu Perfil". El cliente pidió que la
 // membresía tenga su propio botón ("un botón Membresía F, como la habíamos
@@ -69,7 +70,17 @@ function useDesplegable(delayCierre = 140) {
   return { open, abrir, cerrar, cerrarYa: () => setOpen(false) };
 }
 
-export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: string }) {
+export default function Nav({
+  waNumero,
+  waTexto,
+  aviso = true,
+}: {
+  waNumero: string;
+  waTexto: string;
+  /** Barra de la campaña Experiencia arriba del nav. La landing de la campaña
+   *  la apaga: sería un link a la misma página en la que ya estás. */
+  aviso?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const sub = useDesplegable();
@@ -95,7 +106,26 @@ export default function Nav({ waNumero, waTexto }: { waNumero: string; waTexto: 
 
   return (
     <>
-      <nav className={`${scrolled ? 'scrolled' : ''}${open ? ' menu-open' : ''}`}>
+      {/* Barra de aviso de la campaña Experiencia (5-oct): fija arriba de
+          todo, en todas las páginas, y entera clickeable. El nav baja su
+          altura (nav.con-aviso). Con el menú mobile abierto se esconde y el
+          nav vuelve a top 0: el menú ya venía justo de alto en 390x844. */}
+      {aviso && (
+        <Link className={`aviso${open ? ' oculto' : ''}`} href={EXPERIENCIA_URL}>
+          <span className="av-a">
+            {EXPERIENCIA.avisoA}{' '}
+            <span className="av-regalo" aria-hidden="true">
+              🎁
+            </span>
+          </span>{' '}
+          <span className="av-b">
+            {EXPERIENCIA.avisoB} <span className="arrow">→</span>
+          </span>
+        </Link>
+      )}
+      <nav
+        className={`${scrolled ? 'scrolled' : ''}${open ? ' menu-open' : ''}${aviso ? ' con-aviso' : ''}`}
+      >
         <Link className="logo" href="/" aria-label="FOSQUE — inicio">
           <Logo />
         </Link>

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Media from '@/components/Media';
 import RingsDeco from '@/components/RingsDeco';
 import { sedes, waLink } from '@/data/sedes';
+import { EXPERIENCIA, EXPERIENCIA_URL } from '@/data/experiencia';
 
 /* Cuerpo de la "página de aterrizaje" (marquee + las 4 secciones que van
    después del hero). Vive acá, y no dentro de app/invitacion/page.tsx, porque
@@ -27,7 +28,11 @@ const MARQUEE =
 const waTexto = (sucursal: string) =>
   `Hola! Quiero anotarme a la Semana de Invitación (2 sesiones) en Fosque ${sucursal}`;
 
-export default function InvitacionCuerpo() {
+/* `experiencia` (5-oct): en el index, el cierre "¡Activate!" deja de mandar
+   al WhatsApp de cada sede con la Semana de Invitación y lleva a la landing
+   de la campaña Experiencia (/experiencia/, 1 sesión sin cargo), donde se
+   elige la sucursal en el formulario. /invitacion/ sigue como estaba. */
+export default function InvitacionCuerpo({ experiencia = false }: { experiencia?: boolean }) {
   const jh = sedes.filter((s) => s.slug === 'jose-hernandez');
   const reformer = sedes.filter((s) => s.slug !== 'jose-hernandez');
 
@@ -148,24 +153,41 @@ export default function InvitacionCuerpo() {
         <div className="wrap inv-final">
           <div className="eyebrow">Viví la Experiencia Fosque</div>
           <h2>¡Activate! Te lo merecés.</h2>
-          <p>Anotate hoy y accedé a tu Semana de Invitación.</p>
-          <div className="inv-cta-label">
-            ¡Anotate ahora: 2 sesiones de invitación! Elegí tu sucursal
-          </div>
-          <div className="inv-botones">
-            {sedes.map((s) => (
-              <a
-                key={s.slug}
-                className="btn solid"
-                href={waLink(s.whatsapp, waTexto(s.nombre))}
-                target="_blank"
-                rel="noopener"
-              >
-                {s.nombre}
-              </a>
-            ))}
-          </div>
-          <small>Te contestamos por el WhatsApp de la sucursal.</small>
+          {experiencia ? (
+            <>
+              <p>Anotate hoy y viví tu sesión de experiencia Fosque.</p>
+              <div className="inv-cta-label">
+                {EXPERIENCIA.avisoA} 🎁 {EXPERIENCIA.avisoB}
+              </div>
+              <div className="inv-botones">
+                <Link className="btn solid" href={EXPERIENCIA_URL}>
+                  {EXPERIENCIA.cta}
+                </Link>
+              </div>
+              <small>{EXPERIENCIA.legal}</small>
+            </>
+          ) : (
+            <>
+              <p>Anotate hoy y accedé a tu Semana de Invitación.</p>
+              <div className="inv-cta-label">
+                ¡Anotate ahora: 2 sesiones de invitación! Elegí tu sucursal
+              </div>
+              <div className="inv-botones">
+                {sedes.map((s) => (
+                  <a
+                    key={s.slug}
+                    className="btn solid"
+                    href={waLink(s.whatsapp, waTexto(s.nombre))}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {s.nombre}
+                  </a>
+                ))}
+              </div>
+              <small>Te contestamos por el WhatsApp de la sucursal.</small>
+            </>
+          )}
         </div>
       </section>
     </>
