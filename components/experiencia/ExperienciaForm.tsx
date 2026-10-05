@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sedes, getSede, waLink } from '@/data/sedes';
 import { EXPERIENCIA } from '@/data/experiencia';
+import { FORM_ID, EVENTO_IR_AL_FORM, type DetalleIrAlForm } from './IrAlForm';
 
 type Campos = { nombre: string; telefono: string; email: string; sede: string };
 type Enviado = { url: string; sede: string; nombre: string };
@@ -21,6 +22,30 @@ export default function ExperienciaForm() {
     const slug = new URLSearchParams(window.location.search).get('sede');
     if (slug && getSede(slug)) setF((prev) => ({ ...prev, sede: slug }));
   }, []);
+
+  // Los botones de los bloques de abajo (IrAlForm) suben hasta acá: el form
+  // se resalta al llegar y, si el botón era de una sede, la deja elegida.
+  const [resalta, setResalta] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    const onIr = (e: Event) => {
+      const sede = (e as CustomEvent<DetalleIrAlForm>).detail?.sede;
+      if (sede && getSede(sede)) setF((prev) => ({ ...prev, sede }));
+      setResalta(false);
+      if (timer.current) clearTimeout(timer.current);
+      // después del scroll, no durante: que se vea al llegar
+      timer.current = setTimeout(() => {
+        setResalta(true);
+        timer.current = setTimeout(() => setResalta(false), 1600);
+      }, 700);
+    };
+    window.addEventListener(EVENTO_IR_AL_FORM, onIr);
+    return () => {
+      window.removeEventListener(EVENTO_IR_AL_FORM, onIr);
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, []);
+  const clase = `fr-form exp-form${resalta ? ' resalta' : ''}`;
 
   const set =
     (k: keyof Campos) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
@@ -47,7 +72,7 @@ export default function ExperienciaForm() {
 
   if (enviado) {
     return (
-      <div className="fr-form exp-form exp-ok" role="status">
+      <div className={`${clase} exp-ok`} id={FORM_ID} role="status">
         <div className="ok-ico" aria-hidden="true">
           ✓
         </div>
@@ -67,7 +92,7 @@ export default function ExperienciaForm() {
   }
 
   return (
-    <form className="fr-form exp-form" id="anotate" onSubmit={onSubmit}>
+    <form className={clase} id={FORM_ID} onSubmit={onSubmit}>
       <label>
         <span>
           Nombre y Apellido <span className="ast">*</span>

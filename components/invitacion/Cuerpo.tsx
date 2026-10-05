@@ -3,6 +3,7 @@ import Media from '@/components/Media';
 import RingsDeco from '@/components/RingsDeco';
 import { sedes, waLink } from '@/data/sedes';
 import { EXPERIENCIA, EXPERIENCIA_URL } from '@/data/experiencia';
+import IrAlForm from '@/components/experiencia/IrAlForm';
 
 /* Cuerpo de la "página de aterrizaje" (marquee + las 4 secciones que van
    después del hero). Vive acá, y no dentro de app/invitacion/page.tsx, porque
@@ -33,14 +34,38 @@ const MARQUEE_EXPERIENCIA =
 const waTexto = (sucursal: string) =>
   `Hola! Quiero anotarme a la Semana de Invitación (2 sesiones) en Fosque ${sucursal}`;
 
-/* `experiencia` (5-oct): en el index, el cierre "¡Activate!" deja de mandar
-   al WhatsApp de cada sede con la Semana de Invitación y lleva a la landing
-   de la campaña Experiencia (/experiencia/, 1 sesión sin cargo), donde se
-   elige la sucursal en el formulario. /invitacion/ sigue como estaba. */
-export default function InvitacionCuerpo({ experiencia = false }: { experiencia?: boolean }) {
+/* Tres modos, porque el mismo cuerpo vive en tres páginas:
+   · 'invitacion' — /invitacion/, la Semana de Invitación (2 sesiones): el
+     cierre manda al WhatsApp de cada sede. Como estaba.
+   · 'home'       — el index (5-oct): cinta y cierre hablan de la campaña
+     Experiencia (1 sesión) y el cierre lleva a /experiencia/.
+   · 'landing'    — /experiencia/ (5-oct, pedido de Gerardo: "la página sigue
+     y te explica todo y en cada pantalla un llamado a la acción"). Cada bloque
+     suma un botón que sube al formulario de arriba, y entra un bloque propio
+     de Pilates + Musculación (José Hernández). */
+type Modo = 'invitacion' | 'home' | 'landing';
+
+/** Botón "sin cargo" de cada bloque de la landing: sube al formulario. */
+function CtaBloque({ sede, children }: { sede?: string; children: React.ReactNode }) {
+  return (
+    <div className="exp-cta-bloque inv-reveal">
+      <IrAlForm sede={sede} className="btn cta sin-cargo">
+        <span className="sc-regalo" aria-hidden="true">
+          🎁
+        </span>{' '}
+        {children}
+      </IrAlForm>
+    </div>
+  );
+}
+
+export default function InvitacionCuerpo({ modo = 'invitacion' }: { modo?: Modo }) {
+  const experiencia = modo !== 'invitacion';
+  const landing = modo === 'landing';
   const jh = sedes.filter((s) => s.slug === 'jose-hernandez');
   const reformer = sedes.filter((s) => s.slug !== 'jose-hernandez');
   const cinta = experiencia ? MARQUEE_EXPERIENCIA : MARQUEE;
+  const fuerza = jh[0]?.fuerza;
 
   return (
     <>
@@ -71,6 +96,7 @@ export default function InvitacionCuerpo({ experiencia = false }: { experiencia?
               En Fosque nos dedicamos a acompañarte y motivarte a alcanzar tu mejor versión para que
               puedas disfrutar y cuidar lo que más valoras.
             </p>
+            {landing && <CtaBloque>{EXPERIENCIA.cta}</CtaBloque>}
           </div>
           {/* 26-09: acá iba `metodo.mp4`, el mismo que el bloque del método del
               index. Desde que este cuerpo entró al index, la misma imagen
@@ -136,8 +162,43 @@ export default function InvitacionCuerpo({ experiencia = false }: { experiencia?
               </div>
             </div>
           </div>
+          {landing && <CtaBloque>{EXPERIENCIA.cta}</CtaBloque>}
         </div>
       </section>
+
+      {/* PILATES + MUSCULACIÓN: solo en la landing (Gerardo, 5-oct: "hay que
+          mostrar pilates más musculación"). Copy de la sección Fuerza y
+          Cardio de José Hernández (data/sedes.ts), con el nombre que usa el
+          cliente. Fotos que no se repiten en esta página: las de la tarjeta
+          de arriba son otras. */}
+      {landing && fuerza && (
+        <section id="musculacion" className="bloque clip" style={{ background: '#EADFF0' }} data-bg="#F0E9D8">
+          <RingsDeco id="exp-musc" from="#F8E27A" to="#F29B38" className="tl" />
+          <div className="wrap inv-dos exp-musc">
+            <div>
+              <div className="eyebrow inv-reveal">{fuerza.eyebrow}</div>
+              <h2 className="inv-reveal">Pilates Reformer + Musculación.</h2>
+              <p className="inv-reveal">
+                {fuerza.promesa} Sala de fuerza y cardio propia, siempre con instructor, junto a
+                tus clases de Reformer.
+              </p>
+              <ul className="exp-ventajas inv-reveal">
+                {fuerza.ventajas.map((v) => (
+                  <li key={v.t}>
+                    <b>{v.t}</b>
+                    {v.d}
+                  </li>
+                ))}
+              </ul>
+              <CtaBloque sede="jose-hernandez">Pilates + Musculación sin cargo</CtaBloque>
+            </div>
+            <div className="exp-musc-fotos inv-reveal">
+              <Media file="fuerza-jh-grupo.jpg" shot="📷 Sala de fuerza · alumnas entrenando" />
+              <Media file="fuerza-jh-maquinas.jpg" shot="📷 Sala de fuerza · máquinas y peso libre" />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* LO QUE GANÁS */}
       <section id="ganas" data-bg="#F8DDE0">
@@ -150,6 +211,7 @@ export default function InvitacionCuerpo({ experiencia = false }: { experiencia?
             Te aseguramos: <strong>nunca un esfuerzo de más, nunca uno de menos</strong>, siempre
             acompañada por un Profe y una Ejecutiva Fosque.
           </p>
+          {landing && <CtaBloque>{EXPERIENCIA.cta}</CtaBloque>}
         </div>
       </section>
 
@@ -166,9 +228,13 @@ export default function InvitacionCuerpo({ experiencia = false }: { experiencia?
                 {EXPERIENCIA.avisoA} 🎁 {EXPERIENCIA.avisoB}
               </div>
               <div className="inv-botones">
-                <Link className="btn solid" href={EXPERIENCIA_URL}>
-                  {EXPERIENCIA.cta}
-                </Link>
+                {landing ? (
+                  <IrAlForm className="btn solid">{EXPERIENCIA.cta}</IrAlForm>
+                ) : (
+                  <Link className="btn solid" href={EXPERIENCIA_URL}>
+                    {EXPERIENCIA.cta}
+                  </Link>
+                )}
               </div>
               <small>{EXPERIENCIA.legal}</small>
             </>

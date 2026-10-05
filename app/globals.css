@@ -3138,3 +3138,99 @@ nav.con-aviso.menu-open {
     padding-top: 15vh;
   }
 }
+
+/* ---- Landing /experiencia/: el cuerpo de abajo (5-oct) ----
+   Un botón "sin cargo" por bloque (sube al formulario), el bloque de
+   Pilates + Musculación y el botón fijo de mobile. */
+.exp-cta-bloque {
+  margin-top: 2rem;
+}
+#mejorar .exp-cta-bloque,
+#ganas .exp-cta-bloque {
+  text-align: center;
+  margin-top: 3rem;
+}
+/* llegada al formulario desde un botón de abajo: un aro que se nota y se va */
+.exp-form {
+  transition: box-shadow 0.5s ease;
+}
+.exp-form.resalta {
+  box-shadow: 0 0 0 6px var(--terracota), 0 30px 80px rgba(26, 24, 21, 0.12);
+}
+.exp-musc h2 {
+  font-size: clamp(2.2rem, 4.6vw, 3.8rem);
+  margin: 0.8rem 0 1rem;
+}
+.exp-ventajas {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.6rem;
+  margin-top: 1.6rem;
+}
+.exp-ventajas li {
+  line-height: 1.5;
+  font-size: 1.08rem;
+}
+.exp-ventajas b {
+  display: block;
+  font-family: var(--label);
+  font-weight: 400;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+.exp-musc-fotos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+.exp-musc-fotos .vph {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-md);
+  box-shadow: 0 24px 60px rgba(26, 24, 21, 0.14);
+}
+/* la segunda foto, corrida hacia abajo: díptico, no grilla */
+.exp-musc-fotos > :nth-child(2) {
+  margin-top: 3rem;
+}
+.exp-barra-movil {
+  display: none;
+}
+@media (max-width: 900px) {
+  .exp-ventajas {
+    grid-template-columns: 1fr;
+  }
+  .exp-cta-bloque .btn.sin-cargo {
+    width: 100%;
+    text-align: center;
+  }
+  .exp-barra-movil {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 150;
+    padding: 0.7rem 16px calc(0.7rem + env(safe-area-inset-bottom));
+    background: rgba(240, 233, 216, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 -10px 30px rgba(26, 24, 21, 0.08);
+    transform: translateY(110%);
+    visibility: hidden;
+    transition: transform 0.35s ease, visibility 0.35s;
+  }
+  .exp-barra-movil.on {
+    transform: none;
+    visibility: visible;
+  }
+  .exp-barra-movil .btn {
+    display: block;
+    text-align: center;
+    font-size: 1.05rem;
+    padding: 0.9rem 1rem;
+  }
+}

@@ -4,15 +4,21 @@ import Footer from '@/components/Footer';
 import RingsDeco from '@/components/RingsDeco';
 import ExperienciaFx from '@/components/experiencia/ExperienciaFx';
 import ExperienciaForm from '@/components/experiencia/ExperienciaForm';
+import BarraMovil from '@/components/experiencia/BarraMovil';
+import InvitacionCuerpo from '@/components/invitacion/Cuerpo';
 import { WA_GENERAL } from '@/data/sedes';
 import { EXPERIENCIA } from '@/data/experiencia';
 
 /* Landing de la campaña Experiencia (brief del cliente, 5-oct-2026): se llega
-   desde la barra de aviso de todas las páginas y desde el bloque del home.
-   Textos del brief tal cual (data/experiencia.ts). Una sola pantalla: copy a
-   la izquierda, formulario a la derecha, sin nada que distraiga del envío —
-   por eso no lleva la barra de aviso (sería un link a sí misma) ni el
-   WhatsApp flotante (competiría con el botón del formulario).
+   desde la barra de aviso de todas las páginas, el home y los botones de cada
+   sede. Textos del brief tal cual (data/experiencia.ts).
+   Primera pantalla: lo corto + el formulario. Abajo, a pedido de Gerardo
+   ("la página sigue y te explica todo y en cada pantalla un llamado a la
+   acción"), el cuerpo de /invitacion/ en modo 'landing': cada bloque con su
+   botón que sube al formulario, más Pilates + Musculación. Un solo form,
+   así hay uno solo que conectar al CRM.
+   No lleva la barra de aviso (sería un link a sí misma) ni el WhatsApp
+   flotante (competiría con el formulario); en mobile, BarraMovil.
    Como /invitacion/, es de campaña: no se indexa. */
 
 export const metadata: Metadata = {
@@ -45,7 +51,10 @@ export default function ExperienciaPage() {
         </div>
       </section>
 
+      <InvitacionCuerpo modo="landing" />
+
       <Footer />
+      <BarraMovil />
     </ExperienciaFx>
   );
 }

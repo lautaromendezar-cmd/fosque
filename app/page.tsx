@@ -117,7 +117,7 @@ export default function Home() {
           principal de la página". Entra entera menos su hero, porque el hero
           del index ya es la misma pregunta con la misma bajada.
           Fuente única: components/invitacion/Cuerpo.tsx */}
-      <InvitacionCuerpo experiencia />
+      <InvitacionCuerpo modo="home" />
 
       {/* ============ HISTORIA ============ */}
       <section id="historia" className="bloque" style={{ background: '#F8DDE0' }} data-bg="#F5EBE2">
