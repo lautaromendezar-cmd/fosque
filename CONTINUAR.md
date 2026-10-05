@@ -3,6 +3,34 @@
 **EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
 Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep**, pero desde el 21-sep hay un **preview en https://fosque-preview.vercel.app** (proyecto nuevo, con `noindex`, para mostrar cambios sin tocar el hosting; ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
 
+## 🎁 5-oct — Campaña Experiencia: APROBADA, falta subirla a fosque.com
+
+El cliente aprobó todo lo de la rama `modificaciones-26-09` (devolución del
+26-sep + campaña Experiencia) y se mergeó a `main`. **Lo que falta es subirlo
+por FTP** (el dato de acceso está en la PC de casa):
+
+```bash
+git checkout main && git pull
+npm install
+npm run ftp        # arma deploy-ftp/ con fosque.com fijo y lo verifica
+npm run probar     # mirarlo en local antes de subir
+```
+
+Después, con FileZilla, el CONTENIDO de `deploy-ftp/` a la raíz web
+(guía en `deploy/LEEME-SUBIDA.txt`; ese archivo NO se sube). Hay carpetas
+nuevas (`experiencia/`) y cambiaron casi todas las páginas: subir todo y
+pisar. Al terminar, probar en fosque.com: la barra negra de arriba, el botón
+"Sesión sin cargo" del nav, /experiencia/ y mandar el formulario hasta que
+abra WhatsApp (sin enviar el mensaje).
+
+Qué es la campaña (detalle en los commits del 5-oct): barra de aviso en todas
+las páginas, bloque en el home, landing `/experiencia/` (textos en
+`data/experiencia.ts`) con formulario → WhatsApp de la sede elegida (el
+cliente descartó el CRM EVO: ponen respuesta automática en WhatsApp), y
+todos los botones de "empezar / evaluación sin cargo" llevan a la landing.
+`fosque-preview` sigue apuntando a `modificaciones-26-09`: para lo próximo,
+seguir en esa rama o pasar su Production Branch a `main`.
+
 ## 🖥️ Arrancar en una PC nueva
 
 ```bash
