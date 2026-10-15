@@ -3,16 +3,44 @@
 **EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
 Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep**, pero desde el 21-sep hay un **preview en https://fosque-preview.vercel.app** (proyecto nuevo, con `noindex`, para mostrar cambios sin tocar el hosting; ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
 
-## 🔌 15-oct — Form de Experiencia → prospecto en EVO: FUNCIONA EN EL PREVIEW
+## 🔌 15-oct — Form de Experiencia → prospecto en EVO: APROBADO, falta subirlo por FTP
 
-**Estado: esperando que Silvy pruebe y apruebe.** Rama `modificaciones-26-09`
-(= fosque-preview). fosque.com todavía NO lo tiene. Cobro: $100.000.
+**Silvy confirmó que el lead de prueba entró bien a EVO (15-oct 15:45).** El
+`lead.php` para el hosting ya está hecho y probado. **Lo que falta se hace
+desde la PC de casa (ahí está el FTP):**
 
-**Retomar en otra PC:**
 ```bash
 git fetch && git checkout modificaciones-26-09 && git pull
 npm install
+git checkout main && git merge modificaciones-26-09 && git push   # cuando quieras publicarlo
+npm run ftp        # ya buildea con NEXT_PUBLIC_LEAD_URL=/api/lead.php y suma api/
+npm run probar
 ```
+
+Después, con FileZilla:
+1. Subir el contenido de `deploy-ftp/` como siempre (ahora trae `api/lead.php`
+   y `api/.htaccess`).
+2. **El token, aparte y una sola vez:** copiar `deploy/evo-config.ejemplo.php`
+   como `evo-config.php`, pegarle el token (WhatsApp de Silvy, 15-oct) y
+   subirlo a la **raíz del FTP, un nivel arriba de htdocs** (ninguna URL
+   llega ahí). Está en .gitignore y `npm run ftp` frena si aparece en el paquete.
+3. Abrir https://fosque.com/api/lead.php → tiene que decir
+   `{"ok":false,"error":"metodo"}`. Si se ve código PHP, el hosting no tiene PHP
+   (plan B: que el form de fosque.com llame a la función de Vercel).
+4. Lead real desde https://fosque.com/experiencia/ con los datos de Lautaro
+   (ver abajo) → avisarle a Silvy. Si no entra, el error_log del hosting dice
+   `EVO 401` (token), `EVO 400` (sucursal) o `EVO red` (el hosting no sale
+   por HTTPS; en el PHP portátil de Windows pasó por falta de certificados).
+5. Pasos también en `deploy/LEEME-SUBIDA.txt`.
+
+Probado el 15-oct con PHP 8.3 local y simulando la estructura del FTP: GET,
+sin config, datos malos, bot, token real con sede inexistente (EVO: "Branch
+not found", no crea nada) y token falso (401). Escrito compatible con PHP 5.4+.
+
+Cambio post-prueba: EVO ponía **Género = Masculino** por defecto; ahora se manda
+`gender: 'F'` (en lead.mjs y lead.php). Si se anota un hombre, la sede lo
+corrige a mano. No se mandó otro lead para verificarlo (para no ensuciar EVO):
+mirarlo en el lead real de fosque.com.
 
 Cómo anda: el form sigue abriendo el WhatsApp y en segundo plano manda el
 lead a `api/lead.mjs` (función de Vercel; el proyecto es `framework: null`,
@@ -32,24 +60,14 @@ Datos (15-oct):
 - Etiqueta «Sesión sin cargo Web» (la eligió Silvy): EVO la aceptó como
   canal de marketing (mktChannel) y además va en notes.
 - Lead de prueba: Lautaro Mendez, 1130011145, lautaromendez.ar@gmail.com,
-  José Hernández → **idProspect 7716**, cargado bien. Se le preguntó a Silvy
-  si lo ve. Si se manda otra prueba: con esos datos, sin nada que diga
+  José Hernández → **idProspect 7716**, Silvy lo vio bien en EVO
+  (15-oct). Si se manda otra prueba: con esos datos, sin nada que diga
   "Claude" ni "prueba automática".
-
-Falta, cuando Silvy apruebe:
-1. Armar `lead.php` equivalente a `api/lead.mjs` (el hosting no tiene
-   Node). Antes, confirmar que el hosting tenga PHP subiendo un ping.php.
-   El token va en un archivo de config bloqueado por `.htaccess`, nunca en
-   `out/` ni en el repo (pedirlo a Silvy o copiarlo de su WhatsApp).
-2. Que `armar-ftp.mjs` buildee con `NEXT_PUBLIC_LEAD_URL=/api/lead.php`
-   (el form ya lee esa variable; por defecto usa `/api/lead/`).
-3. Mergear a main, `npm run ftp`, subir por FTP y hacer un lead real desde
-   fosque.com.
 
 Visto de paso: el 🎁 del mensaje llega como "�" en la PC porque wa.me
 redirige a api.whatsapp.com y ahí se rompe; ya pasaba antes del cambio.
 
-## 🎁 5-oct — Campaña Experiencia: APROBADA, falta subirla a fosque.com
+## 🎁 5-oct — Campaña Experiencia: APROBADA (ya subida a fosque.com, verificado 15-oct)
 
 El cliente aprobó todo lo de la rama `modificaciones-26-09` (devolución del
 26-sep + campaña Experiencia) y se mergeó a `main`. **Lo que falta es subirlo

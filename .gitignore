@@ -23,3 +23,6 @@ entrevistas/
 modificaciones-26-09/*.mp4
 modificaciones-26-09/desgrabado/*.wav
 modificaciones-26-09/capturas/
+
+# token de EVO para el hosting (va por FTP fuera de htdocs, nunca al repo)
+evo-config.php

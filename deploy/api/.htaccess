@@ -1,0 +1,12 @@
+# Por si alguna vez evo-config.php termina en esta carpeta en vez de fuera de
+# htdocs: que no se pueda pedir por URL. (Sin mod_rewrite: aca esta prohibido,
+# ver el .htaccess de la raiz.)
+<Files "evo-config.php">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</Files>

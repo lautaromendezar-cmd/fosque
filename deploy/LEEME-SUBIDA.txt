@@ -44,6 +44,20 @@ Este archivo NO se sube: es la guia para vos. El paquete se genera solo.
      los corchetes y la saltea, las 3 paginas de sede cargan pero les falta el
      JS. Chequear que este arriba.
 
+   FORMULARIO -> EVO (desde 15-oct). El paquete trae api/lead.php, que
+   carga cada lead de /experiencia/ como prospecto en EVO. El token NO
+   viene en el paquete, va aparte y UNA sola vez:
+   - Copiar deploy/evo-config.ejemplo.php como evo-config.php, pegar el
+     token (esta en el WhatsApp de Silvy, 15-oct) y subirlo a la RAIZ DEL
+     FTP, un nivel ARRIBA de htdocs (al lado de htdocs, no adentro).
+   - Probar: abrir https://fosque.com/api/lead.php en el navegador. Tiene que
+     decir {"ok":false,"error":"metodo"}. Si se ve codigo PHP, el hosting no
+     corre PHP (avisar: plan B es la funcion de Vercel).
+   - Despues mandar un lead real desde https://fosque.com/experiencia/ y
+     chequear en EVO. Si no entra: el error_log del hosting dice "EVO 401"
+     (token mal o vencido), "EVO 400" (sucursal) o "EVO red" (el hosting no
+     sale por HTTPS a EVO).
+
    Truco para no romper nada en una prueba: crear una carpeta _original en el
    servidor y mover ahi lo que ya estaba (es un move del lado del server,
    instantaneo). Asi el original queda intacto sin depender de un backup local.

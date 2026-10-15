@@ -3,8 +3,8 @@
 // El DNS y el token de EVO son usuario y contraseña del CRM: no pueden ir en
 // el JS del sitio. El form le manda los datos a esta función y ella llama a
 // EVO. Corre como función de Vercel (fosque-preview, framework: null → todo
-// lo de /api es función). En el hosting del cliente (FTP, sin Node) lo va a
-// hacer un lead.php equivalente, a armar al exportar: mantenerlos iguales.
+// lo de /api es función). En el hosting del cliente (FTP, sin Node) lo
+// hace deploy/api/lead.php: mantenerlos iguales.
 //
 // Variables de entorno (Vercel → Settings → Environment Variables):
 //   EVO_DNS         usuario que muestra EVO al crear el token
@@ -43,6 +43,8 @@ export default async function handler(req, res) {
     name,
     lastName: resto.join(' ') || '-',
     email,
+    // Sin gender EVO pone Masculino; la campaña es para la Mujer Fosque.
+    gender: 'F',
     ddi: '+54',
     cellphone: cel,
     idBranch,
