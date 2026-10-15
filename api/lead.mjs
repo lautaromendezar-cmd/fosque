@@ -13,7 +13,7 @@
 //   EVO_MARKETING   (opcional) tipo de marketing tal cual está cargado en EVO
 
 const EVO_URL = 'https://evo-integracao-api.w12app.com.br/api/v1/prospects';
-const NOTA = 'Experiencia sin cargo - Web';
+const NOTA = 'Sesión sin cargo Web';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'método' });
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
     ddi: '+54',
     cellphone: cel,
     idBranch,
-    notes: `${NOTA} (fosque.com/experiencia)`,
+    notes: NOTA,
     ...(EVO_MARKETING ? { marketingType: EVO_MARKETING } : {}),
   };
 
