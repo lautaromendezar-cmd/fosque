@@ -3,6 +3,33 @@
 **EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
 Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep**, pero desde el 21-sep hay un **preview en https://fosque-preview.vercel.app** (proyecto nuevo, con `noindex`, para mostrar cambios sin tocar el hosting; ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
 
+## 🔌 15-oct — Form de Experiencia → prospecto en EVO (rama `modificaciones-26-09`)
+
+Pedido del cliente (cobro $100.000). El form sigue abriendo el WhatsApp y
+además, en segundo plano, manda el lead a `api/lead.mjs` (función de Vercel:
+el proyecto es `framework: null`, así que `/api` es función) que llama a
+`POST https://evo-integracao-api.w12app.com.br/api/v1/prospects` con Basic
+auth DNS:token. **El token nunca va en el JS del sitio.** Probado de punta a
+punta en fosque-preview: el pedido sale y devuelve 503 "sin configurar"
+porque todavía no hay token.
+
+Falta:
+1. Que el cliente mande **DNS + token** (token del ADM General, permiso
+   Prospects) y la etiqueta para filtrar (va en `marketingType` si ya existe
+   en EVO; si no, queda en `notes`).
+2. Los **idBranch** de las 3 sedes (el token multisucursal los exige). Que
+   los pasen, o darle al token lectura de Configuración y sacarlos por API.
+3. Cargar en Vercel → fosque-preview → Environment Variables: `EVO_DNS`,
+   `EVO_TOKEN`, `EVO_SUCURSALES` (`{"jose-hernandez":N,"emilio-castro":N,"nunez":N}`),
+   `EVO_MARKETING` (opcional), redeployar y hacer el lead de prueba.
+4. Para FTP: armar `lead.php` equivalente (el hosting no tiene Node; falta
+   confirmar que tenga PHP subiendo un ping.php), con el token en un archivo
+   bloqueado por `.htaccess`, y que `armar-ftp.mjs` buildee con
+   `NEXT_PUBLIC_LEAD_URL=/api/lead.php`.
+
+Visto de paso: el 🎁 del mensaje llega como "�" en la PC porque wa.me
+redirige a api.whatsapp.com y ahí se rompe; ya pasaba antes del cambio.
+
 ## 🎁 5-oct — Campaña Experiencia: APROBADA, falta subirla a fosque.com
 
 El cliente aprobó todo lo de la rama `modificaciones-26-09` (devolución del
