@@ -6,14 +6,19 @@ import { EXPERIENCIA } from '@/data/experiencia';
 import { FORM_ID, EVENTO_IR_AL_FORM, type DetalleIrAlForm } from './IrAlForm';
 
 type Campos = { nombre: string; telefono: string; email: string; sede: string };
+
+/** Adónde va el lead para EVO: la función de Vercel (api/lead.mjs) en el
+ *  preview; el export para FTP la pisa con NEXT_PUBLIC_LEAD_URL (lead.php). */
+const LEAD_URL = process.env.NEXT_PUBLIC_LEAD_URL || '/api/lead';
 type Enviado = { url: string; sede: string; nombre: string };
 
-/** Formulario de la campaña Experiencia. No guarda nada en ningún lado: arma
- *  el mensaje con los datos y abre el WhatsApp de la sucursal elegida (pedido
- *  de Lautaro, 5-oct). La confirmación lo dice así, sin prometer un registro
- *  que no existe: lo que llega a la sede es el mensaje, si ella lo envía. */
+/** Formulario de la campaña Experiencia. Arma el mensaje con los datos y abre
+ *  el WhatsApp de la sucursal elegida; en paralelo carga el lead como
+ *  prospecto en EVO (pedido del cliente, 15-oct). La confirmación no cambia:
+ *  si EVO falla, la persona igual tiene su WhatsApp. */
 export default function ExperienciaForm() {
   const [f, setF] = useState<Campos>({ nombre: '', telefono: '', email: '', sede: '' });
+  const trampa = useRef<HTMLInputElement>(null);
   const [enviado, setEnviado] = useState<Enviado | null>(null);
 
   // Desde el hero de cada sede se llega con ?sede=<slug>: la sucursal viene
@@ -62,6 +67,15 @@ export default function ExperienciaForm() {
       `• Email: ${f.email.trim()}`,
     ].join('\n');
     const url = waLink(sede.whatsapp, texto);
+    // El lead además va a EVO, en segundo plano y sin esperar: el WhatsApp se
+    // abre igual aunque EVO falle (y window.open tiene que salir en el mismo
+    // clic o el navegador lo bloquea). keepalive: sobrevive si la pestaña se va.
+    fetch(LEAD_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...f, empresa: trampa.current?.value || '' }),
+      keepalive: true,
+    }).catch(() => {});
     setEnviado({ url, sede: sede.nombre, nombre: f.nombre.trim().split(/\s+/)[0] });
     // Sin 'noopener' en las features: con él window.open devuelve null
     // siempre y no se puede saber si el navegador bloqueó la pestaña.
@@ -149,6 +163,15 @@ export default function ExperienciaForm() {
           ))}
         </select>
       </label>
+      {/* trampa para bots: fuera de pantalla, sin tab ni autocompletar */}
+      <input
+        ref={trampa}
+        name="empresa"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }}
+      />
       <button className="btn cta" type="submit">
         {EXPERIENCIA.cta}
       </button>
