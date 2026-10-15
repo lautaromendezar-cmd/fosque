@@ -9,7 +9,7 @@ type Campos = { nombre: string; telefono: string; email: string; sede: string };
 
 /** Adónde va el lead para EVO: la función de Vercel (api/lead.mjs) en el
  *  preview; el export para FTP la pisa con NEXT_PUBLIC_LEAD_URL (lead.php). */
-const LEAD_URL = process.env.NEXT_PUBLIC_LEAD_URL || '/api/lead';
+const LEAD_URL = process.env.NEXT_PUBLIC_LEAD_URL || '/api/lead/';
 type Enviado = { url: string; sede: string; nombre: string };
 
 /** Formulario de la campaña Experiencia. Arma el mensaje con los datos y abre
