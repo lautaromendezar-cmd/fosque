@@ -3,6 +3,24 @@
 **EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
 Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep**, pero desde el 21-sep hay un **preview en https://fosque-preview.vercel.app** (proyecto nuevo, con `noindex`, para mostrar cambios sin tocar el hosting; ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
 
+## ✅ 15-oct (noche) — EVO SUBIDO a fosque.com. Sólo falta que Silvy confirme
+
+Subido desde la PC de casa: `deploy-ftp/` armado desde esta rama a `htdocs`
+(md5 de `/experiencia/` idéntico al vivo) y `evo-config.php` con el token en la
+raíz del FTP, al lado de `htdocs` (por URL da 404). Verificado:
+`GET /api/lead.php` → `{"ok":false,"error":"metodo"}`, y un POST con sede
+inexistente → `sucursal` (o sea, el PHP lee el token; no llama a EVO ni crea nada).
+
+Lautaro mandó un **lead real desde https://fosque.com/experiencia/** (el
+WhatsApp abrió bien). **Pendiente:**
+1. **Que Silvy confirme que entró a EVO y con Género = Femenino.**
+2. Si NO entró: bajar `fosque.com.error.log` de la raíz del FTP (sólo desde la
+   PC de casa) y buscar `EVO 401` (token), `EVO 400` (sucursal) o `EVO red`
+   (el hosting no sale por HTTPS).
+3. Mergear `modificaciones-26-09` a `main` y pushear (no publica nada; es orden).
+
+Lo de abajo queda como historia de cómo se llegó.
+
 ## 🔌 15-oct — Form de Experiencia → prospecto en EVO: APROBADO, falta subirlo por FTP
 
 **Silvy confirmó que el lead de prueba entró bien a EVO (15-oct 15:45).** El
