@@ -64,15 +64,54 @@ $prospecto = array(
 );
 if (!empty($config['marketing'])) $prospecto['marketingType'] = $config['marketing'];
 
+$evoUrl = 'https://evo-integracao-api.w12app.com.br/api/v1/prospects';
+$auth = 'Authorization: Basic ' . base64_encode($config['dns'] . ':' . $config['token']) . "\r\n";
+
+// Devuelve el idProspect de un prospecto que ya coincide, o null. Si la
+// busqueda falla devuelve null y el lead se crea igual: mejor un repetido que
+// un lead perdido. Cada resultado se revisa por si EVO ignorara el filtro
+// (no descartar a nadie por error).
+function buscar($evoUrl, $auth, $filtro, $campo, $valor) {
+  $ctx = stream_context_create(array('http' => array(
+    'method' => 'GET', 'header' => $auth, 'timeout' => 10, 'ignore_errors' => true,
+  )));
+  $texto = @file_get_contents($evoUrl . '?' . http_build_query(array($filtro => $valor, 'take' => 10)), false, $ctx);
+  $status = 0;
+  if (isset($http_response_header[0]) && preg_match('/\s(\d{3})\s?/', $http_response_header[0], $m)) $status = (int) $m[1];
+  if ($texto === false || $status < 200 || $status >= 300) {
+    error_log('EVO buscar ' . $status . ' ' . substr((string) $texto, 0, 300));
+    return null;
+  }
+  $lista = json_decode($texto, true);
+  if (!is_array($lista)) return null;
+  foreach ($lista as $p) {
+    $dato = isset($p[$campo]) ? (string) $p[$campo] : '';
+    if ($campo === 'email') {
+      $ok = strtolower(trim($dato)) === strtolower($valor);
+    } else {
+      // EVO puede guardar el celular con o sin 54 / +54: comparar por el final.
+      $d = preg_replace('/\D/', '', $dato);
+      $ok = strlen($d) >= 8 && (substr($d, -strlen($valor)) === $valor || substr($valor, -strlen($d)) === $d);
+    }
+    if ($ok) return isset($p['idProspect']) ? $p['idProspect'] : null;
+  }
+  return null;
+}
+
+// Si la persona ya esta en EVO (mismo mail o celular) no se crea otro
+// prospecto: alguien que manda el form dos veces quedaba repetido.
+$existente = buscar($evoUrl, $auth, 'email', 'email', $email);
+if ($existente === null) $existente = buscar($evoUrl, $auth, 'phone', 'cellphone', $cel);
+if ($existente !== null) responder(200, array('ok' => true, 'idProspect' => $existente, 'repetido' => true));
+
 $ctx = stream_context_create(array('http' => array(
   'method' => 'POST',
-  'header' => "Content-Type: application/json\r\n"
-    . 'Authorization: Basic ' . base64_encode($config['dns'] . ':' . $config['token']) . "\r\n",
+  'header' => "Content-Type: application/json\r\n" . $auth,
   'content' => json_encode($prospecto),
   'timeout' => 15,
   'ignore_errors' => true, // que devuelva el cuerpo aunque EVO conteste 4xx/5xx
 )));
-$texto = @file_get_contents('https://evo-integracao-api.w12app.com.br/api/v1/prospects', false, $ctx);
+$texto = @file_get_contents($evoUrl, false, $ctx);
 if ($texto === false) {
   error_log('EVO red: sin respuesta');
   responder(502, array('ok' => false, 'error' => 'red'));

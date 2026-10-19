@@ -52,13 +52,18 @@ export default async function handler(req, res) {
     ...(EVO_MARKETING ? { marketingType: EVO_MARKETING } : {}),
   };
 
+  const auth = 'Basic ' + Buffer.from(`${EVO_DNS}:${EVO_TOKEN}`).toString('base64');
+
+  // Si la persona ya está en EVO (mismo mail o celular) no se crea otro
+  // prospecto: alguien que manda el form dos veces quedaba repetido.
+  const existente = (await buscar(auth, { email }, (p) => igualMail(p.email, email)))
+    ?? (await buscar(auth, { phone: cel }, (p) => igualCel(p.cellphone, cel)));
+  if (existente) return res.status(200).json({ ok: true, idProspect: existente, repetido: true });
+
   try {
     const r = await fetch(EVO_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + Buffer.from(`${EVO_DNS}:${EVO_TOKEN}`).toString('base64'),
-      },
+      headers: { 'Content-Type': 'application/json', Authorization: auth },
       body: JSON.stringify(prospecto),
     });
     const texto = await r.text();
@@ -72,6 +77,38 @@ export default async function handler(req, res) {
     console.error('EVO red', e);
     return res.status(502).json({ ok: false, error: 'red' });
   }
+}
+
+// Devuelve el idProspect de un prospecto que ya coincide, o null. Si la
+// búsqueda falla devuelve null y el lead se crea igual: mejor un repetido que
+// un lead perdido. `coincide` revisa cada resultado por si EVO ignorara el
+// filtro (no descartar a nadie por error).
+async function buscar(auth, filtro, coincide) {
+  try {
+    const r = await fetch(`${EVO_URL}?${new URLSearchParams({ ...filtro, take: '10' })}`, {
+      headers: { Authorization: auth },
+    });
+    if (!r.ok) {
+      console.error('EVO buscar', r.status, (await r.text()).slice(0, 300));
+      return null;
+    }
+    const lista = safeJson(await r.text());
+    const p = Array.isArray(lista) ? lista.find(coincide) : null;
+    return p ? p.idProspect ?? null : null;
+  } catch (e) {
+    console.error('EVO buscar red', e);
+    return null;
+  }
+}
+
+function igualMail(a, b) {
+  return String(a || '').trim().toLowerCase() === b.toLowerCase();
+}
+
+// EVO puede guardar el celular con o sin 54 / +54: comparar por el final.
+function igualCel(a, cel) {
+  const d = String(a || '').replace(/\D/g, '');
+  return d.length >= 8 && (d.endsWith(cel) || cel.endsWith(d));
 }
 
 function safeJson(s) {
