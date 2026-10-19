@@ -3,6 +3,32 @@
 **EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
 Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep**, pero desde el 21-sep hay un **preview en https://fosque-preview.vercel.app** (proyecto nuevo, con `noindex`, para mostrar cambios sin tocar el hosting; ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
 
+## 🔁 19-oct — Leads repetidos en EVO: resuelto en el preview, falta subir `lead.php` por FTP
+
+Silvy se cargó dos veces y quedó repetida. Ahora, antes de crear el
+prospecto, `lead.mjs` / `lead.php` buscan en EVO
+(`GET /api/v1/prospects?email=…`, y si no aparece `?phone=…`) y si ya
+existe **no crean otro** (responden `repetido: true`; el WhatsApp abre igual).
+Cada resultado se compara de verdad (mail sin mayúsculas, celular por el final)
+por si EVO ignorara el filtro; si la búsqueda falla se crea igual (mejor un
+repetido que un lead perdido). El celular ahora también saca el 9 de
+`+54 9 11…` y el 0 de `011…`.
+
+Probado el 19-oct contra el EVO real desde el preview con un modo temporal
+que no creaba nada (ya sacado): con tus datos lo encuentra (idProspect 7716)
+por mail (también en mayúsculas) y por celular solo, escrito a secas, con
++54, con +54 9 y con 011; una persona nueva da que no existe. `lead.php`
+probado igual en local con PHP 8.3 y un EVO simulado.
+
+**Falta (desde la PC de casa):** `npm run ftp` y subir **sólo
+`deploy-ftp/api/lead.php`** a `htdocs/api/` (nada más cambió). Después, un
+lead desde fosque.com/experiencia/ con tus datos de siempre: **no tiene que
+aparecer uno nuevo en EVO** (es la prueba de que anda).
+
+Ojo con lo que hay que contarle al cliente: si alguien que ya está en EVO
+vuelve a llenar el form (aunque sea meses después o con otra sede) no queda
+registro nuevo en EVO; sólo llega el WhatsApp.
+
 ## ✅ 15-oct (noche) — EVO SUBIDO a fosque.com. Sólo falta que Silvy confirme
 
 Subido desde la PC de casa: `deploy-ftp/` armado desde esta rama a `htdocs`

@@ -61,8 +61,6 @@ export default async function handler(req, res) {
   // prospecto: alguien que manda el form dos veces quedaba repetido.
   const existente = (await buscar(auth, { email }, (p) => igualMail(p.email, email)))
     ?? (await buscar(auth, { phone: cel }, (p) => igualCel(p.cellphone, cel)));
-  // TEMPORAL: prueba contra EVO real sin crear nada. Se saca enseguida.
-  if (b.soloBuscar === 'dedupe-19-oct') return res.status(200).json({ soloBuscar: true, existente });
   if (existente) return res.status(200).json({ ok: true, idProspect: existente, repetido: true });
 
   try {
