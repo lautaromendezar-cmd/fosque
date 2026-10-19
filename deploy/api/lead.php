@@ -35,6 +35,9 @@ $email = $campo('email');
 $sede = $campo('sede');
 $cel = preg_replace('/\D/', '', $campo('telefono'));
 if (strpos($cel, '54') === 0) $cel = substr($cel, 2);
+// +54 9 11... (formato internacional de celular) y 011...: quedan como 11...,
+// igual que si se escribe a secas, para que la busqueda de repetidos coincida.
+if (strlen($cel) === 11 && ($cel[0] === '9' || $cel[0] === '0')) $cel = substr($cel, 1);
 if ($nombre === '' || !preg_match('/^\S+@\S+\.\S+$/', $email) || strlen($cel) < 8) {
   responder(400, array('ok' => false, 'error' => 'datos'));
 }

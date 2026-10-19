@@ -27,6 +27,9 @@ export default async function handler(req, res) {
   const sede = String(b.sede || '');
   let cel = String(b.telefono || '').replace(/\D/g, '');
   if (cel.startsWith('54')) cel = cel.slice(2);
+  // +54 9 11… (formato internacional de celular) y 011…: quedan como 11…,
+  // igual que si se escribe a secas, para que la búsqueda de repetidos coincida.
+  if (cel.length === 11 && /^[90]/.test(cel)) cel = cel.slice(1);
   if (!nombre || !/^\S+@\S+\.\S+$/.test(email) || cel.length < 8) {
     return res.status(400).json({ ok: false, error: 'datos' });
   }
