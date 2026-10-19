@@ -3,7 +3,11 @@
 **EN VIVO: https://fosque.com/** — hosting del cliente, **se publica subiendo `deploy-ftp/` por FTP a mano** (`npm run ftp` + FileZilla; guía en `deploy/LEEME-SUBIDA.txt`).
 Repo: https://github.com/lautaromendezar-cmd/fosque — es **sólo código y backup**: no deploya en ningún lado. **Vercel se borró el 3-sep**, pero desde el 21-sep hay un **preview en https://fosque-preview.vercel.app** (proyecto nuevo, con `noindex`, para mostrar cambios sin tocar el hosting; ver abajo). Para ver un cambio antes de subirlo: `npm run probar`.
 
-## 🔁 19-oct — Leads repetidos en EVO: resuelto en el preview, falta subir `lead.php` por FTP
+## 🔁 19-oct — Leads repetidos en EVO: EN VIVO en fosque.com
+
+**Subido 19-oct** (sólo `htdocs/api/lead.php`). Verificado: GET → `metodo`, y un
+POST con los datos de Lautaro → `{"ok":true,"idProspect":7716,"repetido":true}`
+(no creó nada). Lo de "Falta" de abajo ya está hecho.
 
 Silvy se cargó dos veces y quedó repetida. Ahora, antes de crear el
 prospecto, `lead.mjs` / `lead.php` buscan en EVO
